@@ -3,5 +3,6 @@ ansible_connection: ssh
 ansible_become: yes
 ansible_become_method: sudo
 ansible_become_pass: JHjdYNHbnvF5aMG8
+ansible_network_os: Linux
 
 ####  CONFIGURATION SPECIFIC ####

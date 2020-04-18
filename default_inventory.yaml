@@ -21,49 +21,77 @@ all:
       hosts:
 
         BR2:
-          ansible_host: 192.168.152.93
+          ansible_host: 192.168.152.117
+          console_server: 192.168.172.128
+          console_port: 17001
+          ansible_network_os: ios
 
         BR3:
-          ansible_host: 192.168.152.94
+          ansible_host: 192.168.152.118
+          console_server: 192.168.172.128
+          console_port: 17003
+          ansible_network_os: ios
 
         HQ1:
-          ansible_host: 192.168.152.97          
+          ansible_host: 192.168.152.121
+          console_server: 192.168.172.128
+          console_port: 17007
+          ansible_network_os: ios
 
         HQ2:
-          ansible_host: 192.168.152.98
+          ansible_host: 192.168.152.122
+          console_server: 192.168.172.128
+          console_port: 17009
+          ansible_network_os: ios
 
         ISP:
-          ansible_host: 192.168.152.99
-
+          ansible_host: 192.168.152.123
+          console_server: 192.168.172.128
+          console_port: 17011
+          ansible_network_os: ios
     
     firewalls:
       hosts:
 
         FW1:
-          ansible_host: 192.168.152.95
+          ansible_host: 192.168.152.119
+          console_server: 192.168.172.128
+          console_port: 17005
+          ansible_network_os: unknown
 
         FW2:
-          ansible_host: 192.168.152.96
+          ansible_host: 192.168.152.120
+          console_server: 192.168.172.128
+          console_port: 17006
+          ansible_network_os: unknown
     
     servers:
       hosts:
 
         PC1:
-          ansible_host: 192.168.152.103
+          ansible_host: 192.168.152.127
 
         RADIUS:
-          ansible_host: 192.168.152.104
+          ansible_host: 192.168.152.128
     
     switches:
       hosts:
 
         SW1:
-          ansible_host: 192.168.152.100
+          ansible_host: 192.168.152.124
+          console_server: 192.168.172.128
+          console_port: 17013
+          ansible_network_os: ios
 
         SW2:
-          ansible_host: 192.168.152.101
+          ansible_host: 192.168.152.125
+          console_server: 192.168.172.128
+          console_port: 17015
+          ansible_network_os: ios
 
         SW3:
-          ansible_host: 192.168.152.102
-
+          ansible_host: 192.168.152.126
+          console_server: 192.168.172.128
+          console_port: 17017
+          ansible_network_os: ios
     

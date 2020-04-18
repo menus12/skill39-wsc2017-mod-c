@@ -1,4 +1,5 @@
 ####  CONNECTION SPECIFIC ####
+ansible_network_os: asa
 
 ####  CONFIGURATION SPECIFIC ####
 hostname: FW2

@@ -1,6 +1,6 @@
 ---
 - name: Configure hostnames 
-  hosts: routers:switches:firewalls
+  hosts: all
   gather_facts: false
   tasks:
     - name: Configure hostnames on IOS devices 
@@ -11,6 +11,10 @@
       asa_config:
         lines: hostname {{ hostname }}
       when: (ansible_network_os == "asa")
+    - name: Configure hostnames on Linux servers 
+      hostname: 
+        name: "{{ hostname }}"
+      when: (ansible_network_os == "Linux")
 
 - name: Configure domain name
   hosts: routers:switches:firewalls
@@ -91,17 +95,17 @@
   hosts: BR3
   gather_facts: false
   tasks:
-    - name: Configure authorization on serial console
+    - name: Configure serial console authorization on IOS devices
       ios_config:
         lines: 
           - aaa authorization console
       when: (ansible_network_os == "ios")
 
-- name: Configure synchronous logging on IOS devices
+- name: Configure console synchronous logging
   hosts: routers:switches
   gather_facts: false
   tasks:
-    - name: Configure synchronous logging on IOS devices      
+    - name: Configure console synchronous logging on IOS devices      
       ios_config:
         lines: 
           - logging synchronous
@@ -109,7 +113,7 @@
       loop: "{{ lines }}"
       when: (ansible_network_os == "ios")
 
-- name: Configure transport input on IOS devices
+- name: Configure transport input
   hosts: routers:switches
   gather_facts: false
   tasks:
@@ -129,7 +133,7 @@
       ios_config:
         lines: ip ssh version 2
       when: (ansible_network_os == "ios")
-    - name: onfigure SSH version 2 on ASA devices
+    - name: Configure SSH version 2 on ASA devices
       asa_config:
         lines: ssh version 2
       when: (ansible_network_os == "asa")

@@ -1,16 +1,17 @@
 ---
-- name: Configure interface parameters on ASA devices
-  hosts: firewalls
+- name: Configure hostnames 
+  hosts: all
   gather_facts: false
   tasks:
-    - name: Configure interface parameters on ASA devices
+    - name: Configure hostnames on IOS devices 
+      ios_config:
+        lines: hostname {{ hostname }}
+      when: (ansible_network_os == "ios")
+    - name: Configure hostnames on ASA devices
       asa_config:
-        lines:
-          - nameif {{ item.nameif }}
-          - security-level {{ item.security_level }}
-          - description {{ item.description }}
-          - ip address {{item.ipv4_address}}
-        parents: interface {{item.interface_type}}{{item.interface_id}}
-      when: item.ipv4_address is defined
-      loop: "{{ l3_interfaces | default([]) }}"
-      
+        lines: hostname {{ hostname }}
+      when: (ansible_network_os == "asa")
+    - name: Configure hostnames on Linux servers 
+      hostname: 
+        name: "{{ hostname }}"
+      when: (ansible_network_os == "Linux")

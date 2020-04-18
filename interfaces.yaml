@@ -81,3 +81,14 @@
         parents: interface {{item.interface_type}}{{item.interface_id}}
       when: item.ipv4_address is defined
       loop: "{{ l3_interfaces | default([]) }}"
+
+- name: Configure transport input
+  hosts: firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure vty transport input on ASA devices
+      asa_config:
+        lines: 
+          - "{{ item.transport_input }} {{ item.network }} {{ item.nameif }}"
+      loop: "{{ lines }}"
+      when: ansible_network_os == "asa"
