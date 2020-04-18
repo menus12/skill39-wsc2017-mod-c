@@ -1,0 +1,34 @@
+####  CONNECTION SPECIFIC ####
+
+####  CONFIGURATION SPECIFIC ####
+hostname: ISP
+
+l3_interfaces:
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    description: INET11
+    ipv4_address: 20.17.5.1 255.255.255.252
+  - interface_type: GigabitEthernet
+    interface_id: 0/2
+    description: INET22
+    ipv4_address: 20.17.5.5 255.255.255.252
+  - interface_type: GigabitEthernet
+    interface_id: 0/3
+    description: INET2
+    ipv4_address: 20.17.5.9 255.255.255.252
+  - interface_type: GigabitEthernet
+    interface_id: 0/4
+    description: INET3
+    ipv4_address: 20.17.5.13 255.255.255.252
+  - interface_type: Loopback
+    interface_id: 100
+    description: 
+    ipv4_address: 8.8.8.8 255.255.255.255
+  - interface_type: Loopback
+    interface_id: 200
+    description: 
+    ipv4_address: 209.136.0.1 255.255.0.0
+  - interface_type: Loopback
+    interface_id: 300
+    description: 
+    ipv4_address: 138.76.0.1 255.255.0.0

@@ -1,0 +1,83 @@
+---
+
+- name: Configure common interface parameters
+  hosts: routers:switches
+  gather_facts: false
+  tasks:
+    - name: Configure common interface properties      
+      ios_interface:
+        name: "{{item.interface_type}}{{item.interface_id}}"
+        description: "{{item.description}}"
+        state: up
+      loop: "{{ l3_interfaces | default([]) | union(l3_subinterfaces | default([]) | union(l2_interfaces | default([]))) }}"
+
+- name: Configure routers sub-interfaces
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Configure sub-interface encapsulation
+      ios_config:
+        lines:
+          - encapsulation dot1q {{item.vlan}} {{ item.vlan_mode | d("") }}
+        parents: "interface {{item.interface_type}}{{item.interface_id}}.{{item.vlan}}"        
+      loop: "{{ l3_subinterfaces | default([]) }}"
+
+- name: Configure IP addressing on interfaces
+  hosts: routers:switches
+  gather_facts: false
+  tasks:
+    - name: Configure IPv4 address on interfaces
+      ios_config:
+        lines:
+          - ip address {{item.ipv4_address}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.ipv4_address is defined
+      loop: "{{ l3_interfaces | default([]) }}"
+#    - name: Configure ip address on interfaces
+#      ios_l3_interface:
+#        name: "{{item.interface_type}}{{item.interface_id}}"
+#        ipv4: 
+#        - address: "{{item.ipv4_address}}/{{item.prefix}}"
+#      when: item.ipv4_address is defined
+#      loop: "{{ l3_interfaces | default([]) }}"
+    - name: Configure IPv6 address on interfaces
+      ios_config:
+        lines:
+          - ipv6 address {{item.ipv6_address}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.ipv6_address is defined
+      loop: "{{ l3_interfaces | default([]) }}"
+      
+- name: Configure IP addressing on sub-interfaces
+  hosts: routers
+  gather_facts: false
+  tasks: 
+    - name: Configure IPv4 address on sub-interfaces
+      ios_config:
+        lines:
+          - ip address {{item.ipv4_address}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}.{{item.vlan}}
+      when: item.ipv4_address is defined
+      loop: "{{ l3_subinterfaces | default([]) }}"
+    - name: Configure IPv6 address on sub-interfaces
+      ios_config:
+        lines:
+          - ipv6 address {{item.ipv6_address}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}.{{item.vlan}}
+      when: item.ipv6_address is defined
+      loop: "{{ l3_subinterfaces | default([]) }}"
+
+- name: Configure interface parameters on ASA devices
+  hosts: firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure interface parameters on ASA devices
+      asa_config:
+        lines:
+          - nameif {{ item.nameif }}
+          - security-level {{ item.security_level }}
+          - description {{ item.description }}
+          - ip address {{item.ipv4_address}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.ipv4_address is defined
+      loop: "{{ l3_interfaces | default([]) }}"

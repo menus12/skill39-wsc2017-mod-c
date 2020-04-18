@@ -1,0 +1,20 @@
+####  CONNECTION SPECIFIC ####
+ansible_user: do_not_delete_this_user
+ansible_ssh_pass: JHjdYNHbnvF5aMG8
+ansible_become: no
+ansible_become_method: enable
+ansible_become_pass: wsi
+ansible_connection: network_cli
+
+####  CONFIGURATION SPECIFIC ####
+users:
+  - username: wsi2017
+    configured_password: cisco1
+    privilege: 15
+    algorithm_type: scrypt
+enable_cleartext_password: wsi
+enable_type: password
+password_encryption: true
+domain_name: wsi2017.com
+timezone_offset: 4
+timezone_name: GMT

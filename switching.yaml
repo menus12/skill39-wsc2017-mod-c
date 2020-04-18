@@ -1,0 +1,111 @@
+---
+
+- name: Configure VTP
+  hosts: switches
+  gather_facts: false
+  tasks:
+    - name: Configure VTP
+      ios_config:
+        lines: 
+          - vtp domain {{ vtp_domain }}
+          - vtp password {{ vtp_password }}
+          - vtp version {{ vtp_version }}
+          - vtp mode {{ vtp_mode }}
+
+- name: Configure VLANs
+  hosts: switches
+  gather_facts: false
+  tasks:
+    - name: Check VTP Operating Mode
+      ios_command:
+        commands: sh vtp status | i Operating Mode
+      register: vtp_mode
+    - name: Configure VLANs
+      ios_config:
+        lines: 
+          - vlan {{item.vlan_id}}
+          - name {{item.name}}
+      when: vtp_mode.stdout[0] is not search('Client')
+      loop: "{{ vlans | default([]) }}"
+#    - ios_vlans:
+#        config:
+#          - name: "{{item.name}}"
+#            vlan_id: "{{item.vlan_id}}"        
+#      loop: "{{ vlans | default([]) }}"
+
+- name: Configure LAG
+  hosts: switches
+  gather_facts: false
+  tasks:
+    - name: Configure LAG
+      ios_config:
+        lines:          
+          - channel-group {{item.lag_id}} mode {{item.lag_mode}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+#      ios_linkagg:
+#        aggregate:          
+#          - group: "{{item.lag_id }}"
+#            mode: "{{ item.lag_mode }}"
+#            members: #[ '{{ item.interface_type + item.interface_id }}' ]
+      when: 
+        - item.lag_id is defined 
+        - item.lag_id >= 1
+        - item.lag_mode is defined
+        - item.lag_mode is in ['active', 'passive', 'auto', 'desirable']
+      loop: "{{ l2_interfaces | default([]) }}"
+
+- name: Configure STP
+  hosts: switches
+  gather_facts: false
+  tasks:
+    - name: Configure STP mode
+      ios_config:
+        lines:          
+          - spanning-tree mode {{ stp_mode | d("rapid-pvst")}}
+    - name: Configure STP VLAN priorities
+      ios_config:
+        lines:          
+          - spanning-tree vlan {{ item.vlan_id | d(1) }} priority {{ item.priority | d(61440) }}
+      loop: "{{ stp_priority | default([]) }}"
+    - name: Configure STP portfast
+      ios_config:
+        lines:          
+          - spanning-tree portfast edge
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.portfast == true
+      loop: "{{ l2_interfaces | default([]) }}"
+    - name: Configure STP guard
+      ios_config:
+        lines:          
+          - spanning-tree guard  {{ item.stp_guard }}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.stp_guard is defined and item.stp_guard != "" 
+      loop: "{{ l2_interfaces | default([]) }}"
+
+- name: Configure switchports
+  hosts: switches
+  gather_facts: false
+  tasks:
+    - name: Configure trunk ports
+      ios_config:
+        lines:
+          - switchport trunk encapsulation {{ item.trunk_encapsulation }}
+          - switchport mode {{ item.mode }}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.mode != "access"
+      loop: "{{ l2_interfaces | default([]) }}"
+    - name: Configure native vlan
+      ios_config:
+        lines:          
+          - switchport trunk native vlan {{ item.native_vlan }}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.native_vlan is defined and tem.native_vlan != 1 
+      loop: "{{ l2_interfaces | default([]) }}"
+    - name: Configure access ports
+      ios_config:
+        lines:          
+          - switchport mode {{ item.mode }}
+          - switchport access vlan {{ item.access_vlan | default(1)}}
+        parents: interface {{item.interface_type}}{{item.interface_id}}
+      when: item.mode == "access"
+      loop: "{{ l2_interfaces | default([]) }}"

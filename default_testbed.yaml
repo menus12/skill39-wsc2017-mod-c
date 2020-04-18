@@ -1,0 +1,406 @@
+testbed:
+
+  name: 39-wsi-mod-c_default_NkzYLM
+
+  tacacs:
+    username: "%ENV{PYATS_USERNAME}"
+  passwords:
+    tacacs: "%ENV{PYATS_PASSWORD}"
+    enable: "%ENV{PYATS_AUTH_PASS}"
+    line: "%ENV{PYATS_PASSWORD}"
+  servers:
+    PC1:
+      address: 192.168.172.38
+      server: PC1
+    RADIUS:
+      address: 192.168.172.39
+      server: RADIUS
+
+devices:
+
+  BR2:
+    alias: BR2
+    os: ios
+    type: IOSv_ssh
+    platform: IOSv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17005
+    custom:
+      abstraction:
+        order: [os, type]
+
+  BR3:
+    alias: BR3
+    os: ios
+    type: IOSv_ssh
+    platform: IOSv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17007
+    custom:
+      abstraction:
+        order: [os, type]
+
+  FW1:
+    alias: FW1
+    os: asa
+    type: ASAv_ssh
+    platform: ASAv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17009
+    custom:
+      abstraction:
+        order: [os, type]
+
+  FW2:
+    alias: FW2
+    os: asa
+    type: ASAv_ssh
+    platform: ASAv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17010
+    custom:
+      abstraction:
+        order: [os, type]
+
+  HQ1:
+    alias: HQ1
+    os: ios
+    type: IOSv_ssh
+    platform: IOSv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17011
+    custom:
+      abstraction:
+        order: [os, type]
+
+  HQ2:
+    alias: HQ2
+    os: ios
+    type: IOSv_ssh
+    platform: IOSv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17013
+    custom:
+      abstraction:
+        order: [os, type]
+
+  ISP:
+    alias: ISP
+    os: ios
+    type: IOSv_ssh
+    platform: IOSv_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17015
+    custom:
+      abstraction:
+        order: [os, type]
+
+  Provision-01:
+    alias: Provision-01
+    type: FLAT
+    platform: FLAT
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: None
+    custom:
+      abstraction:
+        order: [os, type]
+
+  Provision-02:
+    alias: Provision-02
+    type: FLAT
+    platform: FLAT
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: None
+    custom:
+      abstraction:
+        order: [os, type]
+
+  SW1:
+    alias: SW1
+    os: ios
+    type: IOSvL2_ssh
+    platform: IOSvL2_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17017
+    custom:
+      abstraction:
+        order: [os, type]
+
+  SW2:
+    alias: SW2
+    os: ios
+    type: IOSvL2_ssh
+    platform: IOSvL2_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17019
+    custom:
+      abstraction:
+        order: [os, type]
+
+  SW3:
+    alias: SW3
+    os: ios
+    type: IOSvL2_ssh
+    platform: IOSvL2_ssh
+
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      console:
+        protocol: telnet
+        ip: 192.168.172.128
+        port: 17021
+    custom:
+      abstraction:
+        order: [os, type]
+
+topology:
+  BR2:
+    interfaces:
+      GigabitEthernet0/1:
+        link: BR2-to-FW2
+        type: ethernet
+      GigabitEthernet0/2:
+        link: BR2-to-ISP
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.235/24
+        link: flat
+        type: ethernet
+  BR3:
+    interfaces:
+      GigabitEthernet0/1:
+        link: BR3-to-ISP
+        type: ethernet
+      GigabitEthernet0/2:
+        link: L2VPN
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.236/24
+        link: flat
+        type: ethernet
+  FW1:
+    interfaces:
+      GigabitEthernet0/0:
+        ipv4: 10.0.0.5/30
+        link: FW1-unconnected#0
+        type: ethernet
+      GigabitEthernet0/1:
+        ipv4: 10.0.0.9/30
+        link: FW1-to-SW3
+        type: ethernet
+      GigabitEthernet0/2:
+        link: L2VPN
+        type: ethernet
+      Management0/0:
+        ipv4: 192.168.152.237/24
+        link: flat
+        type: ethernet
+  FW2:
+    interfaces:
+      GigabitEthernet0/0:
+        ipv4: 10.0.0.10/30
+        link: FW2-unconnected#0
+        type: ethernet
+      GigabitEthernet0/1:
+        link: BR2-to-FW2
+        type: ethernet
+      GigabitEthernet0/2:
+        link: L2VPN
+        type: ethernet
+      Management0/0:
+        ipv4: 192.168.152.238/24
+        link: flat
+        type: ethernet
+  HQ1:
+    interfaces:
+      GigabitEthernet0/1:
+        link: HQ1-to-SW3
+        type: ethernet
+      GigabitEthernet0/2:
+        link: HQ1-to-ISP
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.239/24
+        link: flat
+        type: ethernet
+  HQ2:
+    interfaces:
+      GigabitEthernet0/1:
+        link: HQ2-to-SW3
+        type: ethernet
+      GigabitEthernet0/2:
+        link: HQ2-to-ISP
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.240/24
+        link: flat
+        type: ethernet
+  ISP:
+    interfaces:
+      GigabitEthernet0/1:
+        link: HQ1-to-ISP
+        type: ethernet
+      GigabitEthernet0/2:
+        link: HQ2-to-ISP
+        type: ethernet
+      GigabitEthernet0/3:
+        link: BR2-to-ISP
+        type: ethernet
+      GigabitEthernet0/4:
+        link: BR3-to-ISP
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.197/24
+        link: flat
+        type: ethernet
+  SW1:
+    interfaces:
+      GigabitEthernet0/1:
+        link: SW1-to-SW2
+        type: ethernet
+      GigabitEthernet0/2:
+        link: SW1-to-SW2#1
+        type: ethernet
+      GigabitEthernet0/3:
+        link: SW1-to-SW2#2
+        type: ethernet
+      GigabitEthernet1/0:
+        link: RADIUS-to-SW1
+        type: ethernet
+      GigabitEthernet1/1:
+        link: SW1-to-SW3
+        type: ethernet
+      GigabitEthernet1/2:
+        link: SW1-unconnected#5
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.198/24
+        link: flat
+        type: ethernet
+  SW2:
+    interfaces:
+      GigabitEthernet0/1:
+        link: SW1-to-SW2
+        type: ethernet
+      GigabitEthernet0/2:
+        link: SW1-to-SW2#1
+        type: ethernet
+      GigabitEthernet0/3:
+        link: SW1-to-SW2#2
+        type: ethernet
+      GigabitEthernet1/0:
+        link: PC1-to-SW2
+        type: ethernet
+      GigabitEthernet1/1:
+        link: SW2-unconnected#4
+        type: ethernet
+      GigabitEthernet1/2:
+        link: SW2-to-SW3
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.199/24
+        link: flat
+        type: ethernet
+  SW3:
+    interfaces:
+      GigabitEthernet0/1:
+        link: HQ1-to-SW3
+        type: ethernet
+      GigabitEthernet0/2:
+        link: HQ2-to-SW3
+        type: ethernet
+      GigabitEthernet0/3:
+        link: FW1-to-SW3
+        type: ethernet
+      GigabitEthernet1/0:
+        link: SW3-unconnected#3
+        type: ethernet
+      GigabitEthernet1/1:
+        link: SW1-to-SW3
+        type: ethernet
+      GigabitEthernet1/2:
+        link: SW2-to-SW3
+        type: ethernet
+      GigabitEthernet0/0:
+        ipv4: 192.168.152.200/24
+        link: flat
+        type: ethernet

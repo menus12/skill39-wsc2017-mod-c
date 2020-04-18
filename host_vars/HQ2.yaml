@@ -1,0 +1,35 @@
+####  CONNECTION SPECIFIC ####
+
+####  CONFIGURATION SPECIFIC ####
+hostname: HQ2
+
+l3_interfaces:
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    description: 
+  - interface_type: GigabitEthernet
+    interface_id: 0/2
+    description: INET22
+    ipv4_address: 20.17.5.6 255.255.255.252
+  - interface_type: Loopback
+    interface_id: 102
+    description: 
+    ipv4_address: 22.22.22.22 255.255.255.255
+    ipv6_address: dead:beef:22::1/128
+l3_subinterfaces:
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    vlan: 101
+    description: LAN1
+    ipv4_address: 192.168.10.253 255.255.255.0
+    ipv6_address: A1F:EA75:CA75::/64 eui-64
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    vlan: 102
+    description: LAN2
+    ipv4_address: 192.168.20.253 255.255.255.0
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    vlan: 103
+    description: EDGE
+    ipv4_address: 192.168.30.253 255.255.255.0

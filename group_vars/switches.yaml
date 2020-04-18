@@ -1,0 +1,26 @@
+####  CONNECTION SPECIFIC ####
+ansible_port: 2222
+ansible_network_os: ios
+
+####  CONFIGURATION SPECIFIC ####
+lines:
+  - start_range: 0
+    end_range: 4
+    transport_input: ssh
+
+vtp_mode: transparent
+vtp_version: 2
+vtp_domain: WSI
+vtp_password: 2017
+
+stp_mode: rapid-pvst
+
+vlans:
+  - vlan_id: 101
+    name: LAN1
+  - vlan_id: 102
+    name: LAN2
+  - vlan_id: 103
+    name: EDGE
+
+

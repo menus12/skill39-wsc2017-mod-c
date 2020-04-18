@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.95" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.95/virl.xsd">
+    <extensions>
+        <entry key="management_network" type="String">flat</entry>
+        <entry key="management_lxc" type="Boolean">false</entry>
+    </extensions>
+    <node name="SW1" type="SIMPLE" subtype="IOSvL2" location="370,129">
+        <extensions>
+            <entry key="ansible_group" type="String">switches</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4006</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ no switchport&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.106</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+    </node>
+    <node name="SW2" type="SIMPLE" subtype="IOSvL2" location="364,408">
+        <extensions>
+            <entry key="ansible_group" type="String">switches</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4007</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ no switchport&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.107</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+    </node>
+    <node name="SW3" type="SIMPLE" subtype="IOSvL2" location="663,273">
+        <extensions>
+            <entry key="ansible_group" type="String">switches</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4008</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ no switchport&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.108</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+    </node>
+    <node name="FW1" type="SIMPLE" subtype="ASAv" location="653,537">
+        <extensions>
+            <entry key="ansible_group" type="String">firewalls</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4009</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+domain-name domain.name&#xD;
+interface Management0/0&#xD;
+ ip address dhcp&#xD;
+ nameif Mgmt-intf&#xD;
+ security-level 100&#xD;
+icmp permit any Mgmt-intf&#xD;
+aaa authentication ssh console LOCAL &#xD;
+aaa authorization exec LOCAL auto-enable&#xD;
+ssh stricthostkeycheck&#xD;
+ssh 0.0.0.0 0.0.0.0 Mgmt-intf &#xD;
+ssh key-exchange group dh-group14-sha1&#xD;
+crypto key generate rsa modulus 1024 &#xD;
+username do_not_delete_this_user password JHjdYNHbnvF5aMG8 privilege 15&#xD;
+</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.109</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0"/>
+        <interface id="1" name="GigabitEthernet0/1"/>
+        <interface id="2" name="GigabitEthernet0/2"/>
+    </node>
+    <node name="FW2" type="SIMPLE" subtype="ASAv" location="1357,293">
+        <extensions>
+            <entry key="ansible_group" type="String">firewalls</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4010</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+domain-name domain.name&#xD;
+interface Management0/0&#xD;
+ ip address dhcp&#xD;
+ nameif Mgmt-intf&#xD;
+ security-level 100&#xD;
+icmp permit any Mgmt-intf&#xD;
+aaa authentication ssh console LOCAL &#xD;
+aaa authorization exec LOCAL auto-enable&#xD;
+ssh stricthostkeycheck&#xD;
+ssh 0.0.0.0 0.0.0.0 Mgmt-intf &#xD;
+ssh key-exchange group dh-group14-sha1&#xD;
+crypto key generate rsa modulus 1024 &#xD;
+username do_not_delete_this_user password JHjdYNHbnvF5aMG8 privilege 15&#xD;
+</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.110</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0"/>
+        <interface id="1" name="GigabitEthernet0/1"/>
+        <interface id="2" name="GigabitEthernet0/2"/>
+    </node>
+    <node name="HQ1" type="SIMPLE" subtype="IOSv" location="804,153">
+        <extensions>
+            <entry key="ansible_group" type="String">routers</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4001</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.101</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+    </node>
+    <node name="HQ2" type="SIMPLE" subtype="IOSv" location="813,404">
+        <extensions>
+            <entry key="ansible_group" type="String">routers</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4002</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.102</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+    </node>
+    <node name="ISP" type="SIMPLE" subtype="IOSv" location="990,257">
+        <extensions>
+            <entry key="ansible_group" type="String">routers</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4003</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.103</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet0/4"/>
+    </node>
+    <node name="BR2" type="SIMPLE" subtype="IOSv" location="1189,141">
+        <extensions>
+            <entry key="ansible_group" type="String">routers</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4004</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.104</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+    </node>
+    <node name="BR3" type="SIMPLE" subtype="IOSv" location="1199,403">
+        <extensions>
+            <entry key="ansible_group" type="String">routers</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+            <entry key="static_serial_port_0" type="Integer">4005</entry>
+            <entry key="config" type="String">!&#xD;
+hostname initial_hostname&#xD;
+ip domain-name domain.name&#xD;
+username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8&#xD;
+vrf definition Mgmt-intf&#xD;
+ !&#xD;
+ address-family ipv4&#xD;
+ exit-address-family&#xD;
+!&#xD;
+interface GigabitEthernet0/0&#xD;
+ vrf forwarding Mgmt-intf&#xD;
+ ip address dhcp&#xD;
+ media-type rj45&#xD;
+ negotiation auto&#xD;
+!&#xD;
+ip ssh port 2222 rotary 1&#xD;
+line vty 10 15&#xD;
+ rotary 1&#xD;
+ login local&#xD;
+ privilege level 15&#xD;
+ logging synchronous&#xD;
+ transport input ssh&#xD;
+!&#xD;
+crypto key gen rsa gen mod 1024&#xD;
+!&#xD;
+end</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.105</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+    </node>
+    <node name="L2VPN" type="SIMPLE" subtype="Unmanaged Switch" location="1202,554">
+        <interface id="0" name="link1"/>
+        <interface id="1" name="link2"/>
+        <interface id="2" name="link3"/>
+    </node>
+    <node name="RADIUS" type="SIMPLE" subtype="lxc" location="330,27">
+        <extensions>
+            <entry key="ansible_group" type="String">servers</entry>
+            <entry key="config" type="String">#cloud-config&#xD;
+bootcmd:&#xD;
+- ln -s -t /etc/rc.d /etc/rc.local&#xD;
+hostname: RADIUS&#xD;
+manage_etc_hosts: true&#xD;
+runcmd:&#xD;
+- systemctl start rc-local&#xD;
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config&#xD;
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config&#xD;
+- service ssh restart&#xD;
+- service sshd restart&#xD;
+- ip addr flush dev eth1&#xD;
+- ip addr flush dev eth2&#xD;
+- ifconfig eth2 down&#xD;
+- route del -net default&#xD;
+- dhclient eth1&#xD;
+users:&#xD;
+- default&#xD;
+- gecos: User configured by VIRL Configuration Engine 0.23.12&#xD;
+  lock-passwd: false&#xD;
+  name: wsc2017&#xD;
+  plain-text-passwd: cisco1&#xD;
+  shell: /bin/bash&#xD;
+  ssh-authorized-keys:&#xD;
+  - VIRL-USER-SSH-PUBLIC-KEY&#xD;
+  sudo: ALL=(ALL) ALL&#xD;
+- gecos: User for automated testing&#xD;
+  lock-passwd: false&#xD;
+  name: do_not_delete_this_user&#xD;
+  plain-text-passwd: JHjdYNHbnvF5aMG8&#xD;
+  shell: /bin/bash&#xD;
+  ssh-authorized-keys:&#xD;
+  - VIRL-USER-SSH-PUBLIC-KEY&#xD;
+  sudo: ALL=(ALL) NOPASSWD: ALL&#xD;
+chpasswd:&#xD;
+  list: |&#xD;
+    root:Skill39&#xD;
+  expire: False&#xD;
+write_files:&#xD;
+- path: /etc/systemd/system/dhclient@.service&#xD;
+  content: |&#xD;
+    [Unit]&#xD;
+    Description=Run dhclient on %i interface&#xD;
+    After=network.target&#xD;
+    [Service]&#xD;
+    Type=oneshot&#xD;
+    ExecStart=/sbin/dhclient %i -nw -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease&#xD;
+    ExecStart=/sbin/dhclient %i -nw -pf /var/run/dhclient6.%i.pid -6 -S&#xD;
+    RemainAfterExit=yes&#xD;
+  owner: root:root&#xD;
+  permissions: '0644'&#xD;
+- path: /etc/rc.local&#xD;
+  owner: root:root&#xD;
+  permissions: '0755'&#xD;
+  content: |-&#xD;
+    #!/bin/sh&#xD;
+    ifconfig eth2 up&#xD;
+    dhclient -nw eth2&#xD;
+    sleep 5&#xD;
+    dhclient -nw -6 -S eth2&#xD;
+    systemctl start dhclient@eth2.service&#xD;
+&#xD;
+    exit 0&#xD;
+package_update: true&#xD;
+packages:&#xD;
+- freeradius&#xD;
+- python</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.111</entry>
+        </extensions>
+        <interface id="0" name="eth1"/>
+        <interface id="1" name="eth2"/>
+    </node>
+    <node name="PC1" type="SIMPLE" subtype="lxc" location="315,555">
+        <extensions>
+            <entry key="ansible_group" type="String">servers</entry>
+            <entry key="config" type="String">#cloud-config&#xD;
+bootcmd:&#xD;
+- ln -s -t /etc/rc.d /etc/rc.local&#xD;
+hostname: PC1&#xD;
+manage_etc_hosts: true&#xD;
+runcmd:&#xD;
+- systemctl start rc-local&#xD;
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config&#xD;
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config&#xD;
+- service ssh restart&#xD;
+- service sshd restart&#xD;
+- ip addr flush dev eth1&#xD;
+- ip addr flush dev eth2&#xD;
+- ifconfig eth2 down&#xD;
+- route del -net default&#xD;
+- dhclient eth1&#xD;
+users:&#xD;
+- default&#xD;
+- gecos: User configured by VIRL Configuration Engine 0.23.12&#xD;
+  lock-passwd: false&#xD;
+  name: wsc2017&#xD;
+  plain-text-passwd: cisco1&#xD;
+  shell: /bin/bash&#xD;
+  ssh-authorized-keys:&#xD;
+  - VIRL-USER-SSH-PUBLIC-KEY&#xD;
+  sudo: ALL=(ALL) ALL&#xD;
+- gecos: User for automated testing&#xD;
+  lock-passwd: false&#xD;
+  name: do_not_delete_this_user&#xD;
+  plain-text-passwd: JHjdYNHbnvF5aMG8&#xD;
+  shell: /bin/bash&#xD;
+  ssh-authorized-keys:&#xD;
+  - VIRL-USER-SSH-PUBLIC-KEY&#xD;
+  sudo: ALL=(ALL) NOPASSWD: ALL&#xD;
+chpasswd:&#xD;
+  list: |&#xD;
+    root:Skill39&#xD;
+  expire: False&#xD;
+write_files:&#xD;
+- path: /etc/systemd/system/dhclient@.service&#xD;
+  content: |&#xD;
+    [Unit]&#xD;
+    Description=Run dhclient on %i interface&#xD;
+    After=network.target&#xD;
+    [Service]&#xD;
+    Type=oneshot&#xD;
+    ExecStart=/sbin/dhclient %i -nw -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease&#xD;
+    ExecStart=/sbin/dhclient %i -nw -pf /var/run/dhclient6.%i.pid -6 -S&#xD;
+    RemainAfterExit=yes&#xD;
+  owner: root:root&#xD;
+  permissions: '0644'&#xD;
+- path: /etc/rc.local&#xD;
+  owner: root:root&#xD;
+  permissions: '0755'&#xD;
+  content: |-&#xD;
+    #!/bin/sh&#xD;
+    ifconfig eth2 up&#xD;
+    dhclient -nw eth2&#xD;
+    sleep 5&#xD;
+    dhclient -nw -6 -S eth2&#xD;
+    systemctl start dhclient@eth2.service&#xD;
+&#xD;
+    exit 0&#xD;
+package_update: true&#xD;
+packages:&#xD;
+- openconnect&#xD;
+- python</entry>
+          <entry key="AutoNetkit.mgmt_ip" type="String">192.168.152.112</entry>
+        </extensions>
+        <interface id="0" name="eth1"/>
+        <interface id="1" name="eth2"/>
+    </node>
+    <node name="Provision-01" type="ASSET" subtype="FLAT" location="153,26">
+        <extensions>
+            <entry key="host_network" type="String">shared-NAT</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+    </node>
+    <node name="Provision-02" type="ASSET" subtype="FLAT" location="163,551">
+        <extensions>
+            <entry key="host_network" type="String">shared-NAT</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+    </node>
+    <annotations/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[6]" src="/virl:topology/virl:node[2]/virl:interface[6]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[2]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[3]" src="/virl:topology/virl:node[1]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[1]" src="/virl:topology/virl:node[6]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[2]" src="/virl:topology/virl:node[7]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[4]" src="/virl:topology/virl:node[10]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[11]/virl:interface[3]" src="/virl:topology/virl:node[10]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[5]" src="/virl:topology/virl:node[1]/virl:interface[5]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[2]" src="/virl:topology/virl:node[7]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[11]/virl:interface[1]" src="/virl:topology/virl:node[4]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[2]" src="/virl:topology/virl:node[3]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[6]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[3]" src="/virl:topology/virl:node[9]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[3]" src="/virl:topology/virl:node[11]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[2]" src="/virl:topology/virl:node[9]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[4]" src="/virl:topology/virl:node[12]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[4]" src="/virl:topology/virl:node[13]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[12]/virl:interface[2]" src="/virl:topology/virl:node[14]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[13]/virl:interface[2]" src="/virl:topology/virl:node[15]/virl:interface[1]"/>
+</topology>

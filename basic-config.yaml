@@ -1,0 +1,170 @@
+---
+- name: Configure hostnames 
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure hostnames on IOS devices 
+      ios_config:
+        lines: hostname {{ hostname }}
+      when: (ansible_network_os == "ios")
+    - name: Configure hostnames on ASA devices
+      asa_config:
+        lines: hostname {{ hostname }}
+      when: (ansible_network_os == "asa")
+
+- name: Configure domain name
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure domain name on IOS devices 
+      ios_config:
+        lines: ip domain name {{ domain_name }}
+      when: (ansible_network_os == "ios")
+    - name: Configure domain name on ASA devices
+      asa_config:
+        lines: domain-name {{ domain_name }}
+      when: (ansible_network_os == "asa")
+
+- name: Configure local users
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure local users on IOS devices
+      ios_config:
+        lines: username {{ item.username }} privilege {{ item.privilege }} algorithm-type {{ item.algorithm_type }} secret {{ item.configured_password }}
+      #ios_user:
+      #  name: "{{ item.username }}"
+      #  configured_password: "{{ item.configured_password }}"
+      #  privilege: "{{ item.privilege }}"
+      loop: "{{ users }}"
+      when: (ansible_network_os == "ios")
+    - name: Configure local users on ASA devices      
+      asa_config:
+        lines: username {{ item.username }} password {{ item.configured_password }} privilege {{ item.privilege }}
+      loop: "{{ users }}"
+      when: (ansible_network_os == "asa")
+
+- name: Configure enable password 
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure enable password on IOS devices
+      ios_config:
+        lines: enable {{ enable_type }} {{ enable_cleartext_password }}
+      when: (ansible_network_os == "ios")
+    - name: Configure enable password on ASA devices
+      asa_config:
+        lines: enable password {{ enable_cleartext_password }}
+      when: (ansible_network_os == "asa")
+
+- name: Configure service password encryption on IOS devices
+  hosts: routers:switches
+  gather_facts: false
+  tasks:
+    - name: Configure service password encryption on IOS devices
+      ios_config:
+        lines: service password-encryption
+      when: (ansible_network_os == "ios")
+
+- name: Configure default AAA model
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure default AAA model on IOS devices
+      ios_config:
+        lines: 
+          - aaa new-model
+          - aaa authentication login default local
+          - aaa authorization exec default local
+      when: (ansible_network_os == "ios")
+    - name: Configure default AAA model on ASA devices
+      asa_config:
+        lines: 
+          - aaa authentication ssh console LOCAL 
+          - aaa authentication serial console LOCAL
+          - aaa authentication enable console LOCAL
+          - aaa authentication http console LOCAL
+          - aaa authorization exec LOCAL auto-enable
+      when: (ansible_network_os == "asa")
+
+- name: Configure authorization on serial console
+  hosts: BR3
+  gather_facts: false
+  tasks:
+    - name: Configure authorization on serial console
+      ios_config:
+        lines: 
+          - aaa authorization console
+      when: (ansible_network_os == "ios")
+
+- name: Configure synchronous logging on IOS devices
+  hosts: routers:switches
+  gather_facts: false
+  tasks:
+    - name: Configure synchronous logging on IOS devices      
+      ios_config:
+        lines: 
+          - logging synchronous
+        parents: line vty {{ item.start_range }} {{ item.end_range }} 
+      loop: "{{ lines }}"
+      when: (ansible_network_os == "ios")
+
+- name: Configure transport input on IOS devices
+  hosts: routers:switches
+  gather_facts: false
+  tasks:
+    - name: Configure vty transport input on IOS devices
+      ios_config:
+        lines: 
+          - transport input {{ item.transport_input }}
+        parents: line vty {{ item.start_range }} {{ item.end_range }}      
+      loop: "{{ lines }}"
+      when: ansible_network_os == "ios"
+
+- name: Configure SSH version 2
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: onfigure SSH version 2 on IOS devices
+      ios_config:
+        lines: ip ssh version 2
+      when: (ansible_network_os == "ios")
+    - name: onfigure SSH version 2 on ASA devices
+      asa_config:
+        lines: ssh version 2
+      when: (ansible_network_os == "asa")
+
+- name: Get current datetime
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check system datetime
+      shell: date +"%H:%M:%S %d %b %Y"
+      register: system_datetime
+    - name: Set datetime as fact
+      set_fact: datetime={{ system_datetime.stdout }}
+    - debug: msg="var is {{ datetime }}"
+
+- name: Configure time
+  hosts: routers:switches:firewalls
+  gather_facts: false
+  tasks:
+    - name: Configure timezone on IOS devices
+      ios_config:
+        lines: clock timezone {{ timezone_name }} {{ timezone_offset }} 
+      when: (ansible_network_os == "ios")
+    - debug: msg="var is {{ hostvars['localhost']['datetime'] }}" 
+    - name: Set clocks on IOS devices
+      ios_command:
+        commands: clock set {{ hostvars['localhost']['datetime'] }}
+      when: (ansible_network_os == "ios")
+    - name: Configure timezone on ASA devices
+      asa_config:
+        lines: clock timezone {{ timezone_name }} {{ timezone_offset }} 
+      when: (ansible_network_os == "asa")
+    - debug: msg="var is {{ hostvars['localhost']['datetime'] }}" 
+    - name: Set clocks on ASA devices
+      asa_command:
+        commands: clock set {{ hostvars['localhost']['datetime'] }}
+      when: (ansible_network_os == "asa")
+

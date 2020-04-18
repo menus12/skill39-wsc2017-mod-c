@@ -1,0 +1,18 @@
+####  CONNECTION SPECIFIC ####
+
+####  CONFIGURATION SPECIFIC ####
+hostname: FW2
+
+l3_interfaces:
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    description: LAN3
+    ipv4_address: 10.20.30.253 255.255.255.0
+    security_level: 100
+    nameif: inside
+  - interface_type: GigabitEthernet
+    interface_id: 0/2
+    description: INET4
+    ipv4_address: 20.17.6.2 255.255.255.0
+    security_level: 0
+    nameif: outside

@@ -1,0 +1,69 @@
+####  CONNECTION SPECIFIC ####
+
+####  CONFIGURATION SPECIFIC ####
+hostname: SW1
+
+vtp_mode: client
+
+stp_priority:
+  - vlan_id: 101
+    priority: 0
+  - vlan_id: 102
+    priority: 61440
+  - vlan_id: 103
+    priority: 28672
+
+l2_interfaces:
+  - interface_type: GigabitEthernet
+    interface_id: 0/1
+    description: SW2_uplink
+    mode: trunk
+    trunk_encapsulation: dot1q
+    access_vlan: 1
+    native_vlan: 1
+    portfast: false
+    lag_id: 1
+    lag_mode: desirable
+  - interface_type: GigabitEthernet
+    interface_id: 0/2
+    description: SW2_uplink
+    mode: trunk
+    trunk_encapsulation: dot1q
+    access_vlan: 1
+    native_vlan: 1
+    portfast: false
+    lag_id: 1
+    lag_mode: desirable
+  - interface_type: GigabitEthernet
+    interface_id: 0/3
+    description: SW2_uplink
+    mode: trunk
+    trunk_encapsulation: dot1q
+    access_vlan: 1
+    native_vlan: 1
+    portfast: false
+    lag_id: 1
+    lag_mode: desirable
+  - interface_type: GigabitEthernet
+    interface_id: 1/0
+    description: RADIUS
+    mode: access
+    trunk_encapsulation: dot1q
+    access_vlan: 101
+    native_vlan: 1
+    portfast: true
+    stp_guard: root
+  - interface_type: GigabitEthernet
+    interface_id: 1/1
+    description: SW3_uplink
+    mode: dynamic desirable
+    trunk_encapsulation: dot1q
+    access_vlan: 1
+    native_vlan: 1
+    portfast: false
+
+l3_interfaces:
+  - interface_type: Vlan
+    interface_id: 101
+    description: LAN1
+    ipv4_address: 192.168.10.51 255.255.255.0
