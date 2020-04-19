@@ -1,0 +1,12 @@
+---
+#- debug:
+#    msg: bgp configuration is called
+
+- name: Configure BGP networks on IOS devices
+  ios_config:
+    lines:
+      - network {{ item.0.ipv4_address.split(' ') | join('/') |  ipaddr('network') }} mask {{ item.0.ipv4_address.split(' ') | join('/') | ipaddr('netmask') }} 
+    parents: 
+      - router bgp {{ item.1.area }}
+      - address-family ipv4
+  when: (ansible_network_os == "ios")

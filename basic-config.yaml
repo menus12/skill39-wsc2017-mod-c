@@ -11,10 +11,11 @@
       asa_config:
         lines: hostname {{ hostname }}
       when: (ansible_network_os == "asa")
-    - name: Configure hostnames on Linux servers 
-      hostname: 
-        name: "{{ hostname }}"
-      when: (ansible_network_os == "Linux")
+    - name: Configure FQDN on Linux servers 
+      shell: |
+        hostname: {{ hostname }}.{{ domain_name}}
+        sed 's/127.0.0.1 localhost/127.0.0.1 localhost {{ hostname }}.{{ domain_name}}/g' /etc/hosts | cat > /etc/hosts        
+      when: (ansible_network_os == "linux")
 
 - name: Configure domain name
   hosts: routers:switches:firewalls
@@ -47,6 +48,34 @@
         lines: username {{ item.username }} password {{ item.configured_password }} privilege {{ item.privilege }}
       loop: "{{ users }}"
       when: (ansible_network_os == "asa")
+    - name: Configure local users on Linux devices      
+      user:
+        name: "{{ item.username }}" 
+        password: "{{ item.configured_password }}"
+      loop: "{{ users }}"
+      when: (ansible_network_os == "linux")
+
+- name: Configure sudoers on linux devices 
+  hosts: servers
+  gather_facts: false
+  tasks:
+    - name: Make sure we have a 'wheel' group
+      group:
+        name: wheel
+        state: present
+      when: (ansible_network_os == "linux")
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+      when: (ansible_network_os == "linux")
+    - name: Add sudoers users to wheel group
+      user: name={{ item.username }} groups=wheel append=yes state=present createhome=yes
+      loop: "{{ users }}"
+      when: (ansible_network_os == "linux")
 
 - name: Configure enable password 
   hosts: routers:switches:firewalls

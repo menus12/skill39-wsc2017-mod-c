@@ -43,7 +43,7 @@
     - name: Configure IPv6 address on interfaces
       ios_config:
         lines:
-          - ipv6 address {{item.ipv6_address}}
+          - ipv6 address {{item.ipv6_address}} {{ item.ipv6_address_option | d("") }}
         parents: interface {{item.interface_type}}{{item.interface_id}}
       when: item.ipv6_address is defined
       loop: "{{ l3_interfaces | default([]) }}"
@@ -92,3 +92,22 @@
           - "{{ item.transport_input }} {{ item.network }} {{ item.nameif }}"
       loop: "{{ lines }}"
       when: ansible_network_os == "asa"
+
+- name: Configure interfaces IP addressing on Linux servers
+  hosts: servers
+  gather_facts: true
+  tasks:
+    - name: Wipe non-provision interfaces
+      shell: |
+        ip a flush {{ item }} 
+        ip link set dev {{ item }} down
+      when: item is not in ['lo', 'eth0']
+      loop: "{{ ansible_interfaces }}"
+    - name: Configure DHCP address assignment
+      shell: |
+        ip link set dev {{item.interface_type}}{{item.interface_id}} up
+        dhclient {{item.interface_type}}{{item.interface_id}} -nw
+      when: 
+        - item.ipv4_address is defined
+        - item.ipv4_address == "dhcp"
+      loop: "{{ l3_interfaces | default([]) }}"

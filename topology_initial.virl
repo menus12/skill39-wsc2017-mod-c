@@ -184,6 +184,7 @@ username do_not_delete_this_user password JHjdYNHbnvF5aMG8 privilege 15&#xD;
     <node name="HQ1" type="SIMPLE" subtype="IOSv" location="804,153">
         <extensions>
             <entry key="ansible_group" type="String">routers</entry>
+            <entry key="ansible_group" type="String">routing</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="static_serial_port_0" type="Integer">4001</entry>
             <entry key="config" type="String">!&#xD;

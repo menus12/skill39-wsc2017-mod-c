@@ -1,0 +1,3 @@
+---
+- debug:
+    msg: ospfv3 configuration is called

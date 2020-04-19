@@ -99,7 +99,7 @@
         lines:          
           - switchport trunk native vlan {{ item.native_vlan }}
         parents: interface {{item.interface_type}}{{item.interface_id}}
-      when: item.native_vlan is defined and tem.native_vlan != 1 
+      when: item.native_vlan is defined and item.native_vlan != 1 
       loop: "{{ l2_interfaces | default([]) }}"
     - name: Configure access ports
       ios_config:

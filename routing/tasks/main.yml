@@ -1,0 +1,27 @@
+---
+# tasks file for routing
+
+#########################
+#FIX BUG IN /usr/lib/python2.7/dist-packages/ansible/plugins/filter/ipaddr.py
+
+#def _network_query(v):
+#    '''Return the network of a given IP or subnet'''
+#    if v.size >= 1:   <--------------- should be more or equial then 1, otherwise will not return network for /32 loopbacks
+#        return str(v.network)
+
+- name: Check IPv4 routing topology
+  include_tasks: "{{item.1.protocol}}.yaml"
+  when: 
+    - item.1.protocol == "eigrp"
+    - item.0.ipv4_address is defined
+    - item.1.networks is defined
+    - item.0.ipv4_address.split(' ') | join('/') | ipaddr('network/prefix') in item.1.networks
+  loop: "{{ l3_interfaces | d([]) | union(l3_subinterfaces | d([])) | product(routing_instance | d([])) | list}}"
+
+#- debug:
+#    msg: "interface {{ item.0.interface_type }} {{item.0.interface_id}} of {{hostvars[inventory_hostname]['hostname']}} in {{item.1.protocol }} {{item.1.area}}"
+#  when: 
+#    - item.0.ipv6_address is defined
+#    - item.1.networks is defined
+#    - item.0.ipv6_address | ipaddr('subnet') in item.1.networks
+#  loop: "{{ l3_interfaces | d([]) | union(l3_subinterfaces | d([])) | product(routing_instance | d([])) | list}}"

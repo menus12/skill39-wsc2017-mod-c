@@ -1,8 +1,13 @@
 ####  CONNECTION SPECIFIC ####
 ansible_connection: ssh
 ansible_become: yes
-ansible_become_method: sudo
-ansible_become_pass: JHjdYNHbnvF5aMG8
-ansible_network_os: Linux
+ansible_become_method: su
+ansible_become_pass: Skill39
+ansible_network_os: linux
 
 ####  CONFIGURATION SPECIFIC ####
+
+l3_interfaces:
+  - interface_type: eth
+    interface_id: 1
+    ipv4_address: dhcp

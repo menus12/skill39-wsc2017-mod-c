@@ -1,17 +1,15 @@
 ---
-- name: Configure hostnames 
-  hosts: all
+- name: debug
+  hosts: routers
   gather_facts: false
-  tasks:
-    - name: Configure hostnames on IOS devices 
-      ios_config:
-        lines: hostname {{ hostname }}
-      when: (ansible_network_os == "ios")
-    - name: Configure hostnames on ASA devices
-      asa_config:
-        lines: hostname {{ hostname }}
-      when: (ansible_network_os == "asa")
-    - name: Configure hostnames on Linux servers 
-      hostname: 
-        name: "{{ hostname }}"
-      when: (ansible_network_os == "Linux")
+  roles:
+    - routing
+#  tasks:
+#    - ios_config:
+#        lines:
+#          - network 9.9.9.9 0.0.0.0 area 0
+#        parents: router ospf 9
+
+
+
+

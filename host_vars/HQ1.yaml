@@ -23,7 +23,8 @@ l3_subinterfaces:
     vlan_mode: native
     description: LAN1
     ipv4_address: 192.168.10.254 255.255.255.0
-    ipv6_address: A1F:EA75:CA75::/64 eui-64
+    ipv6_address: a1f:ea75:ca75::0/64
+    ipv6_address_option: eui-64
   - interface_type: GigabitEthernet
     interface_id: 0/1
     vlan: 102
