@@ -15,7 +15,7 @@
   hosts: switches
   gather_facts: false
   roles:
-    - vlans
+    - lag
 
 
 

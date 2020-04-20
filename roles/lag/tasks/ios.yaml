@@ -1,0 +1,6 @@
+---
+
+- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
+  ios_config: 
+    src: "{{ansible_network_os | lower}}_lag_config.j2"
+  when: l2_interfaces is defined

@@ -1,0 +1,15 @@
+{% for item in l2_interfaces %}
+
+{% if 
+    item.lag_id is defined and
+    item.lag_id >= 1 and
+    item.lag_mode is defined and
+    item.lag_mode is in ['active', 'passive', 'auto', 'desirable']
+%}
+
+interface {{item.interface_type}}{{item.interface_id}}
+ channel-group {{item.lag_id}} mode {{item.lag_mode}}
+
+{% endif %}
+
+{% endfor %}
