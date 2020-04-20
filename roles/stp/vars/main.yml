@@ -1,0 +1,4 @@
+---
+# vars file for stp
+
+stp_mode: rapid-pvst

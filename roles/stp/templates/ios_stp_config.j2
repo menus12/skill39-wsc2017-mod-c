@@ -1,0 +1,15 @@
+spanning-tree mode {{ stp_mode }}
+
+{% for item in stp_priority | default([]) %}
+spanning-tree vlan {{ item.vlan_id | d(1) }} priority {{ item.priority | d(61440) }}
+{% endfor %}
+
+{% for item in l2_interfaces | default([]) %}
+interface {{item.interface_type}}{{item.interface_id}}
+{% if item.portfast %}
+ spanning-tree portfast edge
+{% endif %}
+{% if item.stp_guard is defined and item.stp_guard != "" %}
+ spanning-tree guard {{ item.stp_guard }}
+{% endif %}
+{% endfor %}

@@ -12,10 +12,10 @@
 #    - debug: msg="var is {{ datetime }}"
 
 - name: single run
-  hosts: switches
+  hosts: HQ1
   gather_facts: false
   roles:
-    - lag
+    - stp
 
 
 
