@@ -3,6 +3,8 @@
 ####  CONFIGURATION SPECIFIC ####
 hostname: BR3
 
+aaa_authorization_console: true
+
 l3_interfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1

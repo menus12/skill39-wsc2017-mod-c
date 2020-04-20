@@ -1,0 +1,34 @@
+---
+- name: Get current datetime
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check system datetime
+      shell: date +"%H:%M:%S %d %b %Y"
+      register: system_datetime
+    - name: Set datetime as fact
+      set_fact: datetime={{ system_datetime.stdout }}
+
+- name: Basic configuration
+  hosts: all
+  gather_facts: false
+  roles: 
+    - basic-config
+
+- name: Switching configuration
+  hosts: switches
+  gather_facts: false
+  roles: 
+    - vtp 
+    - vlans 
+    - lag
+    - stp
+    - switchports
+
+- name: Routed interfaces and SSH configuration 
+  hosts: all
+  gather_facts: false
+  roles: 
+    - routed-ports
+    - ssh
+
