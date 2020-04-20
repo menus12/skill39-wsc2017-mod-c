@@ -1,6 +1,6 @@
 ---
 # tasks file for vtp
 
-- name: Call basic config generator  
+- name: Call VTP config generator  
   include_tasks: "{{ansible_network_os | lower}}.yaml"
   when: ansible_network_os is defined

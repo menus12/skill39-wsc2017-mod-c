@@ -9,7 +9,6 @@
       register: system_datetime
     - name: Set datetime as fact
       set_fact: datetime={{ system_datetime.stdout }}
-#    - debug: msg="var is {{ datetime }}"
 
 - name: single run
   hosts: HQ1
