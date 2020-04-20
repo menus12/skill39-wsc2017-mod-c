@@ -18,7 +18,7 @@ interface {{item.interface_type}}{{item.interface_id}}
 
 {% for item in l3_subinterfaces | default([])  %}
 interface {{item.interface_type}}{{item.interface_id}}.{{item.vlan}}
-{% if item.description is defined %}
+{% if item.description is defined and item.description != None %}
  description {{item.description}}
 {% endif %}
  encapsulation dot1Q {{item.vlan}} {{ item.vlan_mode | d("") }}
