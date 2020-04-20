@@ -1,0 +1,6 @@
+---
+# defaults file for vlans
+
+vlans:
+  - vlan_id: 1
+    name: default

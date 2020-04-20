@@ -1,0 +1,10 @@
+---
+# vars file for vlans
+
+vlans:
+  - vlan_id: 101
+    name: LAN1
+  - vlan_id: 102
+    name: LAN2
+  - vlan_id: 103
+    name: EDGE
