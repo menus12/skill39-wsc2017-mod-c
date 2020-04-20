@@ -15,7 +15,7 @@
   hosts: HQ1
   gather_facts: false
   roles:
-    - stp
+    - switchports
 
 
 

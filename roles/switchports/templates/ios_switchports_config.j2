@@ -1,0 +1,14 @@
+{% for item in l2_interfaces | default([]) %}
+interface {{item.interface_type}}{{item.interface_id}}
+{% if item.mode != "access" %}
+ switchport trunk encapsulation {{ item.trunk_encapsulation }}
+ switchport mode {{ item.mode }}
+{% endif %}
+{% if item.native_vlan is defined and item.native_vlan != 1 %}
+ switchport trunk native vlan {{ item.native_vlan }}
+{% endif %}
+{% if item.mode == "access" %}
+ switchport mode {{ item.mode }}
+ switchport access vlan {{ item.access_vlan | default(1)}}
+{% endif %}
+{% endfor%}
