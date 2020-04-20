@@ -23,6 +23,7 @@ l2_interfaces:
     access_vlan: 1
     native_vlan: 101
     portfast: false
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/2
     description: HQ2
@@ -31,6 +32,7 @@ l2_interfaces:
     access_vlan: 1
     native_vlan: 1
     portfast: false
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/3
     description: FW1
@@ -39,6 +41,7 @@ l2_interfaces:
     access_vlan: 103
     native_vlan: 1
     portfast: true
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 1/1
     description: SW3_uplink
@@ -47,6 +50,7 @@ l2_interfaces:
     access_vlan: 1
     native_vlan: 1
     portfast: false
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 1/2
     description: SW3_uplink
@@ -55,9 +59,11 @@ l2_interfaces:
     access_vlan: 1
     native_vlan: 1
     portfast: false
+    shutdown: false
 
 l3_interfaces:
   - interface_type: Vlan
     interface_id: 101
     description: LAN1
     ipv4_address: 192.168.10.53 255.255.255.0
+    shutdown: false

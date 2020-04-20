@@ -8,16 +8,20 @@ l3_interfaces:
     interface_id: 0/1
     description: LAN3
     ipv4_address: 10.20.30.254 255.255.255.0
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/2
     description: INET2
     ipv4_address: 20.17.5.10 255.255.255.252
+    shutdown: false
   - interface_type: Loopback
     interface_id: 20
     description: 
     ipv4_address: 20.20.20.20 255.255.255.255
+    shutdown: false
   - interface_type: Loopback
     interface_id: 2
     description: 
     ipv4_address: 2.2.2.2 255.255.255.255
     ipv6_address: dead:beef:2::1/128
+    shutdown: false

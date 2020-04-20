@@ -6,16 +6,19 @@ hostname: HQ1
 l3_interfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1
-    description: 
+    description: SW3_uplink
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/2
     description: INET11
     ipv4_address: 20.17.5.2 255.255.255.252
+    shutdown: false
   - interface_type: Loopback
     interface_id: 101
     description: 
     ipv4_address: 11.11.11.11 255.255.255.255
     ipv6_address: dead:beef:11::1/128
+    shutdown: false
 l3_subinterfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1
@@ -25,13 +28,16 @@ l3_subinterfaces:
     ipv4_address: 192.168.10.254 255.255.255.0
     ipv6_address: a1f:ea75:ca75::0/64
     ipv6_address_option: eui-64
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/1
     vlan: 102
     description: LAN2
     ipv4_address: 192.168.20.254 255.255.255.0
+    shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/1
     vlan: 103
     description: EDGE
     ipv4_address: 192.168.30.254 255.255.255.0
+    shutdown: false

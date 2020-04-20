@@ -1,5 +1,8 @@
 {% for item in l2_interfaces | default([]) %}
 interface {{item.interface_type}}{{item.interface_id}}
+{% if item.description is defined %}
+ description {{item.description}}
+{% endif %}
 {% if item.mode != "access" %}
  switchport trunk encapsulation {{ item.trunk_encapsulation }}
  switchport mode {{ item.mode }}
@@ -10,5 +13,10 @@ interface {{item.interface_type}}{{item.interface_id}}
 {% if item.mode == "access" %}
  switchport mode {{ item.mode }}
  switchport access vlan {{ item.access_vlan | default(1)}}
+{% endif %}
+{% if item.shutdown %}
+ shutdown
+{% else %}
+ no shutdown
 {% endif %}
 {% endfor%}
