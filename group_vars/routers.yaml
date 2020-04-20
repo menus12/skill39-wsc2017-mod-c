@@ -3,7 +3,3 @@ ansible_port: 2222
 ansible_network_os: ios
 
 ####  CONFIGURATION SPECIFIC ####
-lines:
-  - start_range: 0
-    end_range: 4
-    transport_input: ssh

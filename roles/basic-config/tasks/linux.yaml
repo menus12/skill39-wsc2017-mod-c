@@ -1,0 +1,34 @@
+---
+
+- name: Configure FQDN on Linux servers 
+  shell: hostname {{ hostname }}.{{ domain_name}}      
+  
+- name: Add configured FQDN to hosts
+  lineinfile:
+    dest: /etc/hosts
+    state: present
+    regexp: '^127.0.0.1 localhost'
+    line: "127.0.0.1 localhost {{ hostname }}.{{ domain_name}}" 
+
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Configure local users on Linux devices      
+  user:
+    name: "{{ item.username }}" 
+    password: "{{ item.configured_password }}"
+  loop: "{{ users | d([]) }}"
+
+- name: Add sudoers users to wheel group
+  user: name={{ item.username }} groups=wheel append=yes state=present createhome=yes
+  loop: "{{ users | d([]) }}"

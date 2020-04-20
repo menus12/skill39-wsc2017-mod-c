@@ -1,0 +1,18 @@
+---
+# defaults file for basic-config
+
+domain_name: example.com
+aaa_enabled: true
+
+timezone_offset: 5
+timezone_name: GMT
+
+enable_type: secret
+password_encryption: true
+aaa_authorization_console: false
+
+lines:
+  - start_range: 0
+    end_range: 15
+    transport_input: ssh telnet
+    logging_synchronous: true

@@ -1,14 +1,22 @@
 ---
-- name: debug
-  hosts: routers
+
+- name: Get current datetime
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check system datetime
+      shell: date +"%H:%M:%S %d %b %Y"
+      register: system_datetime
+    - name: Set datetime as fact
+      set_fact: datetime={{ system_datetime.stdout }}
+#    - debug: msg="var is {{ datetime }}"
+
+- name: single run
+  hosts: all
   gather_facts: false
   roles:
-    - routing
-#  tasks:
-#    - ios_config:
-#        lines:
-#          - network 9.9.9.9 0.0.0.0 area 0
-#        parents: router ospf 9
+    - basic-config
+
 
 
 

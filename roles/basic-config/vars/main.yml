@@ -1,0 +1,21 @@
+---
+# vars file for basic-config
+
+enable_cleartext_password: wsi
+enable_type: password
+password_encryption: true
+domain_name: wsi2017.com
+timezone_offset: 4
+timezone_name: GMT
+
+users:
+  - username: wsi2017
+    configured_password: cisco1
+    privilege: 15
+    algorithm_type: scrypt
+
+lines:
+  - start_range: 0
+    end_range: 4
+    transport_input: ssh
+    logging_synchronous: true

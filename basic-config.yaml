@@ -158,7 +158,7 @@
   hosts: routers:switches:firewalls
   gather_facts: false
   tasks:
-    - name: onfigure SSH version 2 on IOS devices
+    - name: Configure SSH version 2 on IOS devices
       ios_config:
         lines: ip ssh version 2
       when: (ansible_network_os == "ios")
