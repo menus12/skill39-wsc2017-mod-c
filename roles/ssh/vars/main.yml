@@ -1,0 +1,9 @@
+---
+# vars file for ssh
+
+lines_start_range: 0
+lines_end_range: 4
+
+asa_ssh_interfaces:
+  - network: 0.0.0.0 0.0.0.0
+    nameif: inside

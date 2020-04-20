@@ -13,9 +13,3 @@ users:
     configured_password: cisco1
     privilege: 15
     algorithm_type: scrypt
-
-lines:
-  - start_range: 0
-    end_range: 4
-    transport_input: ssh
-    logging_synchronous: true

@@ -5,8 +5,3 @@ ansible_become_method: enable
 ansible_become_pass: wsi
 
 ####  CONFIGURATION SPECIFIC ####
-
-lines:
-  - network: 0.0.0.0 0.0.0.0
-    transport_input: ssh
-    nameif: inside

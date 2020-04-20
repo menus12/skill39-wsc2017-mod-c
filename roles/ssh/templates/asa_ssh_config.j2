@@ -1,0 +1,3 @@
+{% for item in asa_ssh_interfaces | d([]) %}
+ssh {{ item.network }} {{ item.nameif }}
+{% endfor %}

@@ -29,17 +29,3 @@ no aaa authorization console
 {% endif %}
 
 clock timezone {{ timezone_name }} {{ timezone_offset }}
-
-ip ssh version 2
-
-{% for item in lines %}
-line vty {{ item.start_range }} {{ item.end_range }}
- {% if item.logging_synchronous %}
- logging synchronous
- {% endif %}
- transport input {{ item.transport_input }}
-{% endfor %}
-
-
-
-
