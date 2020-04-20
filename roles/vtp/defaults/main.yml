@@ -1,0 +1,7 @@
+---
+# defaults file for vtp
+
+vtp_domain: default
+vtp_password: default
+vtp_mode: transparent
+vtp_version: 2

@@ -1,0 +1,5 @@
+---
+# vars file for vtp
+
+vtp_domain: WSI
+vtp_password: 2017

@@ -4,11 +4,6 @@ ansible_network_os: ios
 
 ####  CONFIGURATION SPECIFIC ####
 
-vtp_mode: transparent
-vtp_version: 2
-vtp_domain: WSI
-vtp_password: 2017
-
 stp_mode: rapid-pvst
 
 vlans:

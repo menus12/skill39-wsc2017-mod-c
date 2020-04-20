@@ -1,0 +1,6 @@
+---
+
+- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
+  ios_config: 
+    src: "{{ansible_network_os | lower}}_vtp_config.j2"
+    #dest: "./roles/basic-config/files/{{inventory_hostname}}.cfg"
