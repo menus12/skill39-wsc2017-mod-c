@@ -1,0 +1,36 @@
+{% for item in l3_interfaces | default([])  %}
+interface {{item.interface_type}}{{item.interface_id}}
+{% if item.description is defined and item.description != None %}
+ description {{item.description}}
+{% endif %}
+{% if item.ipv4_address is defined %}
+ ip address {{item.ipv4_address}}
+{% endif %}
+{% if item.ipv6_address is defined %}
+ ipv6 address {{item.ipv6_address}}
+{% endif %}
+{% if item.shutdown %}
+ shutdown
+{% else %}
+ no shutdown
+{% endif %}
+{% endfor %}
+
+{% for item in l3_subinterfaces | default([])  %}
+interface {{item.interface_type}}{{item.interface_id}}.{{item.vlan}}
+{% if item.description is defined %}
+ description {{item.description}}
+{% endif %}
+ encapsulation dot1Q {{item.vlan}} {{ item.vlan_mode | d("") }}
+{% if item.ipv4_address is defined %}
+ ip address {{item.ipv4_address}}
+{% endif %}
+{% if item.ipv6_address is defined %}
+ ipv6 address {{item.ipv6_address}}
+{% endif %}
+{% if item.shutdown %}
+ shutdown
+{% else %}
+ no shutdown
+{% endif %}
+{% endfor %}

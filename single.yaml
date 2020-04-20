@@ -11,10 +11,10 @@
       set_fact: datetime={{ system_datetime.stdout }}
 
 - name: single run
-  hosts: SW1
+  hosts: routers:switches
   gather_facts: false
   roles:
-    - switchports
+    - routed-ports
 
 
 
