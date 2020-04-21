@@ -1,0 +1,5 @@
+---
+# defaults file for config-backup
+
+archive_path: "flash://$H-$T.cfg"
+backup_on_write: false
