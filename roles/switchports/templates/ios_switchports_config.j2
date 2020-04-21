@@ -3,6 +3,10 @@ interface {{item.interface_type}}{{item.interface_id}}
 {% if item.description is defined %}
  description {{item.description}}
 {% endif %}
+{% if item.mode == "access" %}
+ switchport access vlan {{ item.access_vlan | default(1)}}
+ switchport mode {{ item.mode }}
+{% endif %}
 {% if item.mode != "access" %}
  switchport trunk encapsulation {{ item.trunk_encapsulation }}
  switchport mode {{ item.mode }}
@@ -10,9 +14,17 @@ interface {{item.interface_type}}{{item.interface_id}}
 {% if item.native_vlan is defined and item.native_vlan != 1 %}
  switchport trunk native vlan {{ item.native_vlan }}
 {% endif %}
-{% if item.mode == "access" %}
- switchport mode {{ item.mode }}
- switchport access vlan {{ item.access_vlan | default(1)}}
+{% if item.port_security_maximum is defined and item.port_security_maximum != None %}
+ switchport port-security maximum {{ item.port_security_maximum }}
+{% endif %}
+{% if item.port_security_violation is defined and item.port_security_violation != None %}
+ switchport port-security violation {{ item.port_security_violation }}
+{% endif %}
+{% if item.port_security_sticky is defined and item.port_security_sticky != None %}
+ switchport port-security mac-address sticky
+{% endif %}
+{% if item.port_security is defined and item.port_security != None %}
+  switchport port-security
 {% endif %}
 {% if item.shutdown %}
  shutdown
