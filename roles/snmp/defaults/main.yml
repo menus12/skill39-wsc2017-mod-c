@@ -1,0 +1,11 @@
+---
+# defaults file for snmp
+
+snmp_community:
+  name: cisco
+  type: RO
+snmp_location: San Jose
+snmp_contact: admin@cisco.com
+snmp_host: 127.0.0.1
+snmp_version: 2c
+asa_snmp_interface: inside

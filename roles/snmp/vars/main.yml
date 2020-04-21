@@ -1,0 +1,11 @@
+---
+# vars file for snmp
+
+snmp_community:
+  name: snmp_ro 
+  type: RO
+snmp_location: Abu-Dhabi, UAE
+snmp_contact: admin@wsi.org
+snmp_host: 192.168.10.10
+snmp_version: 2c
+asa_snmp_interface: inside
