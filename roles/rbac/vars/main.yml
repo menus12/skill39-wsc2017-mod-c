@@ -1,0 +1,36 @@
+---
+# vars file for rbac
+
+views:
+  - name: show_view
+    password: wsi
+    superview: false
+    commands:
+      - type: exec
+        action: include
+        line: who
+      - type: exec
+        action: include
+        line: all show ip
+      - type: exec
+        action: include
+        line: show version
+      - type: exec
+        action: include
+        line: show
+  - name: ping_view
+    password: wsi
+    superview: false
+    commands:
+      - type: exec
+        action: include
+        line: all traceroute
+      - type: exec
+        action: include
+        line: all ping
+  - name: super_view
+    password: wsi
+    superview: true
+    views:
+      - show_view
+      - ping_view

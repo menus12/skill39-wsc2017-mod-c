@@ -1,0 +1,11 @@
+{% for item in views | d([]) %}
+parser view {{item.name}} {% if item.superview | d(false) %}superview{% endif %}
+
+ secret {{ item.password | d('cisco') }}
+ {% for cmd in item.commands | d([]) %}
+ commands {{cmd.type}} {{cmd.action}} {{cmd.line}}
+ {% endfor %}
+ {% for view_name in item.views | d([]) %}
+ view {{view_name}}
+ {% endfor %}
+{% endfor %}
