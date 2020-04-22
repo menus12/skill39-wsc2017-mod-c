@@ -11,10 +11,10 @@
       set_fact: datetime={{ system_datetime.stdout }}
 
 - name: single run
-  hosts: HQ1
+  hosts: BR3
   gather_facts: false
   roles:
-    - config-backup
+    - basic-config
 
 
 

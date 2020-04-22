@@ -1,7 +1,11 @@
 ---
-- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
-  ios_config: 
+#- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
+#  ios_config: 
+#    src: {{ansible_network_os | lower}}_basic_config.j2
+
+- template:
     src: "{{ansible_network_os | lower}}_basic_config.j2"
+    dest: "./roles/basic-config/files/{{inventory_hostname}}.cfg"
 
 - name: Set clock on {{ ansible_network_os | upper }} devices
   ios_command:

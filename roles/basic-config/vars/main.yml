@@ -8,8 +8,9 @@ domain_name: wsi2017.com
 timezone_offset: 4
 timezone_name: GMT
 
-users:
+common_users:
   - username: wsi2017
     configured_password: cisco1
     privilege: 15
+    password_type: secret
     algorithm_type: scrypt

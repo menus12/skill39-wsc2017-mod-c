@@ -10,9 +10,3 @@ timezone_name: GMT
 enable_type: secret
 password_encryption: true
 aaa_authorization_console: false
-
-lines:
-  - start_range: 0
-    end_range: 15
-    transport_input: ssh telnet
-    logging_synchronous: true

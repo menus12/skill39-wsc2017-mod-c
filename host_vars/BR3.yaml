@@ -5,6 +5,28 @@ hostname: BR3
 
 aaa_authorization_console: true
 
+users:
+  - username: user1
+    configured_password: cisco1
+    privilege: 2
+    password_type: secret
+  - username: user2
+    configured_password: cisco1
+    privilege: 7
+    password_type: secret
+  - username: user3
+    configured_password: cisco1
+    view: show_view
+    password_type: secret
+  - username: user4
+    configured_password: cisco1
+    view: ping_view
+    password_type: secret
+  - username: user5
+    configured_password: cisco1
+    view: super_view
+    password_type: secret
+
 l3_interfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1

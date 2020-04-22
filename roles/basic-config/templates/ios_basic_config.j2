@@ -2,8 +2,9 @@ hostname {{ hostname | d(inventory_name) }}
 
 ip domain name {{ domain_name }}
 
-{% for item in users if users is defined %}
-username {{ item.username }} privilege {{ item.privilege }} {%if item.algorithm_type is defined %}algorithm-type {{ item.algorithm_type }} {% endif %} secret {{ item.configured_password }}
+{% for item in common_users | d([]) | union(users | d([])) %}
+username {{ item.username }} {% if item.privilege is defined %}privilege {{ item.privilege }}{% endif %} {%if item.view is defined %}view {{ item.view }}{% endif %} {%if item.algorithm_type is defined %}algorithm-type {{ item.algorithm_type }}{% endif %} {%if item.password_type is defined %}{{item.password_type | d('secret')}} {{ item.configured_password }}{% endif %}
+
 {% endfor %}
 
 enable {{ enable_type }} {{ enable_cleartext_password }}
