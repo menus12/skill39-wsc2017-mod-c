@@ -64,6 +64,7 @@ l2_interfaces:
     trunk_encapsulation: dot1q
     access_vlan: 1
     native_vlan: 1
+    dai_trust: true
     portfast: false
     shutdown: false
 

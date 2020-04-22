@@ -1,0 +1,10 @@
+ip arp inspection vlan {{dai_vlan_range}}
+{% for item in filters | d([]) %}
+ip arp inspection filter {{item.name}} vlan {{item.vlan_range}}
+{% endfor %}
+{% for item in filters | d([]) %}
+arp access-list {{item.name}}
+{% for acl in item.acls | d([]) %}
+ {{acl.action}} ip {{acl.ip}} mac {{acl.mac}}
+{% endfor %}
+{% endfor %}

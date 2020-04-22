@@ -14,4 +14,6 @@
   hosts: SW1
   gather_facts: false
   roles:
+    - switchports
     - dhcp-snooping
+    - dai

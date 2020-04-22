@@ -11,6 +11,9 @@ interface {{item.interface_type}}{{item.interface_id}}
  switchport trunk encapsulation {{ item.trunk_encapsulation }}
  switchport mode {{ item.mode }}
 {% endif %}
+{% if item.dai_trust | d(false) %}
+ ip arp inspection trust
+{% endif %}
 {% if item.native_vlan is defined and item.native_vlan != 1 %}
  switchport trunk native vlan {{ item.native_vlan }}
 {% endif %}

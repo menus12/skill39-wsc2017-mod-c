@@ -1,0 +1,12 @@
+---
+# vars file for dai
+
+dai_vlan_range: 101
+
+filters:
+  - name: RADIUS
+    vlan_range: 101
+    acls:
+      - action: permit
+        ip: host 192.168.10.10
+        mac: any
