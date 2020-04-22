@@ -5,6 +5,20 @@ hostname: BR3
 
 aaa_authorization_console: true
 
+privileged_commands:
+  - mode: exec
+    level: 10
+    command: show ip route
+  - mode: exec
+    level: 2
+    command: show ip
+  - mode: exec
+    level: 5
+    command: show version
+  - mode: exec
+    level: 2
+    command: show
+
 users:
   - username: user1
     configured_password: cisco1

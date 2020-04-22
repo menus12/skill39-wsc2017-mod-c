@@ -29,4 +29,8 @@ aaa authorization console
 no aaa authorization console
 {% endif %}
 
+{% for item in privileged_commands | d([]) %}
+privilege {{item.mode}} level {{item.level}} {{item.command}}
+{% endfor %}
+
 clock timezone {{ timezone_name }} {{ timezone_offset }}
