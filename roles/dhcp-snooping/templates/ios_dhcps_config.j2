@@ -1,0 +1,4 @@
+ip dhcp snooping vlan {{dhcps_vlan_range}}
+{%if not dhcps_information_option | d(false) %}no {% endif %}ip dhcp snooping information option
+ip dhcp snooping database {{dhcps_db_path}}
+ip dhcp snooping

@@ -1,0 +1,6 @@
+---
+# vars file for dhcp-snooping
+
+dhcps_vlan_range: 101
+dhcps_information_option: false
+dhcps_db_path: "flash:dhcp.db"
