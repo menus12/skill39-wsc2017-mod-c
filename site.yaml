@@ -73,3 +73,30 @@
   roles: 
     - acl
     - routing
+
+- name: Local routing policy
+  hosts: HQ1
+  gather_facts: false
+  tasks:
+    - name: Set route-map for local routing policy
+      ios_config:
+        lines:
+          - match ip address ACL_RM_LP
+          - set ip next-hop 20.17.5.1
+        parents: route-map RM_LOCAL_POLICY permit 10
+    - name: Set local routing policy
+      ios_config:
+        lines: ip local policy route-map RM_LOCAL_POLICY
+
+- name: Configure routing redistribution
+  hosts: BR2
+  gather_facts: false
+  tasks:
+    - name: Set route-map for OSPF redistribution
+      ios_config:
+        lines: match ip address ACL_RED_OSPF
+        parents: route-map RM_RED_OSPF permit 10
+    - name: Configure OSPF redistribution
+      ios_config:
+        lines: redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
+        parents: router eigrp 2017
