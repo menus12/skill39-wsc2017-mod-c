@@ -65,5 +65,5 @@ l3_interfaces:
   - interface_type: Vlan
     interface_id: 101
     description: LAN1
-    ipv4_address: 192.168.10.53 255.255.255.0
+    ipv4_address: 192.168.10.53/24
     shutdown: false

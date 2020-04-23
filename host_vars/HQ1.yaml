@@ -11,12 +11,12 @@ l3_interfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/2
     description: INET11
-    ipv4_address: 20.17.5.2 255.255.255.252
+    ipv4_address: 20.17.5.2/30
     shutdown: false
   - interface_type: Loopback
     interface_id: 101
     description: 
-    ipv4_address: 11.11.11.11 255.255.255.255
+    ipv4_address: 11.11.11.11/32
     ipv6_address: dead:beef:11::1/128
     shutdown: false
 l3_subinterfaces:
@@ -25,7 +25,7 @@ l3_subinterfaces:
     vlan: 101
     vlan_mode: native
     description: LAN1
-    ipv4_address: 192.168.10.254 255.255.255.0
+    ipv4_address: 192.168.10.254/24
     ipv6_address: a1f:ea75:ca75::0/64
     ipv6_address_option: eui-64
     shutdown: false
@@ -33,14 +33,23 @@ l3_subinterfaces:
     interface_id: 0/1
     vlan: 102
     description: LAN2
-    ipv4_address: 192.168.20.254 255.255.255.0
+    ipv4_address: 192.168.20.254/24
     shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/1
     vlan: 103
     description: EDGE
-    ipv4_address: 192.168.30.254 255.255.255.0
+    ipv4_address: 192.168.30.254/24
     shutdown: false
+
+bgp_router_id: 20.17.5.2
+bgp_neighbors:
+  - local_as: 65001
+    neighbor: 20.17.5.1
+    remote_as: 65000
+  - local_as: 65001
+    neighbor: 192.168.30.253
+    remote_as: 65001
 
 pools:
   - name: LAN1
@@ -54,3 +63,12 @@ static_pools:
     interface: ansible_eth1
     gateway: 192.168.10.252
     dns_servers: 192.168.10.10
+
+standard_acls:
+  ACL_DENY_BGP_IN:
+    - deny 209.136.0.0 0.0.255.255
+    - permit any
+  ACL_FOR_NAT:
+    - permit 192.168.10.0 0.0.0.255
+  ACL_RM_LP:
+    - permit 11.11.11.11

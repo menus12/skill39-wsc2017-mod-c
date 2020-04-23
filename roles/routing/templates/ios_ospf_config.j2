@@ -1,0 +1,14 @@
+{%- set ospf_network_statements = [] -%}
+{%- for instance in routing_instance | d([]) if instance.protocol == 'ospf' -%}
+{%- for interface in  l3_interfaces | d([]) | union(l3_subinterfaces | d([])) -%}
+{%- if interface.ipv4_address is defined and interface.ipv4_address | ipaddr('subnet') in instance.ipv4_networks | d([]) | map('extract', ipv4_networks) | list -%}
+{{ ospf_network_statements.append('network '+ (interface.ipv4_address | ipaddr('network')) + ' ' + (interface.ipv4_address | ipaddr('hostmask')) + " area " + (instance.area | string)) }}
+{%- endif -%}
+{%- endfor -%}
+{%- endfor -%}
+{% if ospf_network_statements | length > 0 %}
+router ospf {{ospf_process_id}}
+{% for statement in ospf_network_statements %}
+ {{statement}}
+{% endfor %}
+{% endif %}

@@ -45,21 +45,27 @@ l3_interfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1
     description: INET3
-    ipv4_address: 20.17.5.14 255.255.255.252
+    ipv4_address: 20.17.5.14/30
     shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/2
     description: INET4
-    ipv4_address: 20.17.6.3 255.255.255.248
+    ipv4_address: 20.17.6.3/29
     shutdown: false
   - interface_type: Loopback
     interface_id: 30
     description: 
-    ipv4_address: 30.30.30.30 255.255.255.255
+    ipv4_address: 30.30.30.30/32
     shutdown: false
   - interface_type: Loopback
     interface_id: 3
     description: 
-    ipv4_address: 3.3.3.3 255.255.255.255
+    ipv4_address: 3.3.3.3/32
     ipv6_address: dead:beef:3::1/128
     shutdown: false
+
+bgp_router_id: 20.17.5.14
+bgp_neighbors:
+  - local_as: 65003
+    neighbor: 20.17.5.13
+    remote_as: 65000

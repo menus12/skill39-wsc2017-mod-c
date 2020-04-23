@@ -22,4 +22,4 @@
 #        msg: "{{ hostvars[item.name][item.interface]['macaddress'] | hwaddr('cisco') }}"
 #      loop: "{{ static_pools | d([]) }}"
   roles:
-    - dhcp-server
+    - routing

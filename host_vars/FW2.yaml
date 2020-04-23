@@ -8,14 +8,14 @@ l3_interfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1
     description: LAN3
-    ipv4_address: 10.20.30.253 255.255.255.0
+    ipv4_address: 10.20.30.253/24
     security_level: 100
     nameif: inside
     shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 0/2
     description: INET4
-    ipv4_address: 20.17.6.2 255.255.255.0
+    ipv4_address: 20.17.6.2/29
     security_level: 0
     nameif: outside
     shutdown: false

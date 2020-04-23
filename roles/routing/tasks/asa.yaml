@@ -1,0 +1,5 @@
+---
+
+- template:
+    src: "{{ansible_network_os | lower}}_ospf_config.j2"
+    dest: "./roles/routing/files/{{inventory_hostname}}_ospf.cfg"

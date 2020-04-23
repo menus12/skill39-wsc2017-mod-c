@@ -1,0 +1,27 @@
+{%- for instance in routing_instance | d([]) if instance.protocol == 'bgp' -%}
+{%- set bgp_network_statements = [] -%}
+{%- for interface in  l3_interfaces | d([]) | union(l3_subinterfaces | d([])) -%}
+{%- if interface.ipv4_address is defined and interface.ipv4_address | ipaddr('subnet') in instance.ipv4_networks | d([]) | map('extract', ipv4_networks) | list -%}
+{{ bgp_network_statements.append('network '+ (interface.ipv4_address | ipaddr('network')) + ' mask ' + (interface.ipv4_address | ipaddr('netmask'))) }}
+{%- endif -%}
+{%- endfor -%}
+{%- if bgp_network_statements | length > 0 -%}
+router {{instance.protocol}} {{instance.area}}
+ bgp router-id {{bgp_router_id}}
+{% for item in bgp_neighbors | d([]) %}
+{% if item.local_as == instance.area %}
+ neighbor {{item.neighbor}} remote-as {{item.remote_as}}
+{% endif %}
+{% endfor %}
+ address-family ipv4
+{% for statement in bgp_network_statements %}
+  {{statement}}
+{% endfor %}
+{% for item in bgp_neighbors | d([]) %}
+{% if item.local_as == instance.area %}
+  neighbor {{item.neighbor}} activate
+{% endif %}
+{% endfor %}
+ exit-address-family
+{%- endif -%}
+{%- endfor -%}

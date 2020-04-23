@@ -94,13 +94,3 @@ all:
           console_server: 192.168.172.128
           console_port: 17017
           ansible_network_os: ios
-    
-    routing:
-      hosts:
-        HQ1:
-        HQ2:
-        BR2:
-        BR3:
-        FW1:
-        FW2:
-        ISP:
