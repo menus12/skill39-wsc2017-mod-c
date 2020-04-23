@@ -11,21 +11,17 @@
   ios_config: 
     src: "{{ansible_network_os | lower}}_bgp_config.j2"
 
-#- template:
-#    src: "{{ansible_network_os | lower}}_eigrp_config.j2"
-#    dest: "./roles/routing/files/{{inventory_hostname}}_eigrp.cfg"
+- name: Render a Jinja2 template for OSPFv3 onto an {{ ansible_network_os | upper }} device
+  ios_config: 
+    src: "{{ansible_network_os | lower}}_ospfv3_config.j2"
 
 #- template:
-#    src: "{{ansible_network_os | lower}}_ospf_config.j2"
-#    dest: "./roles/routing/files/{{inventory_hostname}}_ospf.cfg"
-
-#- template:
-#    src: "{{ansible_network_os | lower}}_bgp_config.j2"
-#    dest: "./roles/routing/files/{{inventory_hostname}}_bgp.cfg"
+#    src: "{{ansible_network_os | lower}}_ospfv3_config.j2"
+#    dest: "./roles/routing/files/{{inventory_hostname}}_ospfv3.cfg"
 
 #- debug:
-#    msg: "{{ l3_interfaces | d([]) | union(l3_subinterfaces | d([])) | map('extract', ipv4_address) | list }} "
-#  when: "{{item.protocol == 'ospf'}}"
+#    msg: "{{ l3_interfaces | d([]) | union(l3_subinterfaces | d([])) | map('extract', ipv6_address) | list }} "
+#  when: "{{item.protocol == 'ospfv3'}}"
 #  loop: "{{ l3_interfaces | d([]) | union(l3_subinterfaces | d([])) }}" 
 #- debug:
-#    msg: "{{'20.17.5.1/30' | ipaddr('subnet')}}"
+#    msg: "{{'2001::1/64' | ipaddr('subnet')}}"

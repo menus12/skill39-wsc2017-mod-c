@@ -26,8 +26,8 @@ ipv6_networks:
   Loopback102: dead:beef:22::1/128
   Loopback2: dead:beef:2::1/128
   Loopback3: dead:beef:3::1/128
-  LAN1: a1f:ea75:ca75::0/64
-  DMVPN: 2001::0/64
+  LAN1: a1f:ea75:ca75::/64
+  DMVPN: 2001::/64
 
 routing_instance:
   - protocol: eigrp
