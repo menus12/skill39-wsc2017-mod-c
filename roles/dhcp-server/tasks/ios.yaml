@@ -1,0 +1,23 @@
+---
+#- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
+#  ios_config: 
+#    src: "{{ansible_network_os | lower}}_dhcp_server_config.j2"
+
+- name: Configure DHCP pools on {{ ansible_network_os | upper }} device
+  ios_config:
+    lines: 
+      - network {{item.network}}
+      - default-router {{item.gateway}}
+      - dns-server {{item.dns_servers}}
+    parents: ip dhcp pool {{item.name}}
+  loop: "{{ pools | d([]) }}"
+
+- name: Configure static DHCP pools on {{ ansible_network_os | upper }} device
+  ios_config:
+    lines: 
+      - host {{item.host}}
+      - hardware-address {{ hostvars[item.name][item.interface]['macaddress'] | hwaddr('cisco') }}
+      - default-router {{item.gateway}}
+      - dns-server {{item.dns_servers}}
+    parents: ip dhcp pool {{item.name}}
+  loop: "{{ static_pools | d([]) }}"

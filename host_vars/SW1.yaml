@@ -65,6 +65,7 @@ l2_interfaces:
     access_vlan: 1
     native_vlan: 1
     dai_trust: true
+    dhcps_trust: true
     portfast: false
     shutdown: false
 

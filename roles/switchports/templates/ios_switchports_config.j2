@@ -29,6 +29,9 @@ interface {{item.interface_type}}{{item.interface_id}}
 {% if item.port_security is defined and item.port_security != None %}
   switchport port-security
 {% endif %}
+{% if item.dhcps_trust | d(false) %}
+ ip dhcp snooping trust
+{% endif %}
 {% if item.shutdown %}
  shutdown
 {% else %}

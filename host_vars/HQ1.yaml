@@ -41,3 +41,16 @@ l3_subinterfaces:
     description: EDGE
     ipv4_address: 192.168.30.254 255.255.255.0
     shutdown: false
+
+pools:
+  - name: LAN1
+    network: 192.168.10.0 255.255.255.0
+    gateway: 192.168.10.252
+    dns_servers: 192.168.10.10
+
+static_pools:
+  - name: RADIUS
+    host: 192.168.10.10 255.255.255.0
+    interface: ansible_eth1
+    gateway: 192.168.10.252
+    dns_servers: 192.168.10.10

@@ -1,19 +1,25 @@
 ---
 
-- name: Get current datetime
-  hosts: localhost
-  gather_facts: false
-  tasks:
-    - name: Check system datetime
-      shell: date +"%H:%M:%S %d %b %Y"
-      register: system_datetime
-    - name: Set datetime as fact
-      set_fact: datetime={{ system_datetime.stdout }}
+#- name: Get current datetime
+#  hosts: localhost
+#  gather_facts: false
+#  tasks:
+#    - name: Check system datetime
+#      shell: date +"%H:%M:%S %d %b %Y"
+#      register: system_datetime
+#    - name: Set datetime as fact
+#      set_fact: datetime={{ system_datetime.stdout }}
+
+- name: get facts for static dhcp hosts
+  hosts: RADIUS
+  gather_facts: true
 
 - name: single run
-  hosts: SW1
+  hosts: HQ1
   gather_facts: false
+#  tasks:
+#    - debug: 
+#        msg: "{{ hostvars[item.name][item.interface]['macaddress'] | hwaddr('cisco') }}"
+#      loop: "{{ static_pools | d([]) }}"
   roles:
-    - switchports
-    - dhcp-snooping
-    - dai
+    - dhcp-server
