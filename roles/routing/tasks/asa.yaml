@@ -1,5 +1,5 @@
 ---
 
-- template:
+- name: Render a Jinja2 template for OSPF onto an {{ ansible_network_os | upper }} device
+  asa_config: 
     src: "{{ansible_network_os | lower}}_ospf_config.j2"
-    dest: "./roles/routing/files/{{inventory_hostname}}_ospf.cfg"

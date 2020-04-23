@@ -15,7 +15,7 @@
   gather_facts: true
 
 - name: single run
-  hosts: HQ1
+  hosts: firewalls
   gather_facts: false
 #  tasks:
 #    - debug: 

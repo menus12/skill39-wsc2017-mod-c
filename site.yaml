@@ -15,6 +15,24 @@
   roles: 
     - basic-config
 
+- name: RBAC configuration
+  hosts: BR3
+  gather_facts: false
+  roles: 
+    - rbac
+
+- name: Config archive configuration
+  hosts: HQ1
+  gather_facts: false
+  roles: 
+    - config-backup
+
+- name: SNMP configuration
+  hosts: HQ1:FW1
+  gather_facts: false
+  roles: 
+    - snmp
+
 - name: Switching configuration
   hosts: switches
   gather_facts: false
@@ -25,6 +43,13 @@
     - stp
     - switchports
 
+- name: DHCP snooping and ARP inspection configuration
+  hosts: SW1
+  gather_facts: false
+  roles: 
+    - dhcp-snooping
+    - dai
+
 - name: Routed interfaces and SSH configuration 
   hosts: all
   gather_facts: false
@@ -32,3 +57,18 @@
     - routed-ports
     - ssh
 
+- name: Gather facts for hosts with static DHCP configuration
+  hosts: RADIUS
+  gather_facts: true
+
+- name: DHCP server configuration
+  hosts: HQ1
+  gather_facts: false
+  roles: 
+    - dhcp-server
+
+- name: Routing configuration
+  hosts: routers:firewalls
+  gather_facts: false
+  roles: 
+    - routing

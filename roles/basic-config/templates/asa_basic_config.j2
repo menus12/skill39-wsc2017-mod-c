@@ -1,13 +1,9 @@
 hostname {{ hostname | d(inventory_name) }}
-
 domain-name {{ domain_name }}
-
-{% for item in users if users is defined %}
+{% for item in common_users | d([]) | union(users | d([])) %}
 username {{ item.username }} password {{ item.configured_password }} privilege {{ item.privilege }}
 {% endfor %}
-
 enable password {{ enable_cleartext_password }}
-
 {% if aaa_enabled %}
 aaa authentication ssh console LOCAL 
 aaa authentication serial console LOCAL
@@ -15,7 +11,5 @@ aaa authentication enable console LOCAL
 aaa authentication http console LOCAL
 aaa authorization exec LOCAL auto-enable
 {% endif %}
-
 ssh version 2
-
 clock timezone {{ timezone_name }} {{ timezone_offset }}
