@@ -42,3 +42,10 @@ l3_subinterfaces:
     shutdown: false
 
 bgp_router_id: 20.17.5.6
+bgp_neighbors:
+  - local_as: 65001
+    neighbor: 20.17.5.1
+    remote_as: 65000
+  - local_as: 65001
+    neighbor: 192.168.30.254
+    remote_as: 65001

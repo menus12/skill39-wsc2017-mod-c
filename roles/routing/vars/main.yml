@@ -4,7 +4,7 @@
 ipv4_networks:
   Loopback101: 11.11.11.11/32
   Loopback102: 22.22.22.22/32
-  Loopback2: 22.22.22.22/32
+  Loopback2: 2.2.2.2/32
   Loopback3: 3.3.3.3/32
   Loopback20: 20.20.20.20/32
   Loopback30: 30.30.30.30/32
