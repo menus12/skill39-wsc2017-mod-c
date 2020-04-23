@@ -3,7 +3,3 @@
 - name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
   ios_config: 
     src: "{{ansible_network_os | lower}}_acl_config.j2"
-
-#- template:
-#    src: "{{ansible_network_os | lower}}_acl_config.j2"
-#    dest: "./roles/acl/files/{{inventory_hostname}}_acl.cfg"

@@ -67,8 +67,9 @@
   roles: 
     - dhcp-server
 
-- name: Routing configuration
+- name: Routing and ACLs configuration
   hosts: routers:firewalls
   gather_facts: false
   roles: 
+    - acl
     - routing
