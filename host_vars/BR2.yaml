@@ -31,3 +31,7 @@ bgp_neighbors:
   - local_as: 65002
     neighbor: 20.17.5.9
     remote_as: 65000
+
+standard_acls:
+  ACL_RED_OSPF:
+    - permit 30.30.30.30

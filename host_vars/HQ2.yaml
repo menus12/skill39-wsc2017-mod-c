@@ -49,3 +49,7 @@ bgp_neighbors:
   - local_as: 65001
     neighbor: 192.168.30.254
     remote_as: 65001
+
+standard_acls:
+  ACL_FOR_NAT:
+    - permit 192.168.10.0 0.0.0.255

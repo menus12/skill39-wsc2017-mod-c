@@ -1,14 +1,19 @@
 hostname {{ hostname | d(inventory_name) }}
+
 ip domain name {{ domain_name }}
+
 {% for item in common_users | d([]) | union(users | d([])) %}
 username {{ item.username }} {% if item.privilege is defined %}privilege {{ item.privilege }}{% endif %} {%if item.view is defined %}view {{ item.view }}{% endif %} {%if item.algorithm_type is defined %}algorithm-type {{ item.algorithm_type }}{% endif %} {%if item.password_type is defined %}{{item.password_type | d('secret')}} {{ item.configured_password }}{% endif %}
 {% endfor %}
+
 enable {{ enable_type }} {{ enable_cleartext_password }}
+
 {% if password_encryption %}
 service password-encryption
 {% else %}
 no service password-encryption
 {% endif %}
+
 {% if aaa_enabled %}
 aaa new-model
 aaa authentication login default local
@@ -16,12 +21,15 @@ aaa authorization exec default local
 {% else %}
 no aaa new-model
 {% endif %}
+
 {% if aaa_authorization_console %}
 aaa authorization console
 {% else %}
 no aaa authorization console
 {% endif %}
+
 {% for item in privileged_commands | d([]) %}
 privilege {{item.mode}} level {{item.level}} {{item.command}}
 {% endfor %}
+
 clock timezone {{ timezone_name }} {{ timezone_offset }}

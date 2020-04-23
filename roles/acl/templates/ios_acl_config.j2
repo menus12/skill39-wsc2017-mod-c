@@ -1,0 +1,13 @@
+{% for acl in standard_acls | d([]) %}
+ip access-list standard {{acl}}
+{% for ace in standard_acls[acl] | d([]) %}
+ {{ace}}
+{% endfor %}
+{% endfor %}
+
+{% for acl in extended_acls | d([]) %}
+ip access-list extended {{acl}}
+{% for ace in standard_acls[acl] | d([]) %}
+ {{ace}}
+{% endfor %}
+{% endfor %}

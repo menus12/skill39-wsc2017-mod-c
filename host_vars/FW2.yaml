@@ -19,3 +19,7 @@ l3_interfaces:
     security_level: 0
     nameif: outside
     shutdown: false
+
+acls:
+  - ACL_IPSEC_FW1 extended permit tcp host 10.20.30.254 host 192.168.20.253
+  - ACL_SPLIT_TUNNEL standard permit host 20.20.20.20
