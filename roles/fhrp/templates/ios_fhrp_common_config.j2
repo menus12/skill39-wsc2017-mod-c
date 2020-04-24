@@ -8,6 +8,9 @@ interface {{interface.interface_type}}{{interface.interface_id}}
  {{instance.protocol}} {{instance.group}} priority {{priority.priority}}
 {% endif %}
 {% endfor %}
+{% if instance.auth is defined %}
+ {{instance.protocol}} {{instance.group}} authentication md5 key-string {{instance.auth}}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endfor %}
@@ -21,6 +24,9 @@ interface {{interface.interface_type}}{{interface.interface_id}}.{{interface.vla
  {{instance.protocol}} {{instance.group}} priority {{priority.priority}}
 {% endif %}
 {% endfor %}
+{% if instance.auth is defined %}
+ {{instance.protocol}} {{instance.group}} authentication md5 key-string {{instance.auth}}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endfor %}
