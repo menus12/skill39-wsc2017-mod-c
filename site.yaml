@@ -75,6 +75,12 @@
     - routing
     - routing-auth
 
+- name: FHRP configuration
+  hosts: HQ1:HQ2
+  gather_facts: false
+  roles: 
+    - fhrp
+
 - name: BGP ACLs
   hosts: HQ1
   gather_facts: false

@@ -1,34 +1,6 @@
 ---
 # vars file for routing
 
-ipv4_networks:
-  Loopback101: 11.11.11.11/32
-  Loopback102: 22.22.22.22/32
-  Loopback2: 2.2.2.2/32
-  Loopback3: 3.3.3.3/32
-  Loopback20: 20.20.20.20/32
-  Loopback30: 30.30.30.30/32
-  Loopback100: 8.8.8.8/32
-  Loopback200: 209.136.0.0/16
-  Loopback300: 138.76.0.0/16
-  LAN1: 192.168.10.0/24
-  LAN2: 192.168.20.0/24
-  EDGE: 192.168.30.0/24
-  LAN3: 10.20.30.0/24
-  INET11: 20.17.5.0/30
-  INET22: 20.17.5.4/30
-  INET2: 20.17.5.8/30
-  INET3: 20.17.5.12/30
-  INET4: 20.17.6.0/29
-
-ipv6_networks:
-  Loopback101: dead:beef:11::1/128
-  Loopback102: dead:beef:22::1/128
-  Loopback2: dead:beef:2::1/128
-  Loopback3: dead:beef:3::1/128
-  LAN1: a1f:ea75:ca75::/64
-  DMVPN: 2001::/64
-
 routing_instance:
   - protocol: eigrp
     area: 2017 ##AS number

@@ -3,5 +3,4 @@
   hosts: HQ1:HQ2
   gather_facts: false
   roles:
-    - fhrp
-    
+    - routing
