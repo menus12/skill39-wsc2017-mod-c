@@ -1,0 +1,11 @@
+---
+
+- name: Check existing tunnel-groups
+  asa_command:
+    commands: sh run all | i tunnel-group {{item.name}} type remote-access
+  loop: "{{tunnel_groups}}"
+  register: tg
+
+- name: Render a Jinja2 template for tunnel-groups onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_tunnel_group_config.j2"

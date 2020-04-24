@@ -192,8 +192,10 @@
           - pppoe-client dial-pool-number 1
         parents: interface GigabitEthernet0/1
 
-- name: Configure initial WebVPN settings
+- name: Configure WebVPN settings
   hosts: FW2
   gather_facts: false
   roles:
     - webvpn
+    - group-policy
+    - tunnel-group

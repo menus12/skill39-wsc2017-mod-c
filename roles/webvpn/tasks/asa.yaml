@@ -23,23 +23,3 @@
   asa_config:
     lines: ip local pool {{item.name}} {{item.range_start}}-{{item.range_end}} mask {{item.mask}}
   loop: "{{ ip_pools | d([]) }}"
-
-- name: Check existing group-policies
-  asa_command:
-    commands: sh run all | i group-policy {{item.name}} internal
-  loop: "{{group_policies}}"
-  register: gp
-
-- name: Render a Jinja2 template for group-policies onto an {{ ansible_network_os | upper }} device
-  asa_config: 
-    src: "{{ansible_network_os | lower}}_group_policy_config.j2"
-
-- name: Check existing tunnel-groups
-  asa_command:
-    commands: sh run all | i tunnel-group {{item.name}} type remote-access
-  loop: "{{tunnel_groups}}"
-  register: tg
-
-- name: Render a Jinja2 template for tunnel-groups onto an {{ ansible_network_os | upper }} device
-  asa_config: 
-    src: "{{ansible_network_os | lower}}_tunnel_group_config.j2"

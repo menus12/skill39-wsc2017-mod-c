@@ -4,3 +4,5 @@
   gather_facts: false
   roles:
     - webvpn
+    - group-policy
+    - tunnel-group

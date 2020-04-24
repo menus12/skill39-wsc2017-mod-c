@@ -1,0 +1,11 @@
+---
+
+- name: Check existing group-policies
+  asa_command:
+    commands: sh run all | i group-policy {{item.name}} internal
+  loop: "{{group_policies}}"
+  register: gp
+
+- name: Render a Jinja2 template for group-policies onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_group_policy_config.j2"
