@@ -114,3 +114,23 @@
       ios_config:
         lines: redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
           parents: router eigrp 2017
+
+- name: Configure NAT
+  hosts: HQ1:HQ2
+  gather_facts: false
+  tasks:
+    - name: Configure NAT inside interfaces
+      ios_config:
+        lines: ip nat inside
+        parents: interface GigabitEthernet0/1.101
+      async: 15
+      poll: 5
+    - name: Configure NAT outside interfaces
+      ios_config:
+        lines: ip nat outside
+        parents: interface GigabitEthernet0/2
+      async: 15
+      poll: 5
+    - name: Configure NAT statement
+      ios_config:
+        lines: ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/2 overload

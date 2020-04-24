@@ -1,6 +1,21 @@
 ---
 - name: single run
-  hosts: routers:firewalls
+  hosts: HQ1:HQ2
   gather_facts: false
-  roles:
-    - routing-auth
+  tasks:
+    - name: Configure NAT inside interfaces
+      ios_config:
+        lines: ip nat inside
+        parents: interface GigabitEthernet0/1.101
+      async: 15
+      poll: 5
+    - name: Configure NAT outside interfaces
+      ios_config:
+        lines: ip nat outside
+        parents: interface GigabitEthernet0/2
+      async: 15
+      poll: 5
+    - name: Configure NAT statement
+      ios_config:
+        lines: ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/2 overload
+    
