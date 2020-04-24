@@ -1,20 +1,6 @@
 ---
 - name: single run
-  hosts: HQ2:BR2:BR3
+  hosts: routers
   gather_facts: false
   roles:
-    - routed-ports
-  tasks:    
-    - name: Configure DMVPN spokes
-      ios_config:
-        lines:
-          - ipv6 mtu 1400
-          - ipv6 nhrp authentication wsi2017
-          - ipv6 nhrp map multicast 11.11.11.11
-          - ipv6 nhrp map 2001::11/64 11.11.11.11
-          - ipv6 nhrp network-id 100
-          - ipv6 nhrp nhs 2001::11
-          - ipv6 nhrp shortcut
-          - ipv6 ospf network broadcast
-          - ipv6 ospf priority 100
-        parents: interface Tunnel100
+    - routing

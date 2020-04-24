@@ -14,3 +14,10 @@
 - name: Render a Jinja2 template for OSPFv3 onto an {{ ansible_network_os | upper }} device
   ios_config: 
     src: "{{ansible_network_os | lower}}_ospfv3_config.j2"
+
+- name: Configure default route
+  ios_static_route:
+    prefix: 0.0.0.0
+    mask: 0.0.0.0
+    next_hop: "{{default_route}}"
+  when: default_route is defined

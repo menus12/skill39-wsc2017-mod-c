@@ -5,6 +5,8 @@ hostname: BR3
 
 aaa_authorization_console: true
 
+default_route: 20.17.5.13
+
 privileged_commands:
   - mode: exec
     level: 10
