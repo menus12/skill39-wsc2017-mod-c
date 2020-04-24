@@ -23,6 +23,8 @@ l3_interfaces:
     interface_id: 100
     description: DMVPN
     ipv6_address: 2001::22/64
+    source: Loopback102
+    mode: gre multipoint
     shutdown: false
 l3_subinterfaces:
   - interface_type: GigabitEthernet

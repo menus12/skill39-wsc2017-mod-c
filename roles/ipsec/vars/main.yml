@@ -1,0 +1,17 @@
+---
+# vars file for ipsec
+
+isakmp_identity: address
+ikev2_interface: outside
+
+ikev2_policies:
+  - encryption: aes
+    integrity: md5
+    group: 5
+    prf: sha
+
+ikev2_proposals:
+  - name: PROP
+    encryption: aes
+    integrity: md5
+

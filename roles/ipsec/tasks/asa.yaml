@@ -1,0 +1,9 @@
+---
+
+- name: Render a Jinja2 template for common IPsec parameters onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_common_ipsec_config.j2"
+
+- name: Render a Jinja2 template for crypto maps onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_crypto_map_config.j2"

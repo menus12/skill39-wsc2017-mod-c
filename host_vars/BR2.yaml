@@ -29,6 +29,8 @@ l3_interfaces:
     interface_id: 100
     description: DMVPN
     ipv6_address: 2001::2/64
+    source: Loopback2
+    mode: gre multipoint
     shutdown: false
 
 bgp_router_id: 20.17.5.10

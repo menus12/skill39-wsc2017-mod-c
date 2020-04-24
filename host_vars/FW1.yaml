@@ -23,3 +23,20 @@ l3_interfaces:
 acls:
   - ACL_IPSEC_FW2 extended permit tcp host 192.168.20.253 host 10.20.30.254
   - ACL_PERMIT_OUTSIDE extended permit ip host 20.17.6.2 192.168.10.0 255.255.255.0 
+
+tunnel_groups:
+  - name: 20.17.6.2
+    type: ipsec-l2l
+    ipsec_attributes:
+      - peer-id-validate nocheck
+      - ikev2 remote-authentication pre-shared-key cisco
+      - ikev2 local-authentication pre-shared-key cisco
+
+
+crypto_maps:
+  - name: CMAP
+    seq: 10
+    acl: ACL_IPSEC_FW2
+    peer: 20.17.6.2
+    ikev2_proposal: PROP
+    interface: outside

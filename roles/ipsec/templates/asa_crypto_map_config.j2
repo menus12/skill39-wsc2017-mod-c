@@ -1,0 +1,8 @@
+{% for map in crypto_maps | d([]) %}
+crypto map {{map.name}} {{map.seq}} match address {{map.acl}}
+crypto map {{map.name}} {{map.seq}} set peer {{map.peer}}
+{% if map.ikev2_proposal is defined %}
+crypto map {{map.name}} {{map.seq}} set ikev2 ipsec-proposal {{map.ikev2_proposal}}
+{% endif %}
+crypto map {{map.name}} interface {{map.interface}}
+{% endfor %}

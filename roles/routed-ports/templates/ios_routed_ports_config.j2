@@ -9,6 +9,12 @@ interface {{item.interface_type}}{{item.interface_id}}
 {% if item.ipv6_address is defined %}
  ipv6 address {{item.ipv6_address}}
 {% endif %}
+{% if item.source is defined %}
+ tunnel source {{item.source}}
+{% endif %}
+{% if item.mode is defined %}
+ tunnel mode {{item.mode}}
+{% endif %}
 {% if item.shutdown %}
  shutdown
 {% else %}

@@ -1,0 +1,14 @@
+crypto isakmp identity {{isakmp_identity | d('address')}}
+crypto ikev2 enable {{ikev2_interface | d('outside') }}
+{% for policy in ikev2_policies | d([]) %}
+crypto ikev2 policy {{loop.index}}
+ encryption {{policy.encryption | d('aes')}}
+ integrity {{policy.integrity | d('md5')}}
+ group {{policy.group | d('5')}}
+ prf {{policy.prf | d('sha')}}
+{% endfor %}
+{% for proposal in ikev2_proposals | d([]) %}
+crypto ipsec ikev2 ipsec-proposal {{proposal.name}}
+ protocol esp encryption {{proposal.encryption | d('aes')}}
+ protocol esp integrity {{proposal.integrity | d('md5')}}
+{% endfor %}

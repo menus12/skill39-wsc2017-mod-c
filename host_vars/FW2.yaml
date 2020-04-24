@@ -50,13 +50,29 @@ group_policies:
 
 tunnel_groups:
   - name: DefaultWEBVPNGroup
+    type: remote-access
     general_attributes:
       - address-pool SSL_pool
     webvpn_attributes:
       - group-alias Gateway enable
   - name: SplitWebVPN
+    type: remote-access
     general_attributes:
       - address-pool SSL_pool
       - default-group-policy SplitTunnelPolicy
     webvpn_attributes:
       - group-alias VPN enable
+  - name: 20.17.6.1
+    type: ipsec-l2l
+    ipsec_attributes:
+      - peer-id-validate nocheck
+      - ikev2 remote-authentication pre-shared-key cisco
+      - ikev2 local-authentication pre-shared-key cisco
+
+crypto_maps:
+  - name: CMAP
+    seq: 10
+    acl: ACL_IPSEC_FW1
+    peer: 20.17.6.1
+    ikev2_proposal: PROP
+    interface: outside

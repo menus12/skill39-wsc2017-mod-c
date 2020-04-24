@@ -1,13 +1,23 @@
 {% for tunnel in tunnel_groups  %}
 {% if tg.results[loop.index0].stdout[0] is not search(tunnel.name) %}
-tunnel-group {{tunnel.name}} type remote-access
+tunnel-group {{tunnel.name}} type {{tunnel.type}}
 {% endif %}
+{% if tunnel.general_attributes is defined %}
 tunnel-group {{tunnel.name}} general-attributes
-{% for attribute in tunnel.general_attributes %}
+{% for attribute in tunnel.general_attributes | d([]) %}
  {{attribute}}
 {% endfor %}
+{% endif %}
+{% if tunnel.webvpn_attributes is defined %}
 tunnel-group {{tunnel.name}} webvpn-attributes
-{% for attribute in tunnel.webvpn_attributes %}
+{% for attribute in tunnel.webvpn_attributes | d([]) %}
  {{attribute}}
 {% endfor %}
+{% endif %}
+{% if tunnel.ipsec_attributes is defined %}
+tunnel-group {{tunnel.name}} ipsec-attributes
+{% for attribute in tunnel.ipsec_attributes | d([]) %}
+ {{attribute}}
+{% endfor %}
+{% endif %}
 {% endfor %}
