@@ -12,6 +12,16 @@
     parents: ip dhcp pool {{item.name}}
   loop: "{{ pools | d([]) }}"
 
+- name: Configure DHCP excluded ranges on {{ ansible_network_os | upper }} device
+  ios_config:
+    lines: ip dhcp excluded-address {{item.exclude_range_start}} {{item.exclude_range_end}}
+  when:
+    - item.exclude_range_start is defined
+    - item.exclude_range_start != None
+    - item.exclude_range_end is defined 
+    - item.exclude_range_end != None
+  loop: "{{ pools | d([]) }}"
+
 - name: Configure static DHCP pools on {{ ansible_network_os | upper }} device
   ios_config:
     lines: 

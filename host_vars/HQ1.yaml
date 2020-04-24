@@ -61,6 +61,8 @@ pools:
     network: 192.168.10.0 255.255.255.0
     gateway: 192.168.10.252
     dns_servers: 192.168.10.10
+    exclude_range_start: 192.168.10.1
+    exclude_range_end: 192.168.10.50
 
 static_pools:
   - name: RADIUS

@@ -1,6 +1,16 @@
 ---
-- name: single run
-  hosts: HQ1:HQ2
+#- name: single run
+#  hosts: HQ1:HQ2
+#  gather_facts: false
+#  roles:
+#    - routing
+
+- name: Gather facts for hosts with static DHCP configuration
+  hosts: RADIUS
+  gather_facts: true
+
+- name: DHCP server configuration
+  hosts: HQ1
   gather_facts: false
-  roles:
-    - routing
+  roles: 
+    - dhcp-server
