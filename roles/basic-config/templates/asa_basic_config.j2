@@ -4,6 +4,7 @@ domain-name {{ domain_name }}
 
 {% for item in common_users | d([]) | union(users | d([])) %}
 username {{ item.username }} password {{ item.configured_password }} privilege {{ item.privilege }}
+
 {% endfor %}
 
 enable password {{ enable_cleartext_password }}

@@ -1,27 +1,24 @@
 ---
 - name: single run
-  hosts: ISP
+  hosts: BR3
   gather_facts: false
   tasks:
-    - name: Configure PPPoE IP pool
-      ios_config:
-        lines: ip local pool PPPoE 20.17.5.14
-    - name: Configure Virtual-Template
+    - name: Configure Dialer
       ios_config:
         lines:
-          - mtu 1492
-          - ip unnumbered GigabitEthernet0/4
+          - ip address negotiated
           - ip authentication mode eigrp 2017 md5
           - ip authentication key-chain eigrp 2017 KC
-          - peer default ip address pool PPPoE
+          - encapsulation ppp
+          - dialer pool 1
+          - dialer-group 1
           - ppp authentication pap
           - ppp pap sent-username papuser password cisco1
-        parents: interface Virtual-Template1
-    - name: Configure BBA group
-      ios_config:
-        lines: virtual-template 1
-        parents: bba-group pppoe global
+          - no cdp enable
+        parents: interface Dialer1
     - name: Apply PPPoE configuration to physical interface
       ios_config:
-        lines: pppoe enable group global
-        parents: interface GigabitEthernet0/4
+        lines: 
+          - pppoe enable group global
+          - pppoe-client dial-pool-number 1
+        parents: interface GigabitEthernet0/1
