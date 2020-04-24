@@ -140,3 +140,30 @@
     - name: Configure NAT statement
       ios_config:
         lines: ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/2 overload
+
+- name: Configure PPPoE server
+  hosts: ISP
+  gather_facts: false
+  tasks:
+    - name: Configure PPPoE IP pool
+      ios_config:
+        lines: ip local pool PPPoE 20.17.5.14
+    - name: Configure Virtual-Template
+      ios_config:
+        lines:
+          - mtu 1492
+          - ip unnumbered GigabitEthernet0/4
+          - ip authentication mode eigrp 2017 md5
+          - ip authentication key-chain eigrp 2017 KC
+          - peer default ip address pool PPPoE
+          - ppp authentication pap
+          - ppp pap sent-username papuser password cisco1
+        parents: interface Virtual-Template1
+    - name: Configure BBA group
+      ios_config:
+        lines: virtual-template 1
+        parents: bba-group pppoe global
+    - name: Apply PPPoE configuration to physical interface
+      ios_config:
+        lines: pppoe enable group global
+        parents: interface GigabitEthernet0/4

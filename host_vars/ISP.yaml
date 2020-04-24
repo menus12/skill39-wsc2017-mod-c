@@ -54,3 +54,8 @@ bgp_neighbors:
   - local_as: 65000
     neighbor: 20.17.5.14
     remote_as: 65003
+
+users:
+  - username: papuser
+    configured_password: cisco1
+    password_type: password

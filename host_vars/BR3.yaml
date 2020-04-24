@@ -40,6 +40,9 @@ users:
     configured_password: cisco1
     view: super_view
     password_type: secret
+  - username: papuser
+    configured_password: cisco1
+    password_type: password
 
 l3_interfaces:
   - interface_type: GigabitEthernet
