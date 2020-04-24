@@ -1,13 +1,6 @@
 ---
 - name: single run
-  hosts: BR2
+  hosts: routers:firewalls
   gather_facts: false
-  tasks:
-    - name: Set route-map for OSPF redistribution
-      ios_config:
-        lines: match ip address ACL_RED_OSPF
-        parents: route-map RM_RED_OSPF permit 10
-    - name: Configure OSPF redistribution
-      ios_config:
-        lines: redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
-        parents: router eigrp 2017
+  roles:
+    - routing-auth

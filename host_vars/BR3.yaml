@@ -63,6 +63,11 @@ l3_interfaces:
     ipv4_address: 3.3.3.3/32
     ipv6_address: dead:beef:3::1/128
     shutdown: false
+  - interface_type: Tunnel
+    interface_id: 100
+    description: DMVPN
+    ipv6_address: 2001::3/64
+    shutdown: false
 
 bgp_router_id: 20.17.5.14
 bgp_neighbors:

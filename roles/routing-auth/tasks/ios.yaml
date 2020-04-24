@@ -1,0 +1,9 @@
+---
+
+- name: Render a key-chain Jinja2 template onto an {{ ansible_network_os | upper }} device
+  ios_config: 
+    src: "{{ansible_network_os | lower}}_key_chain_config.j2"
+
+- name: Render a EIGRP interface auth Jinja2 template onto an {{ ansible_network_os | upper }} device
+  ios_config: 
+    src: "{{ansible_network_os | lower}}_eigrp_interface_auth_config.j2"

@@ -73,6 +73,20 @@
   roles: 
     - acl
     - routing
+    - routing-auth
+
+- name: BGP ACLs
+  hosts: HQ1
+  gather_facts: false
+  tasks:
+    - name: Set BGP distribute list
+      ios_config:
+        lines: 
+          - neighbor 20.17.5.1 distribute-list ACL_DENY_BGP_IN in
+          - neighbor 192.168.30.253 distribute-list ACL_DENY_BGP_IN in
+        parents: 
+          - router bgp 65001
+          - address-family ipv4
 
 - name: Local routing policy
   hosts: HQ1
@@ -99,4 +113,4 @@
     - name: Configure OSPF redistribution
       ios_config:
         lines: redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
-        parents: router eigrp 2017
+          parents: router eigrp 2017

@@ -4,8 +4,9 @@ ipv6 unicast-routing
 {%- if interface.ipv6_address is defined and interface.ipv6_address | ipaddr('subnet') in instance.ipv6_networks | d([]) | map('extract', ipv6_networks) | list -%}
 interface {{interface.interface_type}}{{interface.interface_id}}
  ipv6 ospf {{ospf_process_id}} area {{instance.area}}
-{%- endif -%}
-{%- endfor -%}
+
+{% endif %}
+{% endfor %}
 {% endfor %}
 
 {% for instance in routing_instance | d([]) if instance.protocol == 'ospfv3' %}
@@ -13,6 +14,7 @@ interface {{interface.interface_type}}{{interface.interface_id}}
 {%- if interface.ipv6_address is defined and interface.ipv6_address | ipaddr('subnet') in instance.ipv6_networks | d([]) | map('extract', ipv6_networks) | list -%}
 interface {{interface.interface_type}}{{interface.interface_id}}.{{interface.vlan}}
  ipv6 ospf {{ospf_process_id}} area {{instance.area}}
-{%- endif -%}
-{%- endfor -%}
-{%- endfor -%}
+
+{% endif %}
+{% endfor %}
+{% endfor %}

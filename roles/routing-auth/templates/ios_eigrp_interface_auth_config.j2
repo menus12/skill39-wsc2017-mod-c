@@ -1,0 +1,20 @@
+{% for instance in routing_instance | d([]) if instance.protocol == 'eigrp' %}
+{%- for interface in  l3_interfaces | d([]) -%}
+{%- if interface.ipv4_address is defined and interface.ipv4_address | ipaddr('subnet') in instance.ipv4_networks | d([]) | map('extract', ipv4_networks) | list -%}
+interface {{interface.interface_type}}{{interface.interface_id}}
+ ip authentication mode eigrp {{instance.area}} md5
+ ip authentication key-chain eigrp {{instance.area}} {{key_chains | list | first}}
+
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% for instance in routing_instance | d([]) if instance.protocol == 'eigrp' %}
+{%- for interface in  l3_subinterfaces | d([]) -%}
+{%- if interface.ipv4_address is defined and interface.ipv4_address | ipaddr('subnet') in instance.ipv4_networks | d([]) | map('extract', ipv4_networks) | list -%}
+interface {{interface.interface_type}}{{interface.interface_id}}.{{interface.vlan}}
+ ip authentication mode eigrp {{instance.area}} md5
+ ip authentication key-chain eigrp {{instance.area}} {{key_chains | list | first}}
+
+{% endif %}
+{% endfor %}
+{% endfor %}

@@ -19,6 +19,11 @@ l3_interfaces:
     ipv4_address: 22.22.22.22/32
     ipv6_address: dead:beef:22::1/128
     shutdown: false
+  - interface_type: Tunnel
+    interface_id: 100
+    description: DMVPN
+    ipv6_address: 2001::22/64
+    shutdown: false
 l3_subinterfaces:
   - interface_type: GigabitEthernet
     interface_id: 0/1

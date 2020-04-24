@@ -1,0 +1,6 @@
+---
+# vars file for routing-auth
+
+key_chains:
+  KC:
+    - WSI

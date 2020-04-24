@@ -1,0 +1,7 @@
+{% for chain in key_chains | d([]) %}
+key chain {{ chain }}
+{% for key in key_chains[chain] | d([]) %}
+ key {{ loop.index0 }}
+  key-string {{ key }}
+{% endfor %}
+{% endfor %}
