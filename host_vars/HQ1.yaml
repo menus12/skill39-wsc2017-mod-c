@@ -77,3 +77,11 @@ standard_acls:
     - permit 192.168.10.0 0.0.0.255
   ACL_RM_LP:
     - permit 11.11.11.11
+
+fhrp_priorities:
+  - protocol: glbp
+    group: 101
+    priority: 151
+  - protocol: standby # HSRP
+    group: 201
+    priority: 121

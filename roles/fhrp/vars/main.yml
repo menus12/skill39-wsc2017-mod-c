@@ -1,0 +1,15 @@
+---
+# vars file for fhrp
+
+fhrp_instance:
+  - protocol: glbp
+    group: 101
+    ipv4_networks: 
+      - LAN1
+    ipv4_vip: 192.168.10.252
+  - protocol: standby #HSRP
+    group: 201
+    ipv4_networks: 
+      - LAN2
+    ipv4_vip: 192.168.20.252
+    auth: cisco1

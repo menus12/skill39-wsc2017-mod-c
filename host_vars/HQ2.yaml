@@ -58,3 +58,11 @@ bgp_neighbors:
 standard_acls:
   ACL_FOR_NAT:
     - permit 192.168.10.0 0.0.0.255
+
+fhrp_priorities:
+  - protocol: glbp
+    group: 101
+    priority: 101
+  - protocol: standby # HSRP
+    group: 201
+    priority: 111

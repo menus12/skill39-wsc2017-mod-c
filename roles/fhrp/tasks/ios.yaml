@@ -1,0 +1,8 @@
+---
+- name: Render a Jinja2 template for common FHRP parameters onto an {{ ansible_network_os | upper }} device
+  ios_config: 
+    src: "{{ansible_network_os | lower}}_fhrp_common_config.j2"
+
+#- template:
+#    src: "{{ansible_network_os | lower}}_fhrp_common_config.j2"
+#    dest: "roles/fhrp/files/{{inventory_hostname}}-fhrp.cfg"
