@@ -191,3 +191,9 @@
           - pppoe enable group global
           - pppoe-client dial-pool-number 1
         parents: interface GigabitEthernet0/1
+
+- name: Configure initial WebVPN settings
+  hosts: FW2
+  gather_facts: false
+  roles:
+    - webvpn

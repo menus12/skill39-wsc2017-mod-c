@@ -1,0 +1,13 @@
+{% for tunnel in tunnel_groups  %}
+{% if tg.results[loop.index0].stdout[0] is not search(tunnel.name) %}
+tunnel-group {{tunnel.name}} type remote-access
+{% endif %}
+tunnel-group {{tunnel.name}} general-attributes
+{% for attribute in tunnel.general_attributes %}
+ {{attribute}}
+{% endfor %}
+tunnel-group {{tunnel.name}} webvpn-attributes
+{% for attribute in tunnel.webvpn_attributes %}
+ {{attribute}}
+{% endfor %}
+{% endfor %}

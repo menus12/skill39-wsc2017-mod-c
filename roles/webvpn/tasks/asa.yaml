@@ -1,0 +1,45 @@
+---
+
+- name: Enable secure copy mode
+  asa_config:
+    lines: ssh scopy enable
+
+- name: Check flash contents
+  asa_command:
+    commands: dir
+  register: dir
+
+- name: Copy AnyConnect package onto an {{ ansible_network_os | upper }} device
+  shell: "sshpass -p '{{ansible_ssh_pass}}' scp {{role_path}}/files/{{package_filename}} {{ansible_user}}@{{ansible_host}}:/{{package_filename}}"
+  async: 300
+  poll: 10
+  when: dir.stdout[0] is not search(package_filename)
+
+- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_webvpn_config.j2"
+
+- name: Configure SSL clients IP pools
+  asa_config:
+    lines: ip local pool {{item.name}} {{item.range_start}}-{{item.range_end}} mask {{item.mask}}
+  loop: "{{ ip_pools | d([]) }}"
+
+- name: Check existing group-policies
+  asa_command:
+    commands: sh run all | i group-policy {{item.name}} internal
+  loop: "{{group_policies}}"
+  register: gp
+
+- name: Render a Jinja2 template for group-policies onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_group_policy_config.j2"
+
+- name: Check existing tunnel-groups
+  asa_command:
+    commands: sh run all | i tunnel-group {{item.name}} type remote-access
+  loop: "{{tunnel_groups}}"
+  register: tg
+
+- name: Render a Jinja2 template for tunnel-groups onto an {{ ansible_network_os | upper }} device
+  asa_config: 
+    src: "{{ansible_network_os | lower}}_tunnel_group_config.j2"

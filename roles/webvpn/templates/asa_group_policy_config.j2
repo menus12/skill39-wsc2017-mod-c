@@ -1,0 +1,9 @@
+{% for policy in group_policies  %}
+{% if gp.results[loop.index0].stdout[0] is not search(policy.name) %}
+group-policy {{policy.name}} internal
+{% endif %}
+group-policy {{policy.name}} attributes
+{% for attribute in policy.attributes %}
+ {{attribute}}
+{% endfor %}
+{% endfor %}

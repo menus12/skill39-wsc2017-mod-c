@@ -1,0 +1,39 @@
+---
+# vars file for webvpn
+
+package_filename: anyconnect-win-4.7.04056-webdeploy-k9.pkg
+asa_webvpn_interface: outside
+tunnel_group_list: true
+
+ip_pools:
+  - name: SSL_pool
+    range_start: 10.255.255.1
+    range_end: 10.255.255.30
+    mask: 255.255.255.0
+
+group_policies:
+  - name: DfltGrpPolicy
+    attributes:
+      - dns-server value 192.168.10.10
+      - vpn-tunnel-protocol ikev1 ikev2 l2tp-ipsec ssl-client ssl-clientless
+      - default-domain value wsi2017.com
+  - name: SplitTunnelPolicy
+    attributes:
+      - dns-server value 192.168.10.10
+      - vpn-tunnel-protocol ikev2 ssl-client 
+      - split-tunnel-policy tunnelspecified
+      - split-tunnel-network-list value ACL_SPLIT_TUNNEL
+      - default-domain value wsi2017.com
+
+tunnel_groups:
+  - name: DefaultWEBVPNGroup
+    general_attributes:
+      - address-pool SSL_pool
+    webvpn_attributes:
+      - group-alias Gateway enable
+  - name: SplitWebVPN
+    general_attributes:
+      - address-pool SSL_pool
+      - default-group-policy SplitTunnelPolicy
+    webvpn_attributes:
+      - group-alias VPN enable

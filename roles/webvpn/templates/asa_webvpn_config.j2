@@ -1,0 +1,9 @@
+webvpn
+ enable {{asa_webvpn_interface}}
+ anyconnect image disk0:/{{package_filename}} 1
+ anyconnect enable
+{% if tunnel_group_list %}
+ tunnel-group-list enable
+{% else %}
+ no tunnel-group-list enable
+{% endif %}
