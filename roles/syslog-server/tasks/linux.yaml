@@ -15,7 +15,7 @@
   file:
     path: "{{item.value}}"
     state: touch
-    mode: u=rw,g=r,o=r
+    mode: u=rw,g=rw,o=rw
   loop: "{{destinations | d([]) }}"
 
 - name: Restart syslog-ng

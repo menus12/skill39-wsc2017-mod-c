@@ -1,0 +1,21 @@
+---
+- name: Install tftpd-hpa
+  apt:
+    name: tftpd-hpa
+    state: present
+
+- name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
+  template:
+    src: "{{ansible_network_os | lower}}_tftpd_config.j2"
+    dest: "/etc/default/tftpd-hpa"
+
+- name: Create destination directory
+  file:
+    path: "{{tftp_directory}}"
+    state: directory
+    mode: u=rw,g=rw,o=rw
+
+- name: Restart tftpd-hpa
+  shell: ip netns exec {{item.namespace}} /usr/sbin/in.tftpd --listen -u {{tftp_username}} -a {{tftp_address}} {{tftp_options}} {{tftp_directory}}  --pidfile=/run/tftpd-hpa-{{item.namespace}}.pid
+  where: item.namespace is defined
+  loop: "{{l3_interfaces | d([])}}"

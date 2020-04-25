@@ -1,0 +1,7 @@
+---
+# vars file for tftp-server
+
+tftp_username: root
+tftp_directory: "/srv/tftp"
+tftp_address: "0.0.0.0:69"
+tftp_options: "-c -s -v"

@@ -76,11 +76,12 @@
     - routed-ports
     - ssh
 
-- name: Syslog-server configuration
+- name: Syslog, tftp server configuration
   hosts: RADIUS
   gather_facts: false
   roles:
     - syslog-server
+    - tftp-server
 
 - name: SNMP and syslog configuration
   hosts: HQ1:FW1
