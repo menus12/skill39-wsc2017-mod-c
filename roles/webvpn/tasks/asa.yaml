@@ -18,8 +18,3 @@
 - name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
   asa_config: 
     src: "{{ansible_network_os | lower}}_webvpn_config.j2"
-
-- name: Configure SSL clients IP pools
-  asa_config:
-    lines: ip local pool {{item.name}} {{item.range_start}}-{{item.range_end}} mask {{item.mask}}
-  loop: "{{ ip_pools | d([]) }}"

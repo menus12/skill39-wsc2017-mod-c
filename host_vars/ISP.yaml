@@ -59,3 +59,7 @@ users:
   - username: papuser
     configured_password: cisco1
     password_type: password
+
+ip_pools:
+  - name: PPPoE
+    range_start: 10.255.255.1

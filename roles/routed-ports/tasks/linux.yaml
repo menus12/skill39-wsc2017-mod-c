@@ -3,18 +3,32 @@
 - name: Gather facts from Linux hosts
   setup:
 
-- name: Wipe non-provision interfaces
-  shell: |
-    ip a flush {{ item }} 
-    ip link set dev {{ item }} down
-  when: item is not in ['lo', 'eth0']
-  loop: "{{ ansible_interfaces }}"
+## Used on linux VMs without ip net namespace configuration
 
-- name: Configure DHCP address assignment
+#- name: Wipe non-provision interfaces
+#  shell: |
+#    ip a flush {{ item }} 
+#    ip link set dev {{ item }} down
+#  when: item is not in ['lo', 'eth0']
+#  loop: "{{ ansible_interfaces }}"
+
+#- name: Configure DHCP address assignment
+#  shell: |
+#    ip link set dev {{item.interface_type}}{{item.interface_id}} up
+#    dhclient {{item.interface_type}}{{item.interface_id}} -nw
+#  when: 
+#    - item.ipv4_address is defined
+#    - item.ipv4_address == "dhcp"
+#  loop: "{{ l3_interfaces | default([]) }}"
+
+- name: Configure DHCP address assignment on netns interfaces
   shell: |
-    ip link set dev {{item.interface_type}}{{item.interface_id}} up
-    dhclient {{item.interface_type}}{{item.interface_id}} -nw
+    ip netns exec {{item.namespace}} ip link set dev {{item.interface_type}}{{item.interface_id}} up
+    ip netns exec {{item.namespace}} dhclient {{item.interface_type}}{{item.interface_id}} -nw
   when: 
     - item.ipv4_address is defined
     - item.ipv4_address == "dhcp"
+    - item.namespace is defined
+    - item.namespace != None
   loop: "{{ l3_interfaces | default([]) }}"
+

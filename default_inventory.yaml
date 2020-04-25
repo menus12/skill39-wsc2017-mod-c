@@ -1,96 +1,59 @@
-# virlutils generated ansible file for sim id 
-#
-# the overall structure of the inventory follows best practices
-# at http://docs.ansible.com/ansible/latest/intro_inventory.html
-
-# we've rendered what we think is best if you disagree, override
-# virl.generators.ansible_inventory_generator
-
-# you can modify grouping behavior by adding extension entries
-# to your .virl file as such
-
-# <node name="router1" type="SIMPLE" subtype="CSR1000v" location="361,129" ipv4="172.16.252.6" ipv6="2001:db8:b:0:1::2">
-#    <extensions>
-#        <entry key="ansible_group" type="String">mygroup</entry>
-#    </extensions>
-# </node>
-
 all:
   children:
     routers:
       hosts:
 
         BR2:
-          ansible_host: 192.168.152.117
-          console_server: 192.168.172.128
-          console_port: 17001
+          ansible_host: 192.168.172.184
           ansible_network_os: ios
 
         BR3:
-          ansible_host: 192.168.152.118
-          console_server: 192.168.172.128
-          console_port: 17003
+          ansible_host: 192.168.172.181
           ansible_network_os: ios
 
         HQ1:
-          ansible_host: 192.168.152.121
-          console_server: 192.168.172.128
-          console_port: 17007
+          ansible_host: 192.168.172.190
           ansible_network_os: ios
 
         HQ2:
-          ansible_host: 192.168.152.122
-          console_server: 192.168.172.128
-          console_port: 17009
+          ansible_host: 192.168.172.188
           ansible_network_os: ios
 
         ISP:
-          ansible_host: 192.168.152.123
-          console_server: 192.168.172.128
-          console_port: 17011
+          ansible_host: 192.168.172.182
           ansible_network_os: ios
     
     firewalls:
       hosts:
 
         FW1:
-          ansible_host: 192.168.152.119
-          console_server: 192.168.172.128
-          console_port: 17005
-          ansible_network_os: unknown
+          ansible_host: 192.168.172.109
+          ansible_network_os: asa
 
         FW2:
-          ansible_host: 192.168.152.120
-          console_server: 192.168.172.128
-          console_port: 17006
-          ansible_network_os: unknown
+          ansible_host: 192.168.172.110
+          ansible_network_os: asa
     
     servers:
       hosts:
 
         PC1:
-          ansible_host: 192.168.152.127
+          ansible_host: 192.168.172.112
 
         RADIUS:
-          ansible_host: 192.168.152.128
+          ansible_host: 192.168.172.111
     
     switches:
       hosts:
 
         SW1:
-          ansible_host: 192.168.152.124
-          console_server: 192.168.172.128
-          console_port: 17013
+          ansible_host: 192.168.172.106
           ansible_network_os: ios
 
         SW2:
-          ansible_host: 192.168.152.125
-          console_server: 192.168.172.128
-          console_port: 17015
+          ansible_host: 192.168.172.107
           ansible_network_os: ios
 
         SW3:
-          ansible_host: 192.168.152.126
-          console_server: 192.168.172.128
-          console_port: 17017
+          ansible_host: 192.168.172.108
           ansible_network_os: ios

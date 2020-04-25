@@ -8,6 +8,7 @@ ansible_network_os: linux
 ####  CONFIGURATION SPECIFIC ####
 
 l3_interfaces:
-  - interface_type: eth
-    interface_id: 1
+  - interface_type: enp
+    interface_id: 0s3
     ipv4_address: dhcp
+    namespace: topology-intf

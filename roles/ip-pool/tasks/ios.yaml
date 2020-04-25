@@ -1,0 +1,6 @@
+---
+
+- name: Configure IP pools
+  ios_config:
+    lines: ip local pool {{item.name}} {{item.range_start}} {{item.range_end | d('')}}
+  loop: "{{ ip_pools | d([]) }}"

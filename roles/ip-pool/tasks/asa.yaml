@@ -1,0 +1,6 @@
+---
+
+- name: Configure IP pools
+  asa_config:
+    lines: ip local pool {{item.name}} {{item.range_start}}-{{item.range_end}} mask {{item.mask}}
+  loop: "{{ ip_pools | d([]) }}"

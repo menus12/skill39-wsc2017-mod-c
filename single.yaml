@@ -1,6 +1,13 @@
 ---
 - name: single run
-  hosts: routers
+  hosts: RADIUS
   gather_facts: false
-  roles:
-    - routing
+  tasks:
+    apt:
+      pkg: 
+        - freeradius
+        - snmp
+        - snmpd
+        - tftpd-hpa
+        - syslog-ng
+      state: present

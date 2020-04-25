@@ -27,12 +27,6 @@
   roles: 
     - config-backup
 
-- name: SNMP configuration
-  hosts: HQ1:FW1
-  gather_facts: false
-  roles: 
-    - snmp
-
 - name: Switching configuration
   hosts: switches
   gather_facts: false
@@ -57,9 +51,30 @@
     - routed-ports
     - ssh
 
-- name: Gather facts for hosts with static DHCP configuration
+- name: SNMP configuration
+  hosts: HQ1:FW1
+  gather_facts: false
+  roles: 
+    - snmp
+
+## This one is required because linux hosts have separate interface for ansible management 
+## and unable to check topology interface with ansible facts because it's in a separate net namespace
+- name: Get mac-address
   hosts: RADIUS
-  gather_facts: true
+  gather_facts: false
+  tasks:
+    - name: Extract interfaces information in non-management net namespace
+      shell: ip netns exec {{item.namespace}} ip link show {{item.interface_type}}{{item.interface_id}}
+      register: output
+      when: 
+        - item.namespace is defined
+        - item.namespace != None
+      loop: "{{l3_interfaces}}"
+    - name: Set topology interface mac address as a fact for static DHCP reservation
+      set_fact:
+        "{{ item.stdout | regex_search('(enp[0-9]{1}[s][0-9]{1})') }}": 
+          macaddress: "{{ item.stdout | regex_search('([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}') }}"
+      loop: "{{output.results}}"
 
 - name: DHCP server configuration
   hosts: HQ1
@@ -129,13 +144,13 @@
       ios_config:
         lines: ip nat inside
         parents: interface GigabitEthernet0/1.101
-      async: 15
+      async: 20
       poll: 5
     - name: Configure NAT outside interfaces
       ios_config:
         lines: ip nat outside
         parents: interface GigabitEthernet0/2
-      async: 15
+      async: 20
       poll: 5
     - name: Configure NAT statement
       ios_config:
@@ -144,10 +159,9 @@
 - name: Configure PPPoE server
   hosts: ISP
   gather_facts: false
+  roles:
+    - ip-pool
   tasks:
-    - name: Configure PPPoE IP pool
-      ios_config:
-        lines: ip local pool PPPoE 20.17.5.14
     - name: Configure Virtual-Template
       ios_config:
         lines:
@@ -231,16 +245,17 @@
           - ipv6 ospf priority 100
         parents: interface Tunnel100
 
+- name: Configure WebVPN settings
+  hosts: FW2
+  gather_facts: false
+  roles:
+    - ip-pool
+    - webvpn
+    - group-policy
+
 - name: Configure IPsec
   hosts: FW1:FW2
   gather_facts: false
   roles:    
     - tunnel-group
     - ipsec
-
-- name: Configure WebVPN settings
-  hosts: FW2
-  gather_facts: false
-  roles:
-    - webvpn
-    - group-policy

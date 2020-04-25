@@ -71,7 +71,7 @@ pools:
 static_pools:
   - name: RADIUS
     host: 192.168.10.10 255.255.255.0
-    interface: ansible_eth1
+    interface: enp0s3
     gateway: 192.168.10.252
     dns_servers: 192.168.10.10
 
