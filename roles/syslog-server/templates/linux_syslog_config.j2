@@ -1,0 +1,12 @@
+{% for source in sources | d([]) %}
+source {{source.name}} { udp({{source.value}}); };
+{% endfor %}
+{% for dest in destinations | d([]) %}
+destination {{dest.name}} { file("{{dest.value}}"); };
+{% endfor %}
+{% for filt in filters | d([]) %}
+filter {{filt.name}} { host ("{{filt.value}}"); };
+{% endfor %}
+{% for logg in logs | d([]) %}
+log { source({{logg.source}}); filter({{logg.filter}}); destination({{logg.destination}}); };
+{% endfor %}

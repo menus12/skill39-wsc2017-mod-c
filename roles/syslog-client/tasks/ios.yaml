@@ -1,0 +1,12 @@
+---
+- name: Configure host logging
+  ios_logging:
+    dest: host
+    name: "{{item.host}}"
+    state: present
+  loop: "{{logging_hosts}}"
+
+- name: Configure logging level
+  ios_logging:
+    level: "{{logging_level}}"
+    state: present

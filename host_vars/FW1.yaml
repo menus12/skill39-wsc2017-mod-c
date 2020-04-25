@@ -40,3 +40,8 @@ crypto_maps:
     peer: 20.17.6.2
     ikev2_proposal: PROP
     interface: outside
+
+logging_level: informational
+logging_hosts:
+  - host: 192.168.10.10
+    interface: inside

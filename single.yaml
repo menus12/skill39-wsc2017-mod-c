@@ -2,12 +2,5 @@
 - name: single run
   hosts: RADIUS
   gather_facts: false
-  tasks:
-    apt:
-      pkg: 
-        - freeradius
-        - snmp
-        - snmpd
-        - tftpd-hpa
-        - syslog-ng
-      state: present
+  roles:
+    - syslog-server

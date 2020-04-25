@@ -1,0 +1,28 @@
+---
+# vars file for syslog-server
+
+config_name: cisco.conf
+
+sources:
+  - name: s_cisco
+    value: ""
+
+destinations:
+  - name: d_hq1 
+    value: "/var/log/hq1.log"
+  - name: d_fw1 
+    value: "/var/log/fw1.log"
+
+filters:
+  - name: f_hq1 
+    value: 192.168.10.254
+  - name: f_fw1
+    value: 192.168.30.252
+
+logs:
+  - source: s_cisco
+    filter: f_hq1
+    destination: d_hq1
+  - source: s_cisco
+    filter: f_fw1
+    destination: d_fw1

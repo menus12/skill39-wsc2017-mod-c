@@ -91,3 +91,7 @@ fhrp_priorities:
   - protocol: standby # HSRP
     group: 201
     priority: 121
+
+logging_level: informational
+logging_hosts:
+  - host: 192.168.10.10

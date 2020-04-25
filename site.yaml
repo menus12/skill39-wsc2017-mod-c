@@ -44,19 +44,6 @@
     - dhcp-snooping
     - dai
 
-- name: Routed interfaces and SSH configuration 
-  hosts: all
-  gather_facts: false
-  roles: 
-    - routed-ports
-    - ssh
-
-- name: SNMP configuration
-  hosts: HQ1:FW1
-  gather_facts: false
-  roles: 
-    - snmp
-
 ## This one is required because linux hosts have separate interface for ansible management 
 ## and unable to check topology interface with ansible facts because it's in a separate net namespace
 - name: Get mac-address
@@ -81,6 +68,26 @@
   gather_facts: false
   roles: 
     - dhcp-server
+
+- name: Routed interfaces and SSH configuration 
+  hosts: all
+  gather_facts: false
+  roles: 
+    - routed-ports
+    - ssh
+
+- name: Syslog-server configuration
+  hosts: RADIUS
+  gather_facts: false
+  roles:
+    - syslog-server
+
+- name: SNMP and syslog configuration
+  hosts: HQ1:FW1
+  gather_facts: false
+  roles: 
+    - snmp
+    - syslog-client
 
 - name: Routing and ACLs configuration
   hosts: routers:firewalls
