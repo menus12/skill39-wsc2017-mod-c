@@ -11,6 +11,13 @@
     dest: "/etc/syslog-ng/conf.d/{{config_name}}"
   notify: Restart syslog-ng
 
+- name: Create destination files
+  file:
+    path: "{{item.value}}"
+    state: touch
+    mode: u=rw,g=r,o=r
+  loop: "{{destinations | d([]) }}"
+
 - name: Restart syslog-ng
   shell: ip netns exec {{item.namespace}} /usr/sbin/syslog-ng --pidfile=/run/syslog-ng-{{item.namespace}}.pid
   where: item.namespace is defined
