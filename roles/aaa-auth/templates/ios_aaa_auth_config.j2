@@ -1,0 +1,25 @@
+{% for auth_type in aaa_auth_type | d([]) %}
+{% for group in aaa_auth_type[auth_type] | d([]) %}
+aaa {{group.method}} {{group.list}} {{group.name}} group {{auth_type}} {{group.backup | d('')}}
+{% endfor %}
+{% endfor %}
+
+{% for server in radius_servers | d([]) %}
+radius server {{server.name}}
+{% if server.ipv4_address is defined %}
+ address ipv4 {{server.ipv4_address}} auth-port {{server.auth_port | d('1812') }} acct-port {{server.acct_port | d('1813')}}
+{% endif %}
+ key {{server.key}}
+{% endfor %}
+
+{% for auth_type in aaa_auth_type | d([]) %}
+{% for group in aaa_auth_type[auth_type] | d([]) %}
+line {{group.lines}}
+{% if group.method == 'authentication' %}
+ {{group.list}} {{group.method}} {{group.name}}
+{% endif %}
+{% if group.method == 'authorization' %}
+ {{group.method}} {{group.list}} {{group.name}}
+{% endif %}
+{% endfor %}
+{% endfor %}

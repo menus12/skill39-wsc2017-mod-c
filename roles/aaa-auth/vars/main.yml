@@ -1,0 +1,22 @@
+---
+# vars file for aaa-auth
+
+aaa_auth_type:
+  radius:
+    - method: authentication
+      list: login
+      name: radius_auth
+      backup: local
+      lines: vty 0 9
+    - method: authorization
+      list: exec
+      name: radius_auth
+      if_authenticated: true
+      lines: vty 0 9
+
+radius_servers:
+  - name: radius_auth
+    ipv4_address: 192.168.10.100
+    auth_port: 1812
+    acct_port: 1813
+    key: cisco1

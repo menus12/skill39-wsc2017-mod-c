@@ -1,0 +1,6 @@
+---
+# tasks file for aaa-auth
+
+- name: Call aaa auth config generator  
+  include_tasks: "{{ansible_network_os | lower}}.yaml"
+  when: ansible_network_os is defined
