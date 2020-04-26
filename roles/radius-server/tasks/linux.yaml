@@ -1,0 +1,53 @@
+---
+- name: Install freeradius
+  apt:
+    name: freeradius
+    state: present
+
+- name: Render a Jinja2 template for radius clients onto an {{ ansible_network_os | upper }} device
+  template:
+    src: "{{ansible_network_os | lower}}_freeradius_clients_config.j2"
+    dest: "/etc/freeradius/3.0/clients.conf"
+
+- name: Render a Jinja2 template for radius users onto an {{ ansible_network_os | upper }} device
+  template:
+    src: "{{ansible_network_os | lower}}_freeradius_users_config.j2"
+    dest: "/etc/freeradius/3.0/mods-config/files/authorize"
+
+- name: Copy radiusd.conf for each interface
+  copy:
+    src: "/etc/freeradius/3.0/radiusd.conf"
+    dest: "/etc/freeradius/3.0/{{item.namespace}}-radiusd.conf"
+    remote_src: yes
+  loop: "{{l3_interfaces | d([])}}"
+
+- name: Replace PID name to make it net namespace aware
+  lineinfile:
+    path: "/etc/freeradius/3.0/{{item.namespace}}-radiusd.conf"
+    regexp: '^pidfile = '
+    line: "pidfile =  ${run_dir}/${name}-{{item.namespace}}.pid"
+  loop: "{{l3_interfaces | d([])}}"
+
+##This one is mandatory since there are no loopbacks in topology net namespace
+- name: Unlink inner-tunnel from sites-enabled
+  file:
+    path: "/etc/freeradius/3.0/sites-enabled/inner-tunnel"
+    state: absent
+
+- name: Check any running freeradius instances
+  find:
+    paths: /run/freeradius
+    recurse: yes
+  register: find_result
+
+- debug:
+    var: find_result.files[0]['path']
+
+- name: Kill running freeradius processes
+  shell: pkill -F {{item['path']}}
+  loop: "{{ find_result.files | d([]) }}"
+
+- name: Restart freeradius for each net namespace
+  shell: ip netns exec {{item.namespace}} /usr/sbin/freeradius -n {{item.namespace}}-radiusd
+  where: item.namespace is defined
+  loop: "{{l3_interfaces | d([])}}"

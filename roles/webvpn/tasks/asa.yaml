@@ -10,7 +10,7 @@
   register: dir
 
 - name: Copy AnyConnect package onto an {{ ansible_network_os | upper }} device
-  shell: "sshpass -p '{{ansible_ssh_pass}}' scp {{role_path}}/files/{{package_filename}} {{ansible_user}}@{{ansible_host}}:/{{package_filename}}"
+  shell: "sshpass -p '{{ansible_ssh_pass}}' scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{role_path}}/files/{{package_filename}} {{ansible_user}}@{{ansible_host}}:/{{package_filename}}"
   async: 300
   poll: 10
   when: dir.stdout[0] is not search(package_filename)

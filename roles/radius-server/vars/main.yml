@@ -1,0 +1,16 @@
+---
+# vars file for radius-server
+
+radius_clients:
+  - name: 192.168.10.254
+    secret: cisco1
+    nastype: cisco
+    shortname: HQ1
+
+radius_users:
+  - name: radius
+    password: cisco1
+    service_type: NAS-Prompt-User
+  - name: wsi2017
+    password: cisco1
+    service_type: NAS-Prompt-User

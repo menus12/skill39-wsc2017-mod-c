@@ -11,12 +11,12 @@ aaa_auth_type:
     - method: authorization
       list: exec
       name: radius_auth
-      if_authenticated: true
+      backup: if-authenticated
       lines: vty 0 9
 
 radius_servers:
   - name: radius_auth
-    ipv4_address: 192.168.10.100
+    ipv4_address: 192.168.10.10
     auth_port: 1812
     acct_port: 1813
     key: cisco1

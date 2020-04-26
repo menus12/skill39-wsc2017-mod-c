@@ -1,0 +1,7 @@
+{% for client in radius_clients | d([]) %}
+client {{client.name}} {
+secret = {{client.secret}}
+nastype = {{client.nastype}}
+shortname = {{client.shortname}}
+}
+{% endfor %}

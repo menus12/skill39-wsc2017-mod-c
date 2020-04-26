@@ -2,3 +2,6 @@
 
 ####  CONFIGURATION SPECIFIC ####
 hostname: PC1
+
+packages:
+  - openconnect

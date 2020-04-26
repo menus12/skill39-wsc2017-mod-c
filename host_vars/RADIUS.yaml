@@ -3,4 +3,5 @@
 ####  CONFIGURATION SPECIFIC ####
 hostname: RADIUS
 
-
+packages:
+  - snmp

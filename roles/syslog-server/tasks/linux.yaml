@@ -9,7 +9,6 @@
   template:
     src: "{{ansible_network_os | lower}}_syslog_config.j2"
     dest: "/etc/syslog-ng/conf.d/{{config_name}}"
-  notify: Restart syslog-ng
 
 - name: Create destination files
   file:
@@ -20,5 +19,5 @@
 
 - name: Restart syslog-ng
   shell: ip netns exec {{item.namespace}} /usr/sbin/syslog-ng --pidfile=/run/syslog-ng-{{item.namespace}}.pid
-  where: item.namespace is defined
+  when: item.namespace is defined
   loop: "{{l3_interfaces | d([])}}"

@@ -1,0 +1,12 @@
+DEFAULT Framed-Protocol == PPP
+	Framed-Protocol = PPP,
+	Framed-Compression = Van-Jacobson-TCP-IP
+
+DEFAULT	Hint == "CSLIP"
+	Framed-Protocol = SLIP,
+	Framed-Compression = Van-Jacobson-TCP-IP
+
+{% for user in radius_users | d([]) %}
+{{user.name}}	Cleartext-Password := "{{user.password}}"
+	Service-Type = {{user.service_type}}
+{% endfor %}

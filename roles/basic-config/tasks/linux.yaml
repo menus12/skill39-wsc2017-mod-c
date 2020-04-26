@@ -27,8 +27,12 @@
   user:
     name: "{{ item.username }}" 
     password: "{{ item.configured_password }}"
-  loop: "{{ users | d([]) }}"
+  loop: "{{ common_users | d([]) | union(users | d([])) }}"
 
 - name: Add sudoers users to wheel group
   user: name={{ item.username }} groups=wheel append=yes state=present createhome=yes
-  loop: "{{ users | d([]) }}"
+  loop: "{{ common_users | d([]) | union(users | d([])) }}"
+
+- name: Install additional packages
+  apt:
+    pkg: "{{packages | d([]) }}"

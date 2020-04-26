@@ -1,8 +1,7 @@
 ---
 
-
 - name: single run
-  hosts: HQ1
+  hosts: PC1
   gather_facts: false
   roles:
-    - aaa-auth
+    - basic-config
