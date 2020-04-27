@@ -1,4 +1,5 @@
 ####  CONNECTION SPECIFIC ####
+ansible_host: 10.0.191.103
 
 ####  CONFIGURATION SPECIFIC ####
 hostname: ISP

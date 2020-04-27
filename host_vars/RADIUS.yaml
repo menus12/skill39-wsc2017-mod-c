@@ -1,4 +1,5 @@
 ####  CONNECTION SPECIFIC ####
+ansible_host: 10.0.191.111
 
 ####  CONFIGURATION SPECIFIC ####
 hostname: RADIUS

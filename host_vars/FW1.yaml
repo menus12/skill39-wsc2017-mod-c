@@ -1,5 +1,5 @@
 ####  CONNECTION SPECIFIC ####
-ansible_network_os: asa
+ansible_host: 10.0.191.109
 
 ####  CONFIGURATION SPECIFIC ####
 hostname: FW1

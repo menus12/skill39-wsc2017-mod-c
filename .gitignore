@@ -134,3 +134,4 @@ single.yaml
 *.retry
 *.pkg
 *.cfg
+.virlrc

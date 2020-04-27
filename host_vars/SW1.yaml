@@ -1,4 +1,5 @@
 ####  CONNECTION SPECIFIC ####
+ansible_host: 10.0.191.106
 
 ####  CONFIGURATION SPECIFIC ####
 hostname: SW1
