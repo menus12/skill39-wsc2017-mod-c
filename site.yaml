@@ -9,24 +9,29 @@
     - name: Set datetime as fact
       set_fact: datetime={{ system_datetime.stdout }}
 
+# BASIC CONFIGURATION - 1, 2, 3, 4 (a-d), 6, 9
 - name: Basic configuration
   hosts: all
   gather_facts: false
   roles: 
     - basic-config
 
+# BASIC CONFIGURATION - 4e
 - name: RBAC configuration
   hosts: BR3
   gather_facts: false
   roles: 
     - rbac
 
+# MONITORING AND BACKUP CONFIGURATION - 3
 - name: Config archive configuration
   hosts: HQ1
   gather_facts: false
   roles: 
     - config-backup
 
+# SWITCHING CONFIGURATION - 1-7
+# SECURITY CONFIGURATION - 2
 - name: Switching configuration
   hosts: switches
   gather_facts: false
@@ -37,6 +42,7 @@
     - stp
     - switchports
 
+# SECURITY CONFIGURATION 3-4
 - name: DHCP snooping and ARP inspection configuration
   hosts: SW1
   gather_facts: false
@@ -63,12 +69,14 @@
           macaddress: "{{ item.stdout | regex_search('([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}') }}"
       loop: "{{output.results}}"
 
+# SERVICES CONFIGURATION - 3
 - name: DHCP server configuration
   hosts: HQ1
   gather_facts: false
   roles: 
     - dhcp-server
 
+# BASIC CONFIGURATION - 7-8
 - name: Routed interfaces and SSH configuration 
   hosts: all
   gather_facts: false
@@ -76,6 +84,15 @@
     - routed-ports
     - ssh
 
+# SERVICES CONFIGURATION - 2
+- name: FHRP configuration
+  hosts: HQ1:HQ2
+  gather_facts: false
+  roles: 
+    - fhrp
+
+# BASIC CONFIGURATION - 5
+# MONITORING AND BACKUP CONFIGURATION - 1, 3
 - name: Syslog, tftp and radius server configuration
   hosts: RADIUS
   gather_facts: false
@@ -84,6 +101,7 @@
     - tftp-server
     - radius-server
 
+# MONITORING AND BACKUP CONFIGURATION - 1-2
 - name: SNMP and syslog configuration
   hosts: HQ1:FW1
   gather_facts: false
@@ -91,6 +109,7 @@
     - snmp
     - syslog-client
 
+# ROUTING CONFIGURATION - 1, 2a, 3, 4
 - name: Routing and ACLs configuration
   hosts: routers:firewalls
   gather_facts: false
@@ -99,12 +118,7 @@
     - routing
     - routing-auth
 
-- name: FHRP configuration
-  hosts: HQ1:HQ2
-  gather_facts: false
-  roles: 
-    - fhrp
-
+# ROUTING CONFIGURATION - 2b
 - name: BGP ACLs
   hosts: HQ1
   gather_facts: false
@@ -118,6 +132,21 @@
           - router bgp 65001
           - address-family ipv4
 
+# ROUTING CONFIGURATION - 5
+- name: Configure routing redistribution
+  hosts: BR2
+  gather_facts: false
+  tasks:
+    - name: Set route-map for OSPF redistribution
+      ios_config:
+        lines: match ip address ACL_RED_OSPF
+        parents: route-map RM_RED_OSPF permit 10
+    - name: Configure OSPF redistribution
+      ios_config:
+        lines: redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
+        parents: router eigrp 2017
+
+# ROUTING CONFIGURATION - 6
 - name: Local routing policy
   hosts: HQ1
   gather_facts: false
@@ -132,19 +161,7 @@
       ios_config:
         lines: ip local policy route-map RM_LOCAL_POLICY
 
-- name: Configure routing redistribution
-  hosts: BR2
-  gather_facts: false
-  tasks:
-    - name: Set route-map for OSPF redistribution
-      ios_config:
-        lines: match ip address ACL_RED_OSPF
-        parents: route-map RM_RED_OSPF permit 10
-    - name: Configure OSPF redistribution
-      ios_config:
-        lines: redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
-        parents: router eigrp 2017
-
+# SERVICES CONFIGURATION - 1
 - name: Configure NAT
   hosts: HQ1:HQ2
   gather_facts: false
@@ -165,6 +182,7 @@
       ios_config:
         lines: ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/2 overload
 
+# WAN & VPN CONFIGURATION - 1
 - name: Configure PPPoE server
   hosts: ISP
   gather_facts: false
@@ -191,6 +209,7 @@
         lines: pppoe enable group global
         parents: interface GigabitEthernet0/4
 
+# WAN & VPN CONFIGURATION - 1
 - name: Configure PPPoE client
   hosts: BR3
   gather_facts: false
@@ -215,6 +234,7 @@
           - pppoe-client dial-pool-number 1
         parents: interface GigabitEthernet0/1
 
+# WAN & VPN CONFIGURATION - 2
 - name: Configure DMVPN hub
   hosts: HQ1
   gather_facts: false
@@ -236,6 +256,7 @@
           - ipv6 ospf priority 200
         parents: interface Tunnel100
 
+# WAN & VPN CONFIGURATION - 2
 - name: Configure DMVPN spokes
   hosts: HQ2:BR2:BR3
   gather_facts: false
@@ -254,6 +275,7 @@
           - ipv6 ospf priority 100
         parents: interface Tunnel100
 
+# WAN & VPN CONFIGURATION - 4 (b-c)
 - name: Configure WebVPN settings
   hosts: FW2
   gather_facts: false
@@ -262,6 +284,7 @@
     - webvpn
     - group-policy
 
+# WAN & VPN CONFIGURATION - 3, 4d
 - name: Configure IPsec
   hosts: FW1:FW2
   gather_facts: false
