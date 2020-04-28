@@ -15,7 +15,18 @@
     state: directory
     mode: u=rw,g=rw,o=rw
 
+- name: Check any running tftpd instances
+  find:
+    paths: /run/
+    use_regex: yes
+    patterns: ['^tftpd']
+  register: find_result
+
+- name: Kill running tftpd processes
+  shell: pkill -F {{item['path']}}
+  loop: "{{ find_result.files | d([]) }}"
+
 - name: Restart tftpd-hpa
-  shell: ip netns exec {{item.namespace}} /usr/sbin/in.tftpd --listen -u {{tftp_username}} -a {{tftp_address}} {{tftp_options}} {{tftp_directory}}  --pidfile=/run/tftpd-hpa-{{item.namespace}}.pid
-  where: item.namespace is defined
+  shell: ip netns exec {{item.namespace}} /usr/sbin/in.tftpd --listen -u {{tftp_username}} -a {{tftp_address}} {{tftp_options}} --pidfile=/run/tftpd-hpa-{{item.namespace}}.pid {{tftp_directory}} 
+  when: item.namespace is defined
   loop: "{{l3_interfaces | d([])}}"

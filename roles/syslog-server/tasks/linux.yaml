@@ -17,6 +17,17 @@
     mode: u=rw,g=rw,o=rw
   loop: "{{destinations | d([]) }}"
 
+- name: Check any running syslog instances
+  find:
+    paths: /run/
+    use_regex: yes
+    patterns: ['^syslog']
+  register: find_result
+
+- name: Kill running syslog processes
+  shell: pkill -F {{item['path']}}
+  loop: "{{ find_result.files | d([]) }}"
+
 - name: Restart syslog-ng
   shell: ip netns exec {{item.namespace}} /usr/sbin/syslog-ng --pidfile=/run/syslog-ng-{{item.namespace}}.pid
   when: item.namespace is defined

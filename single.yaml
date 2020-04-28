@@ -1,7 +1,5 @@
 ---
-
-- name: single run
-  hosts: PC1
-  gather_facts: false
-  roles:
-    - basic-config
+- name: basic configuration for HQ1
+  hosts: RADIUS
+  roles: 
+    - syslog-server

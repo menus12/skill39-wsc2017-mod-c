@@ -40,9 +40,6 @@
     recurse: yes
   register: find_result
 
-- debug:
-    var: find_result.files[0]['path']
-
 - name: Kill running freeradius processes
   shell: pkill -F {{item['path']}}
   loop: "{{ find_result.files | d([]) }}"
