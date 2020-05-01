@@ -1,5 +1,0 @@
----
-- name: basic configuration for HQ1
-  hosts: RADIUS
-  roles: 
-    - syslog-server

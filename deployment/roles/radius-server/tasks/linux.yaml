@@ -46,5 +46,5 @@
 
 - name: Restart freeradius for each net namespace
   shell: ip netns exec {{item.namespace}} /usr/sbin/freeradius -n {{item.namespace}}-radiusd
-  where: item.namespace is defined
+  when: item.namespace is defined
   loop: "{{l3_interfaces | d([])}}"
