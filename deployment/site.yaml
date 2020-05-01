@@ -69,12 +69,14 @@
           macaddress: "{{ item.stdout | regex_search('([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}') }}"
       loop: "{{output.results}}"
 
+# BASIC CONFIGURATION - 5
 # SERVICES CONFIGURATION - 3
-- name: DHCP server configuration
+- name: DHCP server and AAA auth configuration
   hosts: HQ1
   gather_facts: false
   roles: 
     - dhcp-server
+    - aaa-auth
 
 # BASIC CONFIGURATION - 7-8
 - name: Routed interfaces and SSH configuration 

@@ -4,6 +4,10 @@ testbed:
     default:
       username: '%ENV{PYATS_USERNAME}'
       password: '%ENV{PYATS_PASSWORD}'
+    test_project:
+      username: wsi2017
+      password: cisco1
+      enable_password: wsi
 
 
 devices:

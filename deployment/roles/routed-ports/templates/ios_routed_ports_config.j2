@@ -7,7 +7,7 @@ interface {{item.interface_type}}{{item.interface_id}}
  ip address {{item.ipv4_address | ipaddr('address')}} {{item.ipv4_address | ipaddr('netmask')}}
 {% endif %}
 {% if item.ipv6_address is defined %}
- ipv6 address {{item.ipv6_address}}
+ ipv6 address {{item.ipv6_address}} {{item.ipv6_address_option | d('')}}
 {% endif %}
 {% if item.source is defined %}
  tunnel source {{item.source}}
@@ -32,7 +32,7 @@ interface {{item.interface_type}}{{item.interface_id}}.{{item.vlan}}
  ip address {{item.ipv4_address | ipaddr('address')}} {{item.ipv4_address | ipaddr('netmask')}}
 {% endif %}
 {% if item.ipv6_address is defined %}
- ipv6 address {{item.ipv6_address}}
+ ipv6 address {{item.ipv6_address}} {{item.ipv6_address_option | d('')}}
 {% endif %}
 {% if item.shutdown %}
  shutdown
