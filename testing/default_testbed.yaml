@@ -1,13 +1,10 @@
 testbed:
   name: skill39-wsc2017-mod-c
-  passwords:
-    enable: '%ENV{PYATS_AUTH_PASS}'
-    line: '%ENV{PYATS_PASSWORD}'
-    tacacs: '%ENV{PYATS_PASSWORD}'
-  tacacs:
-    login_prompt: 'login:'
-    password_prompt: 'Password:'
-    username: '%ENV{PYATS_USERNAME}'
+  credentials:
+    default:
+      username: '%ENV{PYATS_USERNAME}'
+      password: '%ENV{PYATS_PASSWORD}'
+
 
 devices:
   BR2:
