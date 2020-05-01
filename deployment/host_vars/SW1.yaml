@@ -45,8 +45,6 @@ l2_interfaces:
     access_vlan: 1
     native_vlan: 1
     portfast: false
-    lag_id: 1
-    lag_mode: desirable
     shutdown: false
   - interface_type: GigabitEthernet
     interface_id: 1/0

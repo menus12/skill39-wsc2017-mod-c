@@ -138,6 +138,16 @@ class Switching(aetest.Testcase):
             assert reference_interfaces[intf]['encapsulation'] == actual_interfaces[intf]['encapsulation']
             assert reference_interfaces[intf]['status'] == actual_interfaces[intf]['status']
         pass
+    
+    def assert_lag(self, reference_interfaces, actual_interfaces):
+        for intf in reference_interfaces:
+            assert intf in actual_interfaces.keys()
+            assert reference_interfaces[intf]['protocol'] == actual_interfaces[intf]['protocol'] 
+            assert reference_interfaces[intf]['flags'] == actual_interfaces[intf]['flags']
+            assert reference_interfaces[intf]['oper_status'] == actual_interfaces[intf]['oper_status']
+            assert reference_interfaces[intf]['members'] == list(actual_interfaces[intf]['members'])
+        pass
+    
                 
     #13 
     @aetest.test
@@ -230,9 +240,24 @@ class Switching(aetest.Testcase):
                 self.assert_dtp(reference_interfaces = reference_interfaces, actual_interfaces = sw2_interfaces)
                 self.passed('Static trunk configured on port-channel')
     
+    #16
+    @aetest.test
+    def pagp(self, testbed):
+        sw1_lag = testbed.devices.SW1.execute('sh etherchannel 1 port-channel')
+        tags = ['Ag-Inuse', 'PAgP', 'Gi0/1', 'Gi0/2', 'Desirable-Sl']
+        for tag in tags:
+            assert tag in sw1_lag
+            
+    @aetest.test
+    def stp_mode(self, testbed):
+        sw1_stp = testbed.devices.SW1.parse('show spanning-tree')
+        assert 'rapid_pvst' in sw1_stp.keys()
+
+
+    
     @aetest.cleanup
     def Switching_cleanup(self, testbed, steps):
-        with steps.start('Remove VLAN from VTP server ()'):
+        with steps.start('Remove VLAN from VTP server'):
             new_vlan_cfg = ['no vlan 110']
             testbed.devices.SW3.configure(new_vlan_cfg)
     
