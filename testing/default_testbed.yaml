@@ -1,0 +1,312 @@
+testbed:
+  name: skill39-wsc2017-mod-c
+  passwords:
+    enable: '%ENV{PYATS_AUTH_PASS}'
+    line: '%ENV{PYATS_PASSWORD}'
+    tacacs: '%ENV{PYATS_PASSWORD}'
+  tacacs:
+    login_prompt: 'login:'
+    password_prompt: 'Password:'
+    username: '%ENV{PYATS_USERNAME}'
+
+devices:
+  BR2:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.104
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: router
+  BR3:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.105
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: router
+  FW1:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.109
+        port: 22
+      defaults:
+        class: unicon.Unicon
+    os: asa
+    type: firewall
+  FW2:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.110
+        port: 22
+      defaults:
+        class: unicon.Unicon
+    os: asa
+    type: firewall
+  HQ1:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.101
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: router
+  HQ2:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.102
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: router
+  ISP:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.103
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: router
+  PC1:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.112
+        port: 22
+      defaults:
+        class: unicon.Unicon
+    os: linux
+    type: server
+  RADIUS:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.111
+        port: 22
+      defaults:
+        class: unicon.Unicon
+    os: linux
+    type: server
+  SW1:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.106
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: switch
+  SW2:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.107
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: switch
+  SW3:
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 10.0.191.108
+        port: 2222
+      defaults:
+        class: unicon.Unicon
+    os: ios
+    series: iosv
+    type: switch
+
+
+topology:
+  BR2:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l21
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l15
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l13
+        type: ethernet
+  BR3:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l22
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l6
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l7
+        type: ethernet
+  FW1:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l11
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l10
+        type: ethernet
+      Management0/0:
+        link: l26
+        type: ethernet
+  FW2:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l15
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l14
+        type: ethernet
+      Management0/0:
+        link: l27
+        type: ethernet
+  HQ1:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l18
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l12
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l4
+        type: ethernet
+  HQ2:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l19
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l9
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l5
+        type: ethernet
+  ISP:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l20
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l4
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l5
+        type: ethernet
+      GigabitEthernet0/3:
+        link: l13
+        type: ethernet
+      GigabitEthernet0/4:
+        link: l6
+        type: ethernet
+  PC1:
+    interfaces:
+      enp0s2:
+        link: l29
+        type: ethernet
+      enp0s3:
+        link: l17
+        type: ethernet
+  RADIUS:
+    interfaces:
+      enp0s2:
+        link: l28
+        type: ethernet
+      enp0s3:
+        link: l16
+        type: ethernet
+  SW1:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l23
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l1
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l2
+        type: ethernet
+      GigabitEthernet0/3:
+        link: l3
+        type: ethernet
+      GigabitEthernet1/0:
+        link: l16
+        type: ethernet
+      GigabitEthernet1/1:
+        link: l8
+        type: ethernet
+      GigabitEthernet1/2:
+        type: ethernet
+  SW2:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l24
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l1
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l2
+        type: ethernet
+      GigabitEthernet0/3:
+        link: l3
+        type: ethernet
+      GigabitEthernet1/0:
+        link: l17
+        type: ethernet
+      GigabitEthernet1/1:
+        type: ethernet
+      GigabitEthernet1/2:
+        link: l0
+        type: ethernet
+  SW3:
+    interfaces:
+      GigabitEthernet0/0:
+        link: l25
+        type: ethernet
+      GigabitEthernet0/1:
+        link: l12
+        type: ethernet
+      GigabitEthernet0/2:
+        link: l9
+        type: ethernet
+      GigabitEthernet0/3:
+        link: l11
+        type: ethernet
+      GigabitEthernet1/0:
+        type: ethernet
+      GigabitEthernet1/1:
+        link: l8
+        type: ethernet
+      GigabitEthernet1/2:
+        link: l0
+        type: ethernet
