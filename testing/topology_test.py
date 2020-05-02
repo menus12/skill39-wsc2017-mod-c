@@ -1,16 +1,6 @@
 from pyats import aetest
 
-if __name__ == '__main__':
-    import argparse
-    from genie import testbed
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--testbed', dest = 'testbed',
-                        type = testbed.load)
-
-    args, unknown = parser.parse_known_args()
-
-    aetest.main(**vars(args))
 
 # define a common setup section by inherting from aetest
 class CommonSetup(aetest.CommonSetup):
@@ -22,6 +12,7 @@ class CommonSetup(aetest.CommonSetup):
         testbed.devices.SW1.connect()
         testbed.devices.SW2.connect()
         testbed.devices.SW3.connect()
+        testbed.devices.ISP.connect()
 #        for device in testbed.devices:
 #            with steps.start('Connecting to %s' % device):
 #                testbed.devices[device].connect()
@@ -37,6 +28,7 @@ class CommonCleanup(aetest.CommonCleanup):
         testbed.devices.SW1.disconnect()
         testbed.devices.SW2.disconnect()
         testbed.devices.SW3.disconnect()
+        testbed.devices.ISP.disconnect()
 #        for device in testbed.devices:
 #           with steps.start('Disconnecting from %s' % device):
 #                testbed.devices[device].disconnect()
@@ -85,10 +77,10 @@ class Basic_config(aetest.Testcase):
             'Loopback101': 
             {'IP-Address': '11.11.11.11/32',
              'Status': 'up'}
-            }
-        hq1_interfaces = testbed.devices.HQ1.parse('show ip interface') 
+            }               
         
         with steps.start('7. Create all necessary interfaces, subinterfaces and loopbacks'):
+            hq1_interfaces = testbed.devices.HQ1.parse('show ip interface') 
             for intf in interfaces: 
                 assert intf in hq1_interfaces.keys() 
                 assert interfaces[intf]['IP-Address'] in list(hq1_interfaces[intf]['ipv4']) 
@@ -110,10 +102,10 @@ class Basic_config(aetest.Testcase):
             'Tunnel100': 
             {'IP-Address': '2001::11',
              'Status': 'up'}
-            }
-        hq1_ipv6_interfaces = testbed.devices.HQ1.parse('show ipv6 interface') 
+            }       
         
         with steps.start('7b. For HQ1 and HQ2 use automatic IPv6 addresses generation'):
+            hq1_ipv6_interfaces = testbed.devices.HQ1.parse('show ipv6 interface') 
             for intf in interfaces: 
                 assert intf in hq1_ipv6_interfaces.keys()                 
                 assert interfaces[intf]['Status'] == hq1_ipv6_interfaces[intf]['oper_status'] 
@@ -164,13 +156,12 @@ class Switching(aetest.Testcase):
     #13 
     @aetest.test
     def vtp_manipulation(self, testbed, steps):
-
-        with steps.start('1. VLAN database on all switches should contain following VLANs: 101-103'):
-            reference_vlans = {
+        reference_vlans = {
                 '101': {'vlan_id': '101', 'name': 'LAN1', 'interfaces': ['GigabitEthernet1/0']},
                 '102': {'vlan_id': '102', 'name': 'LAN2'},
                 '103': {'vlan_id': '103', 'name': 'EDGE'}
             }
+        with steps.start('1. VLAN database on all switches should contain following VLANs: 101-103'):            
             sw1_vlans = testbed.devices.SW1.parse('show vlan')['vlans']
             self.assert_vlans(reference_vlans = reference_vlans, actual_vlans = sw1_vlans)
         with steps.start('Use SW3 as VTP server'):
@@ -275,7 +266,44 @@ class Switching(aetest.Testcase):
    
 # ROUTING CONFIGURATION 
 class Routing(aetest.Testcase):
-    pass
+    
+    def assert_neighbors(self, reference_interfaces, actual_interfaces):
+        for intf in reference_interfaces:
+            assert intf in actual_interfaces.keys()
+            assert list(reference_interfaces[intf]['eigrp_nbr']) == list(actual_interfaces[intf]['eigrp_nbr'])
+        pass
+    
+    #23
+    @aetest.test
+    def eigrp(self, testbed):
+        reference_eigrp_interface = {
+            'Vi2.1': {'eigrp_nbr': {'20.17.5.14'} },
+            'GigabitEthernet0/2': {'eigrp_nbr': {'20.17.5.6'} },
+            'GigabitEthernet0/1': {'eigrp_nbr': {'20.17.5.2'} },
+            'GigabitEthernet0/3': {'eigrp_nbr': {'20.17.5.10'} }            
+        }
+        isp_intf = testbed.devices.ISP.parse('show ip eigrp neighbors')['eigrp_instance']['2017']['vrf']['default']['address_family']['ipv4']['eigrp_interface']
+        self.assert_neighbors(reference_interfaces=reference_eigrp_interface, actual_interfaces=isp_intf)
+        
+    
+    #24
+    @aetest.test
+    def routing_authentication(self, testbed, steps):
+        with steps.start('Routing authentication should be configured on 5 EIGRP interfaces'):
+            isp_intf = testbed.devices.ISP.execute('sh ip eigrp interfaces detail | i md5')
+            assert isp_intf.count('Authentication mode is md5,  key-chain is') >= 5
+        with steps.start('The Key String should be "WSI"'):
+            isp_keychain = testbed.devices.ISP.execute('sh key chain')
+            assert 'WSI' in isp_keychain
+            
+    #31
+    @aetest.test
+    def policy_based_routing(self, testbed, steps):
+        with steps.start('ISP is the first hop for 30.30.30.30'):
+            assert '1 20.17.5.1' in  testbed.devices.HQ1.execute('traceroute 30.30.30.30 numeric source 11.11.11.11')
+        with steps.start('ISP learned 30.30.30.30 route from BR2'):
+            assert 'D EX     30.30.30.30' in  testbed.devices.ISP.execute('show ip route | i 30.30.30.30')
+
 
 # SERVICES CONFIGURATION
 class Services(aetest.Testcase):
@@ -292,3 +320,16 @@ class Monitoring_and_backup(aetest.Testcase):
 # WAN & VPN CONFIGURATION
 class WAN_and_VPN(aetest.Testcase):
     pass
+
+
+if __name__ == '__main__':
+    import argparse
+    from genie import testbed
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--testbed', dest = 'testbed',
+                        type = testbed.load)
+
+    args, unknown = parser.parse_known_args()
+
+    aetest.main(**vars(args))
