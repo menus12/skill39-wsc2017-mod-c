@@ -1,7 +1,19 @@
 from pyats import aetest
 
+if __name__ == '__main__':
+    import argparse
+    from genie import testbed
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--testbed', dest = 'testbed',
+                        type = testbed.load)
+
+    args, unknown = parser.parse_known_args()
+
+    aetest.main(**vars(args))
+
 # define a common setup section by inherting from aetest
-class ScriptCommonSetup(aetest.CommonSetup):
+class CommonSetup(aetest.CommonSetup):
 
     @aetest.subsection
     def connect_to_devices(self, testbed, steps):
@@ -16,7 +28,7 @@ class ScriptCommonSetup(aetest.CommonSetup):
         
 
 # define common cleanup after all tests are finished
-class ScriptCommonCleanup(aetest.CommonCleanup):
+class CommonCleanup(aetest.CommonCleanup):
     
     @aetest.subsection
     def disconnect_from_devices(self, testbed, steps):
@@ -260,17 +272,23 @@ class Switching(aetest.Testcase):
         with steps.start('Remove VLAN from VTP server'):
             new_vlan_cfg = ['no vlan 110']
             testbed.devices.SW3.configure(new_vlan_cfg)
-    
-    
-if __name__ == '__main__':
-    import argparse
-    #from pyats.topology import loader
-    from genie import testbed
+   
+# ROUTING CONFIGURATION 
+class Routing(aetest.Testcase):
+    pass
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--testbed', dest = 'testbed',
-                        type = testbed.load)
+# SERVICES CONFIGURATION
+class Services(aetest.Testcase):
+    pass
 
-    args, unknown = parser.parse_known_args()
+# SECURITY CONFIGURATION
+class Security(aetest.Testcase):
+    pass
 
-    aetest.main(**vars(args))
+# MONITORING AND BACKUP CONFIGURATION
+class Monitoring_and_backup(aetest.Testcase):
+    pass
+
+# WAN & VPN CONFIGURATION
+class WAN_and_VPN(aetest.Testcase):
+    pass
