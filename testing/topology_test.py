@@ -52,17 +52,17 @@ class Basic_config(aetest.Testcase):
     # 3
     @aetest.test
     def local_passwords_and_services(self, testbed, steps):
-        with steps.start('6a. Password should be stored in in plain text. 6c. As a reversible cipher text'):
+        with steps.start('Enable password configured with encryption'):
             assert 'password 7' in testbed.devices.HQ1.execute('sh run | i enable')
-        with steps.start('3a. Only scrypt hash of the password should be stored in configuration'):
-            assert 'secret' in testbed.devices.HQ1.execute('sh run | i username')
+        with steps.start('User password configured with scrypt hash'):
+            assert 'username wsi2017 privilege 15 secret 9' in testbed.devices.HQ1.execute('sh run | i username wsi2017')
 
     # 8
     @aetest.test
     def server_based_aaa(self, testbed, steps):
-        with steps.start('5. Configure RADIUS authentication for all remote consoles (vty) on HQ1 router'):
+        with steps.start('RADIUS server configured'):
             assert '192.168.10.10' in testbed.devices.HQ1.execute('sh aaa servers')
-        with steps.start('5f. Test RADIUS authentication using radius/cisco1 credentials'):
+        with steps.start('RADIUS authentication test is successful'):
             assert 'successfully' in testbed.devices.HQ1.execute(
                 'test aaa group radius server 192.168.10.10 auth-port 1812 radius cisco1 legacy')
 
@@ -83,14 +83,14 @@ class Basic_config(aetest.Testcase):
              'Status': 'up'}
             }               
         
-        with steps.start('7. Create all necessary interfaces, subinterfaces and loopbacks'):
+        with steps.start('Interfaces assigned with correct IPv4 addresses'):
             hq1_interfaces = testbed.devices.HQ1.parse('show ip interface') 
             for intf in interfaces: 
                 assert intf in hq1_interfaces.keys() 
                 assert interfaces[intf]['IP-Address'] in list(hq1_interfaces[intf]['ipv4']) 
                 assert interfaces[intf]['Status'] == hq1_interfaces[intf]['oper_status'] 
 
-        with steps.start('IPv4 Check connectivity'):
+        with steps.start('IPv4 connectivity is ok'):
             assert '!!!!!' in testbed.devices.HQ1.execute(
                 'ping 2.2.2.2 source 11.11.11.11')
             
@@ -108,14 +108,14 @@ class Basic_config(aetest.Testcase):
              'Status': 'up'}
             }       
         
-        with steps.start('7b. For HQ1 and HQ2 use automatic IPv6 addresses generation'):
+        with steps.start('Interfaces assigned with correct IPv6 addresses'):
             hq1_ipv6_interfaces = testbed.devices.HQ1.parse('show ipv6 interface') 
             for intf in interfaces: 
                 assert intf in hq1_ipv6_interfaces.keys()                 
                 assert interfaces[intf]['Status'] == hq1_ipv6_interfaces[intf]['oper_status'] 
                 assert len([ip for ip in hq1_ipv6_interfaces[intf]['ipv6'].keys() if ip.startswith(interfaces[intf]['IP-Address'])]) > 0
 
-        with steps.start('IPv6 Check connectivity'):
+        with steps.start('IPv6 connectivity is ok'):
             hq2_ipv6 = testbed.devices.HQ2.parse('show ipv6 interface')['GigabitEthernet0/1.101']['ipv6']
             for addr in hq2_ipv6: 
                 if addr.startswith('A1F:EA75:CA75'):
@@ -165,14 +165,14 @@ class Switching(aetest.Testcase):
                 '102': {'vlan_id': '102', 'name': 'LAN2'},
                 '103': {'vlan_id': '103', 'name': 'EDGE'}
             }
-        with steps.start('1. VLAN database on all switches should contain following VLANs: 101-103'):            
+        with steps.start('All VLANs are present'):            
             sw1_vlans = testbed.devices.SW1.parse('show vlan')['vlans']
             self.assert_vlans(reference_vlans = reference_vlans, actual_vlans = sw1_vlans)
-        with steps.start('Use SW3 as VTP server'):
+        with steps.start('Create additional VLAN on VTP server'):
             new_vlan_cfg = ['vlan 110', 'name somevlan']
             testbed.devices.SW3.configure(new_vlan_cfg)
             reference_vlans['110'] = {'vlan_id': '110', 'name': 'somevlan'}
-        with steps.start('SW1 and SW2 as clients'):            
+        with steps.start('Created VlAN is present on VTP clients'):            
             sw1_vlans = testbed.devices.SW1.parse('show vlan')['vlans']
             self.assert_vlans(reference_vlans = reference_vlans, actual_vlans = sw1_vlans)    
 
@@ -183,7 +183,7 @@ class Switching(aetest.Testcase):
         sw1_interfaces = testbed.devices.SW1.parse('show interfaces trunk')['interface']
         sw2_interfaces = testbed.devices.SW2.parse('show interfaces trunk')['interface']
         sw3_interfaces = testbed.devices.SW3.parse('show interfaces trunk')['interface']
-        with steps.start('2a. Gi1/1-2 ports on SW3 listen for trunk negotiation but won’t initiate it itself'):
+        with steps.start('Gi1/1-2 on SW3 in auto mode'):
             reference_interfaces = {
                 'GigabitEthernet1/1': {
                     'name': 'GigabitEthernet1/1',
@@ -197,7 +197,7 @@ class Switching(aetest.Testcase):
                     'status': 'trunking'}
             }            
             self.assert_dtp(reference_interfaces = reference_interfaces, actual_interfaces = sw3_interfaces)
-        with steps.start('2b. Gi1/1 on SW1 and Gi1/2 on SW2 will initiate trunk negotiation'):
+        with steps.start('Gi1/1 on SW1 and Gi1/2 on SW2 in desirable mode'):
             reference_interfaces = {
                 'GigabitEthernet1/1': {
                     'name': 'GigabitEthernet1/1',
@@ -214,7 +214,7 @@ class Switching(aetest.Testcase):
                     'status': 'trunking'}                
             }            
             self.assert_dtp(reference_interfaces = reference_interfaces, actual_interfaces = sw2_interfaces)
-        with steps.start('2c. Gi0/1-3 on SW1 and SW2 configured as trunks'):
+        with steps.start('Gi0/1-3 on SW1 and SW2 in trunk mode'):
             reference_interfaces = {
                 'GigabitEthernet0/1': {
                     'name': 'GigabitEthernet0/1',
@@ -239,6 +239,11 @@ class Switching(aetest.Testcase):
                 reference_interfaces = {
                     'Port-channel1': {
                         'name': 'Port-channel1',
+                        'mode': 'on',
+                        'encapsulation': '802.1q',
+                        'status': 'trunking'},
+                    'GigabitEthernet0/3': {
+                        'name': 'GigabitEthernet0/3',
                         'mode': 'on',
                         'encapsulation': '802.1q',
                         'status': 'trunking'}
@@ -291,10 +296,10 @@ class Routing(aetest.Testcase):
     #24
     @aetest.test
     def routing_authentication(self, testbed, steps):
-        with steps.start('Routing authentication should be configured on 5 EIGRP interfaces'):
+        with steps.start('Routing auth is configured on EIGRP interfaces'):
             isp_intf = testbed.devices.ISP.execute('sh ip eigrp interfaces detail | i md5')
             assert isp_intf.count('Authentication mode is md5,  key-chain is') >= 5
-        with steps.start('The Key String should be "WSI"'):
+        with steps.start('Key chain contains "WSI" key'):
             isp_keychain = testbed.devices.ISP.execute('sh key chain')
             assert 'WSI' in isp_keychain
             
