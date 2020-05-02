@@ -307,7 +307,15 @@ class Routing(aetest.Testcase):
 
 # SERVICES CONFIGURATION
 class Services(aetest.Testcase):
-    pass
+    
+    #32
+    @aetest.test
+    def nat(self, testbed, steps):
+        with steps.start('Create translation'):
+            testbed.devices.HQ1.execute('ping 8.8.8.8 source 192.168.10.254')
+        with steps.start('Check translation'):
+            assert int(testbed.devices.HQ1.parse('show ip nat statistics')['active_translations']['dynamic']) > 0
+
 
 # SECURITY CONFIGURATION
 class Security(aetest.Testcase):
