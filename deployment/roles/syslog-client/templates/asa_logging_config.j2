@@ -1,6 +1,6 @@
 logging enable
 logging timestamp
-logging monitor {{logging_level}}
+logging trap {{logging_level}}
 {% for host in logging_hosts | d([]) %}
 logging host {{host.interface}} {{host.host}}
 {% endfor %}

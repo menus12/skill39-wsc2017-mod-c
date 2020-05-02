@@ -13,6 +13,9 @@ class CommonSetup(aetest.CommonSetup):
         testbed.devices.SW2.connect()
         testbed.devices.SW3.connect()
         testbed.devices.ISP.connect()
+        testbed.devices.BR3.connect()
+        testbed.devices.FW1.connect()
+        testbed.devices.RADIUS.connect()
 #        for device in testbed.devices:
 #            with steps.start('Connecting to %s' % device):
 #                testbed.devices[device].connect()
@@ -29,6 +32,9 @@ class CommonCleanup(aetest.CommonCleanup):
         testbed.devices.SW2.disconnect()
         testbed.devices.SW3.disconnect()
         testbed.devices.ISP.disconnect()
+        testbed.devices.BR3.disconnect()
+        testbed.devices.FW1.disconnect()
+        testbed.devices.RADIUS.disconnect()
 #        for device in testbed.devices:
 #           with steps.start('Disconnecting from %s' % device):
 #                testbed.devices[device].disconnect()
@@ -256,10 +262,8 @@ class Switching(aetest.Testcase):
         sw1_stp = testbed.devices.SW1.parse('show spanning-tree')
         assert 'rapid_pvst' in sw1_stp.keys()
 
-
-    
     @aetest.cleanup
-    def Switching_cleanup(self, testbed, steps):
+    def switching_cleanup(self, testbed, steps):
         with steps.start('Remove VLAN from VTP server'):
             new_vlan_cfg = ['no vlan 110']
             testbed.devices.SW3.configure(new_vlan_cfg)
@@ -319,15 +323,73 @@ class Services(aetest.Testcase):
 
 # SECURITY CONFIGURATION
 class Security(aetest.Testcase):
-    pass
+    
+    #41
+    @aetest.test
+    def port_security(self, testbed):
+        tags = ['Gi1/0', '2', 'Restrict']
+        status = testbed.devices.SW2.execute('show port-security')
+        for tag in tags:
+            assert tag in status
+    
+    #42
+    @aetest.test
+    def dhcp_snooping(self, testbed, steps):
+        with steps.start('Check dhcp snooping status'):
+            status = testbed.devices.SW1.execute('sh ip dhcp snooping')
+            tags = [
+                "Switch DHCP snooping is enabled",
+                "DHCP snooping is configured on following VLANs:\r\n101",
+                "DHCP snooping is operational on following VLANs:\r\n101"
+            ]
+            for tag in tags:
+                assert tag in status
+        with steps.start('Check dhcp snooping bindings'):
+            assert '101' in testbed.devices.SW1.execute('sh ip dhcp snooping binding')
+        with steps.start('Check dhcp snooping database'):
+            assert 'flash:' in testbed.devices.SW1.execute('show ip dhcp snooping database | i Agent URL')
 
 # MONITORING AND BACKUP CONFIGURATION
 class Monitoring_and_backup(aetest.Testcase):
-    pass
+    
+    #44
+    @aetest.test
+    def syslog(self, testbed, steps):
+        with steps.start('Check logging from HQ1'):
+            testbed.devices.HQ1.execute('send log 6 pyATS check')
+            assert 'pyATS check' in testbed.devices.RADIUS.execute("sudo cat /var/log/hq1.log")
+        with steps.start('Check logging from FW1'):
+            testbed.devices.FW1.configure('')
+            assert "executed 'configure terminal'" in testbed.devices.RADIUS.execute("sudo cat /var/log/fw1.log")
+    
+    #46
+    @aetest.test
+    def configuration_backup(self, testbed, steps):
+        with steps.start('Save config on HQ1'):
+            assert '!' in testbed.devices.HQ1.execute('write')
+        with steps.start('Check backup on tftp server'):
+            assert testbed.devices.HQ1.hostname in testbed.devices.RADIUS.execute("sudo ls /srv/tftp")
+
+    @aetest.cleanup
+    def monitoring_and_backup_cleanup(self, testbed, steps):
+        with steps.start('Remove backups from tftp server'):
+            testbed.devices.RADIUS.execute("sudo rm -f /srv/tftp/*")
+        with steps.start('Remove logs'):
+            testbed.devices.RADIUS.execute("sudo su")
+            testbed.devices.RADIUS.execute("echo '' > /var/log/hq1.log")
+            testbed.devices.RADIUS.execute("echo '' > /var/log/fw1.log")
+            testbed.devices.RADIUS.execute("exit")
 
 # WAN & VPN CONFIGURATION
 class WAN_and_VPN(aetest.Testcase):
-    pass
+    
+    #49
+    @aetest.test
+    def mgre_nhrp_phase_2(self, testbed, steps):
+        with steps.start('First trace'):
+            testbed.devices.BR3.execute('traceroute 2001::22')
+        with steps.start('Second trace'):
+            assert '1 2001::22' in testbed.devices.BR3.execute('traceroute 2001::22')
 
 
 if __name__ == '__main__':
