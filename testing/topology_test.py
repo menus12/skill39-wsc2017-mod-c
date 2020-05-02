@@ -1,7 +1,5 @@
 from pyats import aetest
 
-
-
 # define a common setup section by inherting from aetest
 class CommonSetup(aetest.CommonSetup):
 
@@ -352,14 +350,19 @@ class Security(aetest.Testcase):
 # MONITORING AND BACKUP CONFIGURATION
 class Monitoring_and_backup(aetest.Testcase):
     
+    @aetest.setup
+    def monitoring_and_backup_setup(self, testbed, steps):
+        with steps.start('Create log entry from HQ1'):
+            testbed.devices.HQ1.execute('send log 6 pyATS check')
+        with steps.start('Create log entry from FW1'):
+            testbed.devices.FW1.configure('')       
+    
     #44
     @aetest.test
     def syslog(self, testbed, steps):
-        with steps.start('Check logging from HQ1'):
-            testbed.devices.HQ1.execute('send log 6 pyATS check')
+        with steps.start('Check logging from HQ1'):            
             assert 'pyATS check' in testbed.devices.RADIUS.execute("sudo cat /var/log/hq1.log")
-        with steps.start('Check logging from FW1'):
-            testbed.devices.FW1.configure('')
+        with steps.start('Check logging from FW1'):            
             assert "executed 'configure terminal'" in testbed.devices.RADIUS.execute("sudo cat /var/log/fw1.log")
     
     #46
@@ -380,6 +383,7 @@ class Monitoring_and_backup(aetest.Testcase):
             testbed.devices.RADIUS.execute("echo '' > /var/log/fw1.log")
             testbed.devices.RADIUS.execute("exit")
 
+
 # WAN & VPN CONFIGURATION
 class WAN_and_VPN(aetest.Testcase):
     
@@ -390,7 +394,6 @@ class WAN_and_VPN(aetest.Testcase):
             testbed.devices.BR3.execute('traceroute 2001::22')
         with steps.start('Second trace'):
             assert '1 2001::22' in testbed.devices.BR3.execute('traceroute 2001::22')
-
 
 if __name__ == '__main__':
     import argparse
