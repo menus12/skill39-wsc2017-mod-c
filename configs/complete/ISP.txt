@@ -1,0 +1,245 @@
+Building configuration...
+
+  
+Current configuration : 5604 bytes
+!
+! Last configuration change at 21:58:48 GMT Mon May 4 2020 by do_not_delete_this_user
+!
+version 15.8
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname ISP
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password 7 1312041B
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+clock timezone GMT 4 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name wsi2017.com
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+key chain KC
+ key 0
+  key-string 7 10793A30
+!
+!
+username do_not_delete_this_user privilege 15 secret 5 $1$zyra$ubjjKYYs5Y6SYU3ImS5XJ/
+username wsi2017 privilege 15 secret 9 $9$RPPZG.bFSIQsXL$qHMV4IDRjTqj37KBwCQHPErHaQ6j8vxJhu/3d6wfISo
+username papuser password 7 070C285F4D0648
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+bba-group pppoe global
+ virtual-template 1
+!
+!
+interface Loopback100
+ ip address 8.8.8.8 255.255.255.255
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+!
+interface Loopback200
+ ip address 209.136.0.1 255.255.0.0
+!
+interface Loopback300
+ ip address 138.76.0.1 255.255.0.0
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-intf
+ ip address 10.0.191.103 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description INET11
+ ip address 20.17.5.1 255.255.255.252
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description INET22
+ ip address 20.17.5.5 255.255.255.252
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description INET2
+ ip address 20.17.5.9 255.255.255.252
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/4
+ description INET3
+ ip address 20.17.5.13 255.255.255.252
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ duplex auto
+ speed auto
+ media-type rj45
+ pppoe enable group global
+!
+interface Virtual-Template1
+ mtu 1492
+ ip unnumbered GigabitEthernet0/4
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ peer default ip address pool PPPoE
+ ppp authentication pap
+ ppp pap sent-username papuser password 7 094F471A1A0A46
+!
+!
+router eigrp 2017
+ network 8.8.8.8 0.0.0.0
+ network 20.17.5.0 0.0.0.3
+ network 20.17.5.4 0.0.0.3
+ network 20.17.5.8 0.0.0.3
+ network 20.17.5.12 0.0.0.3
+!
+router bgp 65000
+ bgp router-id 8.8.8.8
+ bgp log-neighbor-changes
+ neighbor 20.17.5.2 remote-as 65001
+ neighbor 20.17.5.6 remote-as 65001
+ neighbor 20.17.5.10 remote-as 65002
+ neighbor 20.17.5.14 remote-as 65003
+ !
+ address-family ipv4
+  network 138.76.0.0
+  network 209.136.0.0 mask 255.255.0.0
+  neighbor 20.17.5.2 activate
+  neighbor 20.17.5.6 activate
+  neighbor 20.17.5.10 activate
+  neighbor 20.17.5.14 activate
+ exit-address-family
+!
+ip local pool PPPoE 20.17.5.14
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+ip ssh port 2222 rotary 1
+ip ssh version 2
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+line vty 5 9
+ transport input none
+line vty 10 15
+ privilege level 15
+ logging synchronous
+ rotary 1
+ transport input ssh
+!
+no scheduler allocate
+!
+end

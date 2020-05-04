@@ -1,0 +1,193 @@
+Building configuration...
+
+Current configuration : 4706 bytes
+!
+! Last configuration change at 21:58:16 GMT Mon May 4 2020 by do_not_delete_this_user
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password 7 0104150D
+!
+username do_not_delete_this_user privilege 15 secret 5 $1$czkN$0ErslR9mAP13eFFzC.d6R1
+username wsi2017 privilege 15 secret 9 $9$JduFhSuIk15ABP$/SPUle5PPP0ALaamGAXPCZ0Fz4ntOr6jF9onHM.fOmo
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone GMT 4 0
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain-name wsi2017.com
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 101 priority 28672
+spanning-tree vlan 102 priority 24576
+spanning-tree vlan 103 priority 61440
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/0
+ no switchport
+ vrf forwarding Mgmt-intf
+ ip address 10.0.191.107 255.255.255.0
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ description SW1_uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ negotiation auto
+ channel-group 1 mode auto
+!
+interface GigabitEthernet0/2
+ description SW1_uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ negotiation auto
+ channel-group 1 mode auto
+!
+interface GigabitEthernet0/3
+ description SW1_uplink
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ description PC1
+ switchport access vlan 101
+ switchport mode access
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 5254.0007.7c44
+ switchport port-security
+ negotiation auto
+ spanning-tree portfast edge
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ description SW3_uplink
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic desirable
+ negotiation auto
+!
+interface Vlan101
+ description LAN1
+ ip address 192.168.10.52 255.255.255.0
+!
+ip forward-protocol nd
+!
+ip http server
+ip http secure-server
+!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+ip ssh port 2222 rotary 1
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+line vty 5 9
+line vty 10 15
+ privilege level 15
+ logging synchronous
+ rotary 1
+ transport input ssh
+!
+!
+end

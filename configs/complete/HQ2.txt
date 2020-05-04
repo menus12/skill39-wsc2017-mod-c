@@ -1,0 +1,250 @@
+Building configuration...
+
+  
+Current configuration : 5672 bytes
+!
+! Last configuration change at 21:58:53 GMT Mon May 4 2020 by do_not_delete_this_user
+!
+version 15.8
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname HQ2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password 7 06111C28
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+clock timezone GMT 4 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name wsi2017.com
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+key chain KC
+ key 0
+  key-string 7 08167F67
+!
+!
+username do_not_delete_this_user privilege 15 secret 5 $1$isMs$VZsvT4tCLLks0qukkyBYc1
+username wsi2017 privilege 15 secret 9 $9$OsKdKqR0IdDxJb$RoBjTjiMBN.2ucWbemqqScPIVM/DHaWeJNijSS1MttA
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback102
+ ip address 22.22.22.22 255.255.255.255
+ ipv6 address DEAD:BEEF:22::1/128
+ ipv6 ospf 1 area 0
+!
+interface Tunnel100
+ description DMVPN
+ no ip address
+ no ip redirects
+ ipv6 address 2001::22/64
+ ipv6 mtu 1400
+ ipv6 nhrp authentication wsi2017
+ ipv6 nhrp map multicast 11.11.11.11
+ ipv6 nhrp map 2001::11/64 11.11.11.11
+ ipv6 nhrp network-id 100
+ ipv6 nhrp nhs 2001::11
+ ipv6 ospf 1 area 0
+ ipv6 ospf network broadcast
+ ipv6 ospf priority 100
+ tunnel source Loopback102
+ tunnel mode gre multipoint
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-intf
+ ip address 10.0.191.102 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description SW3_uplink
+ no ip address
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1.101
+ description LAN1
+ encapsulation dot1Q 101
+ ip address 192.168.10.253 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ glbp 101 ip 192.168.10.252
+ glbp 101 priority 101
+ ipv6 address A1F:EA75:CA75::/64 eui-64
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet0/1.102
+ description LAN2
+ encapsulation dot1Q 102
+ ip address 192.168.20.253 255.255.255.0
+ standby 201 ip 192.168.20.252
+ standby 201 priority 111
+ standby 201 authentication md5 key-string 7 070C285F4D0648
+!
+interface GigabitEthernet0/1.103
+ description EDGE
+ encapsulation dot1Q 103
+ ip address 192.168.30.253 255.255.255.0
+!
+interface GigabitEthernet0/2
+ description INET22
+ ip address 20.17.5.6 255.255.255.252
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ media-type rj45
+!
+!
+router eigrp 2017
+ network 20.17.5.4 0.0.0.3
+!
+router ospf 1
+ network 192.168.10.0 0.0.0.255 area 1
+ network 192.168.20.0 0.0.0.255 area 1
+ network 192.168.30.0 0.0.0.255 area 1
+!
+router bgp 65001
+ bgp router-id 20.17.5.6
+ bgp log-neighbor-changes
+ neighbor 20.17.5.1 remote-as 65000
+ neighbor 192.168.30.254 remote-as 65001
+ !
+ address-family ipv4
+  network 22.22.22.22 mask 255.255.255.255
+  neighbor 20.17.5.1 activate
+  neighbor 192.168.30.254 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/2 overload
+ip route 0.0.0.0 0.0.0.0 20.17.5.5
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+ip ssh port 2222 rotary 1
+ip ssh version 2
+!
+ip access-list standard ACL_FOR_NAT
+ permit 192.168.10.0 0.0.0.255
+!
+ipv6 router ospf 1
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+line vty 5 9
+ transport input none
+line vty 10 15
+ privilege level 15
+ logging synchronous
+ rotary 1
+ transport input ssh
+!
+no scheduler allocate
+!
+end

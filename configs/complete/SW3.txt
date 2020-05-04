@@ -1,0 +1,181 @@
+Building configuration...
+
+Current configuration : 4315 bytes
+!
+! Last configuration change at 21:58:11 GMT Mon May 4 2020 by do_not_delete_this_user
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password 7 111E0A0C
+!
+username do_not_delete_this_user privilege 15 secret 5 $1$VTM6$tFVAt20dlEvaMiSaCByzp.
+username wsi2017 privilege 15 secret 9 $9$QspXFCuiZ0FMBv$6hYe458jVmv6vQfmgOs7jdrdmAAAwwWDl3pvGXMRgyc
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone GMT 4 0
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain-name wsi2017.com
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 101 priority 61440
+spanning-tree vlan 102 priority 28672
+spanning-tree vlan 103 priority 24576
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no switchport
+ vrf forwarding Mgmt-intf
+ ip address 10.0.191.108 255.255.255.0
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ description HQ1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 101
+ switchport mode trunk
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ description HQ2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ description FW1
+ switchport access vlan 103
+ switchport mode access
+ negotiation auto
+ spanning-tree portfast edge
+!
+interface GigabitEthernet1/0
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ description SW3_uplink
+ switchport trunk encapsulation dot1q
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ description SW3_uplink
+ switchport trunk encapsulation dot1q
+ negotiation auto
+!
+interface Vlan101
+ description LAN1
+ ip address 192.168.10.53 255.255.255.0
+!
+ip forward-protocol nd
+!
+ip http server
+ip http secure-server
+!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+ip ssh port 2222 rotary 1
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+line vty 5 9
+line vty 10 15
+ privilege level 15
+ logging synchronous
+ rotary 1
+ transport input ssh
+!
+!
+end

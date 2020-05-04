@@ -1,0 +1,227 @@
+Building configuration...
+
+  
+Current configuration : 5002 bytes
+!
+! Last configuration change at 21:58:41 GMT Mon May 4 2020 by do_not_delete_this_user
+!
+version 15.8
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname BR2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password 7 02111752
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+clock timezone GMT 4 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name wsi2017.com
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+key chain KC
+ key 0
+  key-string 7 0124352D
+!
+!
+username do_not_delete_this_user privilege 15 secret 5 $1$cY5z$IMbqfUNxahvGuH/fs/Kgm0
+username wsi2017 privilege 15 secret 9 $9$UfPF66haN2CN5r$yudQueFRqFtd9HasvS7l2xVkCbQ6NCX2O/bVN5j/bhA
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback2
+ ip address 2.2.2.2 255.255.255.255
+ ipv6 address DEAD:BEEF:2::1/128
+ ipv6 ospf 1 area 0
+!
+interface Loopback20
+ ip address 20.20.20.20 255.255.255.255
+!
+interface Tunnel100
+ description DMVPN
+ no ip address
+ no ip redirects
+ ipv6 address 2001::2/64
+ ipv6 mtu 1400
+ ipv6 nhrp authentication wsi2017
+ ipv6 nhrp map multicast 11.11.11.11
+ ipv6 nhrp map 2001::11/64 11.11.11.11
+ ipv6 nhrp network-id 100
+ ipv6 nhrp nhs 2001::11
+ ipv6 ospf 1 area 0
+ ipv6 ospf network broadcast
+ ipv6 ospf priority 100
+ tunnel source Loopback2
+ tunnel mode gre multipoint
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-intf
+ ip address 10.0.191.104 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description LAN3
+ ip address 10.20.30.254 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description INET2
+ ip address 20.17.5.10 255.255.255.252
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ duplex auto
+ speed auto
+ media-type rj45
+!
+!
+router eigrp 2017
+ network 20.17.5.8 0.0.0.3
+ redistribute ospf 1 metric 1000000 0 255 1 1500 route-map RM_RED_OSPF
+!
+router ospf 1
+ network 10.20.30.0 0.0.0.255 area 2
+ network 20.20.20.20 0.0.0.0 area 2
+!
+router bgp 65002
+ bgp router-id 20.17.5.10
+ bgp log-neighbor-changes
+ neighbor 20.17.5.9 remote-as 65000
+ !
+ address-family ipv4
+  network 2.2.2.2 mask 255.255.255.255
+  neighbor 20.17.5.9 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 20.17.5.9
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+ip ssh port 2222 rotary 1
+ip ssh version 2
+!
+ip access-list standard ACL_RED_OSPF
+ permit 30.30.30.30
+!
+ipv6 router ospf 1
+!
+ipv6 ioam timestamp
+!
+route-map RM_RED_OSPF permit 10
+ match ip address ACL_RED_OSPF
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+line vty 5 9
+ transport input none
+line vty 10 15
+ privilege level 15
+ logging synchronous
+ rotary 1
+ transport input ssh
+!
+no scheduler allocate
+!
+end

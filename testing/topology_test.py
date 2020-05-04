@@ -5,18 +5,9 @@ class CommonSetup(aetest.CommonSetup):
 
     @aetest.subsection
     def connect_to_devices(self, testbed, steps):
-        testbed.devices.HQ1.connect()
-        testbed.devices.HQ2.connect()
-        testbed.devices.SW1.connect()
-        testbed.devices.SW2.connect()
-        testbed.devices.SW3.connect()
-        testbed.devices.ISP.connect()
-        testbed.devices.BR3.connect()
-        testbed.devices.FW1.connect()
-        testbed.devices.RADIUS.connect()
-#        for device in testbed.devices:
-#            with steps.start('Connecting to %s' % device):
-#                testbed.devices[device].connect()
+        for device in testbed.devices:
+            with steps.start('Connecting to %s' % device):
+                testbed.devices[device].connect()
         
 
 # define common cleanup after all tests are finished
@@ -24,18 +15,9 @@ class CommonCleanup(aetest.CommonCleanup):
     
     @aetest.subsection
     def disconnect_from_devices(self, testbed, steps):
-        testbed.devices.HQ1.disconnect()
-        testbed.devices.HQ2.disconnect()
-        testbed.devices.SW1.disconnect()
-        testbed.devices.SW2.disconnect()
-        testbed.devices.SW3.disconnect()
-        testbed.devices.ISP.disconnect()
-        testbed.devices.BR3.disconnect()
-        testbed.devices.FW1.disconnect()
-        testbed.devices.RADIUS.disconnect()
-#        for device in testbed.devices:
-#           with steps.start('Disconnecting from %s' % device):
-#                testbed.devices[device].disconnect()
+        for device in testbed.devices:
+           with steps.start('Disconnecting from %s' % device):
+                testbed.devices[device].disconnect()
 
 class Basic_config(aetest.Testcase):
         

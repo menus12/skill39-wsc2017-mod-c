@@ -1,0 +1,260 @@
+Building configuration...
+
+  
+Current configuration : 6024 bytes
+!
+! Last configuration change at 21:58:45 GMT Mon May 4 2020 by do_not_delete_this_user
+!
+version 15.8
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname BR3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+!
+no logging console
+enable password 7 03134802
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization console
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+clock timezone GMT 4 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name wsi2017.com
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+key chain KC
+ key 0
+  key-string 7 1332243B
+!
+!
+username do_not_delete_this_user privilege 15 secret 5 $1$0t48$nuJI6iNjAiJzMcPHIufb3/
+username wsi2017 privilege 15 secret 9 $9$DwVlyz6umLMsv5$JqD00.yJvFf4bM1iPSQPXoqF1CfVhwssPQJWU7W4KlY
+username user1 privilege 2 secret 5 $1$i8OV$2OweNisI/gBYIn/gmUW201
+username user2 privilege 7 secret 5 $1$RE1l$tyV5LOMSOyYmxdAuTcuco.
+username user3 view show_view secret 5 $1$hHKX$PHdYvtk1w2jMOztzNQS5E/
+username user4 view ping_view secret 5 $1$xTPn$rUsf5MTZ3FQqpsERGUXJu/
+username user5 view super_view secret 5 $1$ZZ7A$KDXHeGiaJuMSB6BM7n7xi0
+username papuser password 7 13061E01080355
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback3
+ ip address 3.3.3.3 255.255.255.255
+ ipv6 address DEAD:BEEF:3::1/128
+ ipv6 ospf 1 area 0
+!
+interface Loopback30
+ ip address 30.30.30.30 255.255.255.255
+!
+interface Tunnel100
+ description DMVPN
+ no ip address
+ no ip redirects
+ ipv6 address 2001::3/64
+ ipv6 mtu 1400
+ ipv6 nhrp authentication wsi2017
+ ipv6 nhrp map multicast 11.11.11.11
+ ipv6 nhrp map 2001::11/64 11.11.11.11
+ ipv6 nhrp network-id 100
+ ipv6 nhrp nhs 2001::11
+ ipv6 ospf 1 area 0
+ ipv6 ospf network broadcast
+ ipv6 ospf priority 100
+ tunnel source Loopback3
+ tunnel mode gre multipoint
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-intf
+ ip address 10.0.191.105 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description INET3
+ no ip address
+ duplex auto
+ speed auto
+ media-type rj45
+ pppoe enable group global
+ pppoe-client dial-pool-number 1
+!
+interface GigabitEthernet0/2
+ description INET4
+ ip address 20.17.6.3 255.255.255.248
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface Dialer1
+ mtu 1492
+ ip address negotiated
+ ip authentication mode eigrp 2017 md5
+ ip authentication key-chain eigrp 2017 KC
+ encapsulation ppp
+ dialer pool 1
+ dialer-group 1
+ no cdp enable
+ ppp authentication pap
+ ppp pap sent-username papuser password 7 121A0C0411045D
+!
+!
+router eigrp 2017
+ network 20.17.5.12 0.0.0.3
+!
+router ospf 1
+ network 20.17.6.0 0.0.0.7 area 0
+ network 30.30.30.30 0.0.0.0 area 3
+!
+router bgp 65003
+ bgp router-id 20.17.5.14
+ bgp log-neighbor-changes
+ neighbor 20.17.5.13 remote-as 65000
+ !
+ address-family ipv4
+  network 3.3.3.3 mask 255.255.255.255
+  neighbor 20.17.5.13 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 20.17.5.13
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+ip ssh port 2222 rotary 1
+ip ssh version 2
+!
+ipv6 router ospf 1
+!
+ipv6 ioam timestamp
+!
+!
+!
+!
+!
+control-plane
+!
+privilege exec level 10 show ip route
+privilege exec level 2 show ip
+privilege exec level 5 show version
+privilege exec level 2 show
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+parser view show_view
+ secret 5 $1$O3wm$IDGoAPDJU8WllET5oCdoV1
+ commands exec include who
+ commands exec include all show ip
+ commands exec include show version
+ commands exec include show
+!
+parser view ping_view
+ secret 5 $1$dfLD$pVXAG.piU8egg95f74umn.
+ commands exec include all traceroute
+ commands exec include all ping
+!
+parser view super_view superview
+ secret 5 $1$6w7i$nC5rDf5qD9fxio8CcKKWA/
+ view show_view
+ view ping_view
+!
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input ssh
+line vty 5 9
+ transport input none
+line vty 10 15
+ privilege level 15
+ logging synchronous
+ rotary 1
+ transport input ssh
+!
+no scheduler allocate
+!
+end
