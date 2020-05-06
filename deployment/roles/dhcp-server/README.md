@@ -11,7 +11,7 @@ Tested against IOSv 15.8(3) on CML2
 Role Variables
 --------------
 
-Variables used in host_vars
+Variables used in host_vars:
 - pool - list of dicts with following parameters:
   - name
   - network
