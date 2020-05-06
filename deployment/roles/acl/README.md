@@ -17,7 +17,7 @@ standard_acls (dict) - standard ACLs for IOS configuration
 
 extended_acls (dict) - extended ACLs for IOS configuration
 
-acls (dict) - ACLs for ASA configuration
+acls (list) - ACLs for ASA configuration
 
 IOS example
 -----------
