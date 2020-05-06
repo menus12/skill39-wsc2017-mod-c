@@ -1,4 +1,4 @@
-Role Name
+aaa-auth
 =========
 
 This role is used for configuraton of radius servers and aaa lists
@@ -29,5 +29,4 @@ BSD
 Author Information
 ------------------
 
-Aleksandr Gorbachev
-mailto:agorbachev@nsalab.org
+Aleksandr Gorbachev (agorbachev@nsalab.org)
