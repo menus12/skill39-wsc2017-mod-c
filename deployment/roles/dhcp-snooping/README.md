@@ -6,12 +6,12 @@ This role is used for dhcp-snooping configuration on IOS switches
 Requirements
 ------------
 
-Tested against IOSv 15.8(3) on CML2
+Tested against IOSvL2 15.2 on CML2
 
 Role Variables
 --------------
 
-Variables used in vars/main.yml
+Variables used in vars/main.yml:
 - dhcps_vlan_range
 - dhcps_information_option
 - dhcps_db_path
