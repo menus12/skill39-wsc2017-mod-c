@@ -2,11 +2,23 @@
 
 Contains ansible playbooks for test project deployment
 
-**./deployment/ansible.cfg**
+**./host_vars/**
+Contains variables for each host
+
+**./host_group/**
+Contains variables for each group of hosts
+
+**./roles/**
+Contains deployment roles
+
+**./playbook-examples/**
+Examples of playbooks for straightforward deployment without roles
+
+**./ansible.cfg**
 Local ansible configuration file
 
-**./deployment/default_inventory.yaml**
+**./default_inventory.yaml**
 Ansible inventory for test project devices grouped into appropriate groups
 
-**./deployment/site.yaml**
+**./site.yaml**
 Step-by-step test project deployment playbook
