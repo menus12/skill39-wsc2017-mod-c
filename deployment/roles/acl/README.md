@@ -14,17 +14,21 @@ Role Variables
 This role is using host_vars/group_vars where access-lists are defined
 
 standard_acls (dict) - standard ACLs for IOS configuration
+
 extended_acls (dict) - extended ACLs for IOS configuration
+
 acls (dict) - ACLs for ASA configuration
 
-IOS example:
+IOS example
+-----------
 
 standard_acls:
   ACL_DENY_BGP_IN:
     - deny 209.136.0.0 0.0.255.255
     - permit any
 
-ASA example:
+ASA example
+-----------
 
 acls:
   - ACL_IPSEC_FW2 extended permit tcp host 192.168.20.253 host 10.20.30.254
