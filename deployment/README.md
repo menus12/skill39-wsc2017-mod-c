@@ -1,6 +1,6 @@
 # DEPLOYMENT
 
-Contains ansible playbooks for test project deployment
+Contains ansible playbooks for test project deployment automation
 
 **./host_vars/**
 Contains variables for each host

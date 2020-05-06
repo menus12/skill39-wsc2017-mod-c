@@ -1,5 +1,4 @@
-# WorldSkills International Competition 2017 
-# Skill 39 test project automation
+# WorldSkills International Competition 2017<br>Skill 39 test project automation
 This repository contains test project deployment and marking automation scripts for Skill 39 Module C from WSC 2017.
 
 ## DESCRIPTION OF TEST PROJECT
