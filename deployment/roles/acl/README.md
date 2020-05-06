@@ -1,31 +1,43 @@
-Role Name
+acl
 =========
 
-A brief description of the role goes here.
+This role is used for access-lists configuraton 
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Tested against IOSv 15.8(3) and ASAv 9.12.2 on CML2
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+This role is using host_vars/group_vars where access-lists are defined
 
-Dependencies
-------------
+standard_acls (dict) - standard ACLs for IOS configuration
+extended_acls (dict) - extended ACLs for IOS configuration
+acls (dict) - ACLs for ASA configuration
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+IOS example:
+
+standard_acls:
+  ACL_DENY_BGP_IN:
+    - deny 209.136.0.0 0.0.255.255
+    - permit any
+
+ASA example:
+
+acls:
+  - ACL_IPSEC_FW2 extended permit tcp host 192.168.20.253 host 10.20.30.254
+  - ACL_PERMIT_OUTSIDE extended permit ip host 20.17.6.2 192.168.10.0 255.255.255.0 
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: HQ1:FW1
       roles:
-         - { role: username.rolename, x: 42 }
+         - acl
 
 License
 -------
@@ -35,4 +47,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Aleksandr Gorbachev (agorbachev@nsalab.org)
