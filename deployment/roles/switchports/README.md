@@ -1,7 +1,7 @@
 switchports
 =========
 
-This role is used for spanning-tree configuration on IOS switches
+This role is used for switchports configuration on IOS switches
 
 Requirements
 ------------
