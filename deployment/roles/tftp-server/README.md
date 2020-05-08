@@ -1,31 +1,39 @@
-Role Name
+tftp-server
 =========
 
-A brief description of the role goes here.
+This role is used to install and configure tftpd-hpa server on Ubuntu
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Tested against Ubuntu 18.04 Bionic on CML2
+
+Linux server must have full internet connectivity in order to install freeradius using apt module
+
+It is assumed that server management interface is in a separate net namespace (like VRF), therefore additional steps are taken to restart service in appropriate net namespace
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Variables used in vars/main.yml:
+- tftp_username
+- tftp_directory
+- tftp_address
+- tftp_options
 
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Variables used in host_vars:
+ - l3_interfaces:
+   - interface_type
+   - interface_id
+   - ipv4_address
+   - namespace - netns name
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: RADIUS
       roles:
-         - { role: username.rolename, x: 42 }
+         - tftp-server
 
 License
 -------
@@ -35,4 +43,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Aleksandr Gorbachev (agorbachev@nsalab.org)

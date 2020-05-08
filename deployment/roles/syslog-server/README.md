@@ -33,10 +33,10 @@ Variables used in vars/main.yml:
 
 Variables used in host_vars:
  - l3_interfaces:
-  - interface_type
-  - interface_id
-  - ipv4_address
-  - namespace - netns name
+   - interface_type
+   - interface_id
+   - ipv4_address
+   - namespace - netns name
 
 Example Playbook
 ----------------
