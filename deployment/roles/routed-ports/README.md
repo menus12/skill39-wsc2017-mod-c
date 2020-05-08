@@ -11,6 +11,7 @@ Tested against IOSv 15.8(3), IOSvL2 15.2, ASAv 9.12.2, Ubuntu 18.04 Bionic on CM
 Role Variables
 --------------
 
+Variables used in host_vars:
 - l3_interfaces
   - interface_type
   - interface_id
