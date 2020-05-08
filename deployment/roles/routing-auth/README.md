@@ -1,7 +1,7 @@
 routing-auth
 =========
 
-A brief description of the role goes here.
+This role is used for routing authentication configuration
 
 Requirements
 ------------
