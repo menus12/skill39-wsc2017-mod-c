@@ -1,7 +1,7 @@
 radius-server
 =========
 
-A brief description of the role goes here.
+This role is used to install and configure freeradius on Ubuntu
 
 Requirements
 ------------
