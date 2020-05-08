@@ -1,7 +1,7 @@
 stp
 =========
 
-This role is used for ssh configuration on IOS switches
+This role is used for spanning-tree configuration on IOS switches
 
 Requirements
 ------------
