@@ -1,0 +1,52 @@
+parameters:
+  ip_seed: 1.1.1.1
+  vlan: 4382
+  traffic_streams: 50
+
+testcases:
+      
+  Basic_config:
+    groups: [sanity, regression, ha]
+    name: Basic configuration
+  
+    parameters:
+      test_uids: 
+        - hostname
+        - domain_name
+        - local_passwords_and_services
+        - server_based_aaa
+
+    tests:
+      hostname:
+          - desc: Check hostname
+            device: HQ1
+            exec_command: show run | i hostname
+            assert_value: HQ1
+      domain_name:
+          - desc: Check domain name
+            device: HQ1
+            exec_command: sh ip domain-name
+            assert_value: wsi2017.com
+      local_passwords_and_services:
+          - desc: Enable password configured with encryption
+            device: HQ1
+            exec_command: sh run | i enable
+            assert_value: password 7
+          - desc: User password configured with scrypt hash
+            device: HQ1
+            exec_command: sh run | i username wsi2017
+            assert_value: username wsi2017 privilege 15 secret 9
+      server_based_aaa:
+          - desc: RADIUS server configured
+            device: HQ1
+            exec_command: sh aaa servers
+            assert_value: 192.168.10.10
+          - desc: RADIUS authentication test is successful
+            device: HQ1
+            exec_command: test aaa group radius server 192.168.10.10 auth-port 1812 radius cisco1 legacy
+            assert_value: successfully
+      clock:
+          - desc: Check timezone settings
+            device: HQ1
+            exec_command: sh run | i clock
+            assert_value: 4 0

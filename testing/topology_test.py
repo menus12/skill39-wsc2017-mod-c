@@ -30,7 +30,7 @@ class Basic_config(aetest.Testcase):
     @aetest.test
     def domain_name(self, testbed):
         assert testbed.devices.HQ1.execute('sh ip domain-name') == 'wsi2017.com'
-    
+        
     # 3
     @aetest.test
     def local_passwords_and_services(self, testbed, steps):
