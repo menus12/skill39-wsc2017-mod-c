@@ -3,5 +3,5 @@
 - name: Render a Jinja2 template onto an {{ ansible_network_os | upper }} device
   ios_config: 
     src: "{{ansible_network_os | lower}}_routed_ports_config.j2"
-  async: 12
-  poll: 3
+  async: 20
+  poll: 5
