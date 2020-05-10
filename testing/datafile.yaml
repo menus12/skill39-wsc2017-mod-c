@@ -9,13 +9,6 @@ testcases:
     groups: [sanity, regression, ha]
     name: Basic configuration
   
-    parameters:
-      test_uids: 
-        - hostname
-        - domain_name
-        - local_passwords_and_services
-        - server_based_aaa
-
     tests:
       hostname:
           - desc: Check hostname
@@ -45,8 +38,79 @@ testcases:
             device: HQ1
             exec_command: test aaa group radius server 192.168.10.10 auth-port 1812 radius cisco1 legacy
             assert_value: successfully
+      ipv4_addressing_and_connectivity:
+          - desc: Interfaces assigned with correct IPv4 addresses
+            device: HQ1
+            parse_command: show ip interface
+            assert_function: assert_ipv4_interfaces
+            reference_var:
+              GigabitEthernet0/1.101:
+                IP-Address: 192.168.10.254/24
+                Status: up
+              GigabitEthernet0/1.102:
+                IP-Address: 192.168.20.254/24
+                Status: up
+              GigabitEthernet0/1.103:
+                IP-Address: 192.168.30.254/24
+                Status: up
+              Loopback101:
+                IP-Address: 11.11.11.11/32
+                Status: up
+          - desc: IPv4 connectivity is ok
+            device: HQ1
+            exec_command: ping 2.2.2.2 source 11.11.11.11
+            assert_value: "!!!!!"
       clock:
           - desc: Check timezone settings
             device: HQ1
             exec_command: sh run | i clock
             assert_value: 4 0
+  
+  Switching:
+    
+    name: Switching configuration
+
+    tests:
+      vtp_manipulation:
+        - desc: All VLANs are present
+          device: SW1
+          parse_command: show vlan
+          assert_function: assert_vlans
+          reference_var:
+            vlans:
+              "101": 
+                vlan_id: "101"
+                name: LAN1
+                interfaces: 
+                  - GigabitEthernet1/0
+              "102":
+                vlan_id: "102"
+                name: LAN2
+              "103": 
+                vlan_id: "103"
+                name: EDGE
+        - desc: Create additional VLAN on VTP server
+          device: SW3
+          config_command: 
+            - vlan 110
+            - name somevlan
+        - desc: Created VLAN is present on VTP clients
+          device: SW1
+          parse_command: show vlan
+          assert_function: assert_vlans
+          reference_var:
+            vlans:
+              "101": 
+                vlan_id: "101"
+                name: LAN1
+                interfaces: 
+                  - GigabitEthernet1/0
+              "102":
+                vlan_id: "102"
+                name: LAN2
+              "103": 
+                vlan_id: "103"
+                name: EDGE
+              "110": 
+                vlan_id: "110"
+                name: somevlan
