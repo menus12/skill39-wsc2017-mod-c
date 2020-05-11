@@ -75,6 +75,12 @@ l3_interfaces:
     source: Loopback3
     mode: gre multipoint
     shutdown: false
+  - interface_type: Dialer
+    interface_id: 1
+    description: PPPoE
+    ipv4_address: 20.17.5.14/30
+    shutdown: false
+
 
 bgp_router_id: 20.17.5.14
 bgp_neighbors:

@@ -86,6 +86,99 @@
     - routed-ports
     - ssh
 
+# WAN & VPN CONFIGURATION - 1
+- name: Configure PPPoE server
+  hosts: ISP
+  gather_facts: false
+  roles:
+    - ip-pool
+  tasks:
+    - name: Configure Virtual-Template
+      ios_config:
+        lines:
+          - mtu 1492
+          - ip unnumbered GigabitEthernet0/4
+          - ip authentication mode eigrp 2017 md5
+          - ip authentication key-chain eigrp 2017 KC
+          - peer default ip address pool PPPoE
+          - ppp authentication pap
+          - ppp pap sent-username papuser password cisco1
+        parents: interface Virtual-Template1
+    - name: Configure BBA group
+      ios_config:
+        lines: virtual-template 1
+        parents: bba-group pppoe global
+    - name: Apply PPPoE configuration to physical interface
+      ios_config:
+        lines: pppoe enable group global
+        parents: interface GigabitEthernet0/4
+
+# WAN & VPN CONFIGURATION - 1
+- name: Configure PPPoE client
+  hosts: BR3
+  gather_facts: false
+  tasks:
+    - name: Configure Dialer
+      ios_config:
+        lines:
+          - ip address negotiated
+          - ip authentication mode eigrp 2017 md5
+          - ip authentication key-chain eigrp 2017 KC
+          - encapsulation ppp
+          - dialer pool 1
+          - dialer-group 1
+          - ppp authentication pap
+          - ppp pap sent-username papuser password cisco1
+          - no cdp enable
+        parents: interface Dialer1
+    - name: Apply PPPoE configuration to physical interface
+      ios_config:
+        lines: 
+          - pppoe enable group global
+          - pppoe-client dial-pool-number 1
+        parents: interface GigabitEthernet0/1
+
+# WAN & VPN CONFIGURATION - 2
+- name: Configure DMVPN hub
+  hosts: HQ1
+  gather_facts: false
+  tasks:    
+    - name: Configure DMVPN hub
+      ios_config:
+        lines:
+          - ipv6 address FE80::11 link-local
+          - ipv6 mtu 1400
+          - ipv6 nhrp authentication wsi2017
+          - ipv6 nhrp map multicast dynamic
+          - ipv6 nhrp map multicast 11.11.11.11
+          - ipv6 nhrp map 2001::11/64 11.11.11.11
+          - ipv6 nhrp network-id 100
+          - ipv6 nhrp nhs 2001::11
+          - ipv6 nhrp shortcut
+          - ipv6 nhrp redirect
+          - ipv6 ospf network broadcast
+          - ipv6 ospf priority 200
+        parents: interface Tunnel100
+
+# WAN & VPN CONFIGURATION - 2
+- name: Configure DMVPN spokes
+  hosts: HQ2:BR2:BR3
+  gather_facts: false
+  tasks:    
+    - name: Configure DMVPN spokes
+      ios_config:
+        lines:
+          - ipv6 mtu 1400
+          - ipv6 nhrp authentication wsi2017
+          - ipv6 nhrp map multicast 11.11.11.11
+          - ipv6 nhrp map 2001::11/64 11.11.11.11
+          - ipv6 nhrp network-id 100
+          - ipv6 nhrp nhs 2001::11
+          - ipv6 nhrp shortcut
+          - ipv6 ospf network broadcast
+          - ipv6 ospf priority 100
+        parents: interface Tunnel100
+
 # SERVICES CONFIGURATION - 2
 - name: FHRP configuration
   hosts: HQ1:HQ2
@@ -184,98 +277,6 @@
       ios_config:
         lines: ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/2 overload
 
-# WAN & VPN CONFIGURATION - 1
-- name: Configure PPPoE server
-  hosts: ISP
-  gather_facts: false
-  roles:
-    - ip-pool
-  tasks:
-    - name: Configure Virtual-Template
-      ios_config:
-        lines:
-          - mtu 1492
-          - ip unnumbered GigabitEthernet0/4
-          - ip authentication mode eigrp 2017 md5
-          - ip authentication key-chain eigrp 2017 KC
-          - peer default ip address pool PPPoE
-          - ppp authentication pap
-          - ppp pap sent-username papuser password cisco1
-        parents: interface Virtual-Template1
-    - name: Configure BBA group
-      ios_config:
-        lines: virtual-template 1
-        parents: bba-group pppoe global
-    - name: Apply PPPoE configuration to physical interface
-      ios_config:
-        lines: pppoe enable group global
-        parents: interface GigabitEthernet0/4
-
-# WAN & VPN CONFIGURATION - 1
-- name: Configure PPPoE client
-  hosts: BR3
-  gather_facts: false
-  tasks:
-    - name: Configure Dialer
-      ios_config:
-        lines:
-          - ip address negotiated
-          - ip authentication mode eigrp 2017 md5
-          - ip authentication key-chain eigrp 2017 KC
-          - encapsulation ppp
-          - dialer pool 1
-          - dialer-group 1
-          - ppp authentication pap
-          - ppp pap sent-username papuser password cisco1
-          - no cdp enable
-        parents: interface Dialer1
-    - name: Apply PPPoE configuration to physical interface
-      ios_config:
-        lines: 
-          - pppoe enable group global
-          - pppoe-client dial-pool-number 1
-        parents: interface GigabitEthernet0/1
-
-# WAN & VPN CONFIGURATION - 2
-- name: Configure DMVPN hub
-  hosts: HQ1
-  gather_facts: false
-  tasks:    
-    - name: Configure DMVPN hub
-      ios_config:
-        lines:
-          - ipv6 address FE80::11 link-local
-          - ipv6 mtu 1400
-          - ipv6 nhrp authentication wsi2017
-          - ipv6 nhrp map multicast dynamic
-          - ipv6 nhrp map multicast 11.11.11.11
-          - ipv6 nhrp map 2001::11/64 11.11.11.11
-          - ipv6 nhrp network-id 100
-          - ipv6 nhrp nhs 2001::11
-          - ipv6 nhrp shortcut
-          - ipv6 nhrp redirect
-          - ipv6 ospf network broadcast
-          - ipv6 ospf priority 200
-        parents: interface Tunnel100
-
-# WAN & VPN CONFIGURATION - 2
-- name: Configure DMVPN spokes
-  hosts: HQ2:BR2:BR3
-  gather_facts: false
-  tasks:    
-    - name: Configure DMVPN spokes
-      ios_config:
-        lines:
-          - ipv6 mtu 1400
-          - ipv6 nhrp authentication wsi2017
-          - ipv6 nhrp map multicast 11.11.11.11
-          - ipv6 nhrp map 2001::11/64 11.11.11.11
-          - ipv6 nhrp network-id 100
-          - ipv6 nhrp nhs 2001::11
-          - ipv6 nhrp shortcut
-          - ipv6 ospf network broadcast
-          - ipv6 ospf priority 100
-        parents: interface Tunnel100
 
 # WAN & VPN CONFIGURATION - 4 (b-c)
 - name: Configure WebVPN settings
