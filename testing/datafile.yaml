@@ -59,13 +59,34 @@ testcases:
           - desc: IPv4 connectivity is ok
             device: HQ1
             exec_command: ping 2.2.2.2 source 11.11.11.11
-            assert_value: "!!!!!"
+            assert_value: Success rate is 100 percent
+      ipv6_addressing_and_connectivity:
+          - desc: Interfaces assigned with correct IPv6 addresses
+            device: HQ1
+            parse_command: show ipv6 interface
+            assert_function: assert_ipv6_interfaces
+            reference_var:
+              GigabitEthernet0/1.101:
+                IP-Address: "A1F:EA75:CA75:"
+                Status: up
+              Loopback101:
+                IP-Address: "DEAD:BEEF:11::1"
+                Status: up
+              Tunnel100:
+                IP-Address: "2001::11"
+                Status: up
+          - desc: IPv6 connectivity is ok
+            device: HQ1
+            exec_command: ping 2001::2 source 2001::11
+            assert_value: Success rate is 100 percent
       clock:
           - desc: Check timezone settings
             device: HQ1
             exec_command: sh run | i clock
             assert_value: 4 0
   
+    cleanup_steps:
+
   Switching:
     
     name: Switching configuration
@@ -114,3 +135,85 @@ testcases:
               "110": 
                 vlan_id: "110"
                 name: somevlan
+      dtp_manipulation:
+        - desc: Gi1/1-2 on SW3 in auto mode
+          device: SW3
+          parse_command: show interfaces trunk
+          assert_function: assert_dtp
+          reference_var:
+            GigabitEthernet1/1:
+              name: GigabitEthernet1/1
+              mode: auto
+              encapsulation: 802.1q
+              status: trunking
+            GigabitEthernet1/2:
+              name: GigabitEthernet1/2
+              mode: auto
+              encapsulation: 802.1q
+              status: trunking
+        - desc: Gi1/1 on SW1 in desirable mode
+          device: SW1
+          parse_command: show interfaces trunk
+          assert_function: assert_dtp
+          reference_var:
+            GigabitEthernet1/1:
+              name: GigabitEthernet1/1
+              mode: desirable
+              encapsulation: 802.1q
+              status: trunking
+        - desc: Gi1/2 on SW2 in desirable mode
+          device: SW2
+          parse_command: show interfaces trunk
+          assert_function: assert_dtp
+          reference_var:
+            GigabitEthernet1/2:
+              name: GigabitEthernet1/2
+              mode: desirable
+              encapsulation: 802.1q
+              status: trunking
+      pagp:
+        - desc: Check PAgP operation
+          device: SW1
+          exec_command: show etherchannel 1 port-channel
+          assert_function: assert_tags
+          reference_var: 
+            - Ag-Inuse
+            - PAgP
+            - Gi0/1
+            - Gi0/2
+            - Desirable-Sl
+      stp_mode:
+        - desc: Check STP mode
+          device: SW1
+          parse_command: show spanning-tree
+          assert_function: assert_tags
+          reference_var: 
+            - rapid_pvst
+
+    cleanup_steps:
+      - desc: Remove VLAN from VTP server
+        device: SW3
+        config_command: 
+          - no vlan 110
+
+  Routing:
+    
+    name: Routing configuration
+
+    tests:
+      eigrp:
+        - desc: Check EIGRP neighbors
+          device: ISP
+          parse_command: show ip eigrp neighbors
+          assert_function: assert_eigrp_neighbors
+          reference_var:
+            Vi2.1: 
+              eigrp_nbr: 20.17.5.14
+            GigabitEthernet0/2: 
+              eigrp_nbr: 20.17.5.6
+            GigabitEthernet0/1: 
+              eigrp_nbr: 20.17.5.2
+            GigabitEthernet0/3: 
+              eigrp_nbr: 20.17.5.10
+    
+    cleanup_steps:
