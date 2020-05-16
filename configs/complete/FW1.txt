@@ -45,7 +45,6 @@ access-list ACL_PERMIT_OUTSIDE extended permit ip host 20.17.6.2 192.168.10.0 25
 pager lines 23
 logging enable
 logging timestamp
-logging monitor informational
 logging trap informational
 logging host inside 192.168.10.10
 mtu Mgmt-intf 1500
@@ -85,7 +84,14 @@ aaa authentication login-history
 snmp-server host inside 192.168.10.10 community ***** version 2c
 snmp-server location Abu-Dhabi, UAE
 snmp-server contact admin@wsi.org
+crypto ipsec ikev2 ipsec-proposal PROP
+ protocol esp encryption aes
+ protocol esp integrity md5
 crypto ipsec security-association pmtu-aging infinite
+crypto map CMAP 10 match address ACL_IPSEC_FW2
+crypto map CMAP 10 set peer 20.17.6.2 
+crypto map CMAP 10 set ikev2 ipsec-proposal PROP
+crypto map CMAP interface outside
 crypto ca trustpoint _SmartCallHome_ServerCA
  no validation-usage
  crl configure
@@ -140,6 +146,14 @@ crypto ca certificate chain _SmartCallHome_ServerCA
     b478a53a 874c8d8a a5d54697 f22c10b9 bc5422c0 01506943 9ef4b2ef 6df8ecda 
     f1e3b1ef df918f54 2a0b25c1 2619c452 100565d5 8210eac2 31cd2e
   quit
+crypto isakmp identity address 
+crypto ikev2 policy 1
+ encryption aes
+ integrity md5
+ group 5
+ prf sha
+ lifetime seconds 86400
+crypto ikev2 enable outside
 telnet timeout 5
 ssh stricthostkeycheck
 ssh 0.0.0.0 0.0.0.0 Mgmt-intf
@@ -154,39 +168,39 @@ no threat-detection statistics tcp-intercept
 dynamic-access-policy-record DfltAccessPolicy
 username wsi2017 password ***** pbkdf2 privilege 15
 username do_not_delete_this_user password ***** pbkdf2 privilege 15
+tunnel-group 20.17.6.2 type ipsec-l2l
+tunnel-group 20.17.6.2 ipsec-attributes
+ peer-id-validate nocheck
+ ikev2 remote-authentication pre-shared-key *****
+ ikev2 local-authentication pre-shared-key *****
 !
 class-map inspection_default
  match default-inspection-traffic
 !
 !
-policy-map type inspect dns preset_dns_map
+policy-map type inspect dns migrated_dns_map_1
  parameters
   message-length maximum client auto
   message-length maximum 512
   no tcp-inspection
 policy-map global_policy
  class inspection_default
-  inspect ip-options 
-  inspect netbios 
-  inspect rtsp 
-  inspect sunrpc 
-  inspect tftp 
-  inspect xdmcp 
-  inspect dns preset_dns_map 
+  inspect dns migrated_dns_map_1 
   inspect ftp 
   inspect h323 h225 
   inspect h323 ras 
+  inspect ip-options 
+  inspect netbios 
   inspect rsh 
+  inspect rtsp 
+  inspect skinny  
   inspect esmtp 
   inspect sqlnet 
+  inspect sunrpc 
+  inspect tftp 
   inspect sip  
-  inspect skinny  
+  inspect xdmcp 
 policy-map type inspect dns migrated_dns_map_2
- parameters
-  message-length maximum client auto
-  message-length maximum 512
-  no tcp-inspection
-policy-map type inspect dns migrated_dns_map_1
  parameters
   message-length maximum client auto
   message-length maximum 512
@@ -209,5 +223,5 @@ call-home
   subscribe-to-alert-group inventory periodic monthly
   subscribe-to-alert-group configuration periodic monthly
   subscribe-to-alert-group telemetry periodic daily
-Cryptochecksum:97c4aafe6414e4d7b3121d03ba9585cf
+Cryptochecksum:414953a27446baa609d21472102cb8e4
 : end

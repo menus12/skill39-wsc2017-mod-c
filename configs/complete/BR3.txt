@@ -1,9 +1,9 @@
 Building configuration...
 
   
-Current configuration : 6024 bytes
+Current configuration : 6043 bytes
 !
-! Last configuration change at 21:58:45 GMT Mon May 4 2020 by do_not_delete_this_user
+! Last configuration change at 10:25:57 GMT Sat May 16 2020 by do_not_delete_this_use
 !
 version 15.8
 service timestamps debug datetime msec
@@ -22,7 +22,7 @@ vrf definition Mgmt-intf
  exit-address-family
 !
 no logging console
-enable password 7 03134802
+enable password 7 15051805
 !
 aaa new-model
 !
@@ -66,17 +66,17 @@ multilink bundle-name authenticated
 !
 key chain KC
  key 0
-  key-string 7 1332243B
+  key-string 7 113E2A2C
 !
 !
 username do_not_delete_this_user privilege 15 secret 5 $1$0t48$nuJI6iNjAiJzMcPHIufb3/
-username wsi2017 privilege 15 secret 9 $9$DwVlyz6umLMsv5$JqD00.yJvFf4bM1iPSQPXoqF1CfVhwssPQJWU7W4KlY
-username user1 privilege 2 secret 5 $1$i8OV$2OweNisI/gBYIn/gmUW201
-username user2 privilege 7 secret 5 $1$RE1l$tyV5LOMSOyYmxdAuTcuco.
-username user3 view show_view secret 5 $1$hHKX$PHdYvtk1w2jMOztzNQS5E/
-username user4 view ping_view secret 5 $1$xTPn$rUsf5MTZ3FQqpsERGUXJu/
-username user5 view super_view secret 5 $1$ZZ7A$KDXHeGiaJuMSB6BM7n7xi0
-username papuser password 7 13061E01080355
+username wsi2017 privilege 15 secret 9 $9$V2Q4z8j8Ybe4lb$Bfv7.K9R5ZjiHkX0Cni/tZnRqCkfIEtLrhd40OgtAcA
+username user1 privilege 2 secret 5 $1$.jRQ$oAtIqa2WCZe7XpCCoUAw.0
+username user2 privilege 7 secret 5 $1$qyjy$MvpTR8/kRi/dx3fWajCvP.
+username user3 view show_view secret 5 $1$tQNq$ohk3jRN8OJu4ScL65rIfn0
+username user4 view ping_view secret 5 $1$FYVQ$KDpwLV1jJTJHk6z9p7p0v.
+username user5 view super_view secret 5 $1$Sd6k$6zSw822NFRzNv3isN5OLk1
+username papuser password 7 110A1016141D5A
 !
 redundancy
 !
@@ -143,6 +143,7 @@ interface GigabitEthernet0/2
  media-type rj45
 !
 interface Dialer1
+ description PPPoE
  mtu 1492
  ip address negotiated
  ip authentication mode eigrp 2017 md5
@@ -152,7 +153,7 @@ interface Dialer1
  dialer-group 1
  no cdp enable
  ppp authentication pap
- ppp pap sent-username papuser password 7 121A0C0411045D
+ ppp pap sent-username papuser password 7 03075218050070
 !
 !
 router eigrp 2017
@@ -224,19 +225,19 @@ banner login ^C
 * Cisco in writing.                                                      *
 **************************************************************************^C
 parser view show_view
- secret 5 $1$O3wm$IDGoAPDJU8WllET5oCdoV1
+ secret 5 $1$oMCI$v68o5yiqBMi946ly2mxHH1
  commands exec include who
  commands exec include all show ip
  commands exec include show version
  commands exec include show
 !
 parser view ping_view
- secret 5 $1$dfLD$pVXAG.piU8egg95f74umn.
+ secret 5 $1$L3dp$JqcDS7X//I4lGaHLafm8t.
  commands exec include all traceroute
  commands exec include all ping
 !
 parser view super_view superview
- secret 5 $1$6w7i$nC5rDf5qD9fxio8CcKKWA/
+ secret 5 $1$o2Vc$ZDB3CTElldBKULHYRl1b2.
  view show_view
  view ping_view
 !

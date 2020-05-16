@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 4706 bytes
+Current configuration : 4925 bytes
 !
-! Last configuration change at 21:58:16 GMT Mon May 4 2020 by do_not_delete_this_user
+! Last configuration change at 06:48:18 GMT Sat May 16 2020 by do_not_delete_this_use
 !
 version 15.2
 service timestamps debug datetime msec
@@ -22,10 +22,10 @@ vrf definition Mgmt-intf
  exit-address-family
 !
 no logging console
-enable password 7 0104150D
+enable password 7 051C1506
 !
 username do_not_delete_this_user privilege 15 secret 5 $1$czkN$0ErslR9mAP13eFFzC.d6R1
-username wsi2017 privilege 15 secret 9 $9$JduFhSuIk15ABP$/SPUle5PPP0ALaamGAXPCZ0Fz4ntOr6jF9onHM.fOmo
+username wsi2017 privilege 15 secret 9 $9$WMMy9sGPEVrF09$dJZ2ojz4I2we4Abjo1rFEI5VF9t4pjgCgZisXl.v9DQ
 aaa new-model
 !
 !
@@ -38,6 +38,8 @@ aaa authorization exec default local
 !
 !
 aaa session-id common
+no process cpu extended history
+no process cpu autoprofile hog
 clock timezone GMT 4 0
 !
 !
@@ -59,6 +61,7 @@ spanning-tree vlan 101 priority 28672
 spanning-tree vlan 102 priority 24576
 spanning-tree vlan 103 priority 61440
 !
+no cdp run
 !
 ! 
 !
@@ -82,12 +85,14 @@ interface GigabitEthernet0/0
  vrf forwarding Mgmt-intf
  ip address 10.0.191.107 255.255.255.0
  negotiation auto
+ no cdp enable
 !
 interface GigabitEthernet0/1
  description SW1_uplink
  switchport trunk encapsulation dot1q
  switchport mode trunk
  negotiation auto
+ no cdp enable
  channel-group 1 mode auto
 !
 interface GigabitEthernet0/2
@@ -95,6 +100,7 @@ interface GigabitEthernet0/2
  switchport trunk encapsulation dot1q
  switchport mode trunk
  negotiation auto
+ no cdp enable
  channel-group 1 mode auto
 !
 interface GigabitEthernet0/3
@@ -102,6 +108,7 @@ interface GigabitEthernet0/3
  switchport trunk encapsulation dot1q
  switchport mode trunk
  negotiation auto
+ no cdp enable
 !
 interface GigabitEthernet1/0
  description PC1
@@ -113,16 +120,19 @@ interface GigabitEthernet1/0
  switchport port-security mac-address sticky 5254.0007.7c44
  switchport port-security
  negotiation auto
+ no cdp enable
  spanning-tree portfast edge
 !
 interface GigabitEthernet1/1
  negotiation auto
+ no cdp enable
 !
 interface GigabitEthernet1/2
  description SW3_uplink
  switchport trunk encapsulation dot1q
  switchport mode dynamic desirable
  negotiation auto
+ no cdp enable
 !
 interface Vlan101
  description LAN1
@@ -140,6 +150,7 @@ ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
 !
+no service-routing capabilities-manager
 !
 !
 !

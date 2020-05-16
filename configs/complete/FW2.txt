@@ -78,9 +78,18 @@ aaa authentication http console LOCAL
 aaa authorization exec LOCAL auto-enable
 aaa authorization http console LOCAL
 aaa authentication login-history
+http server enable
+http 0.0.0.0 0.0.0.0 outside
 no snmp-server location
 no snmp-server contact
+crypto ipsec ikev2 ipsec-proposal PROP
+ protocol esp encryption aes
+ protocol esp integrity md5
 crypto ipsec security-association pmtu-aging infinite
+crypto map CMAP 10 match address ACL_IPSEC_FW1
+crypto map CMAP 10 set peer 20.17.6.1 
+crypto map CMAP 10 set ikev2 ipsec-proposal PROP
+crypto map CMAP interface outside
 crypto ca trustpoint _SmartCallHome_ServerCA
  no validation-usage
  crl configure
@@ -135,6 +144,14 @@ crypto ca certificate chain _SmartCallHome_ServerCA
     b478a53a 874c8d8a a5d54697 f22c10b9 bc5422c0 01506943 9ef4b2ef 6df8ecda 
     f1e3b1ef df918f54 2a0b25c1 2619c452 100565d5 8210eac2 31cd2e
   quit
+crypto isakmp identity address 
+crypto ikev2 policy 1
+ encryption aes
+ integrity md5
+ group 5
+ prf sha
+ lifetime seconds 86400
+crypto ikev2 enable outside
 telnet timeout 5
 ssh scopy enable
 ssh stricthostkeycheck
@@ -147,42 +164,76 @@ console serial
 threat-detection basic-threat
 threat-detection statistics access-list
 no threat-detection statistics tcp-intercept
+webvpn
+ enable outside
+ hsts
+  enable
+  max-age 31536000
+  include-sub-domains
+  no preload
+ anyconnect image disk0:/anyconnect-win-4.7.04056-webdeploy-k9.pkg 1
+ anyconnect enable
+ tunnel-group-list enable
+ cache
+  disable
+ error-recovery disable
+group-policy DfltGrpPolicy attributes
+ dns-server value 192.168.10.10
+ vpn-tunnel-protocol ikev1 ikev2 l2tp-ipsec ssl-client ssl-clientless
+ default-domain value wsi2017.com
+group-policy SplitTunnelPolicy internal
+group-policy SplitTunnelPolicy attributes
+ dns-server value 192.168.10.10
+ vpn-tunnel-protocol ikev2 ssl-client 
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ACL_SPLIT_TUNNEL
+ default-domain value wsi2017.com
 dynamic-access-policy-record DfltAccessPolicy
 username wsi2017 password ***** pbkdf2 privilege 15
 username do_not_delete_this_user password ***** pbkdf2 privilege 15
+tunnel-group DefaultWEBVPNGroup general-attributes
+ address-pool SSL_pool
+tunnel-group DefaultWEBVPNGroup webvpn-attributes
+ group-alias Gateway enable
+tunnel-group SplitWebVPN type remote-access
+tunnel-group SplitWebVPN general-attributes
+ address-pool SSL_pool
+ default-group-policy SplitTunnelPolicy
+tunnel-group SplitWebVPN webvpn-attributes
+ group-alias VPN enable
+tunnel-group 20.17.6.1 type ipsec-l2l
+tunnel-group 20.17.6.1 ipsec-attributes
+ peer-id-validate nocheck
+ ikev2 remote-authentication pre-shared-key *****
+ ikev2 local-authentication pre-shared-key *****
 !
 class-map inspection_default
  match default-inspection-traffic
 !
 !
-policy-map type inspect dns preset_dns_map
+policy-map type inspect dns migrated_dns_map_1
  parameters
   message-length maximum client auto
   message-length maximum 512
   no tcp-inspection
 policy-map global_policy
  class inspection_default
-  inspect ip-options 
-  inspect netbios 
-  inspect rtsp 
-  inspect sunrpc 
-  inspect tftp 
-  inspect xdmcp 
-  inspect dns preset_dns_map 
+  inspect dns migrated_dns_map_1 
   inspect ftp 
   inspect h323 h225 
   inspect h323 ras 
+  inspect ip-options 
+  inspect netbios 
   inspect rsh 
+  inspect rtsp 
+  inspect skinny  
   inspect esmtp 
   inspect sqlnet 
+  inspect sunrpc 
+  inspect tftp 
   inspect sip  
-  inspect skinny  
+  inspect xdmcp 
 policy-map type inspect dns migrated_dns_map_2
- parameters
-  message-length maximum client auto
-  message-length maximum 512
-  no tcp-inspection
-policy-map type inspect dns migrated_dns_map_1
  parameters
   message-length maximum client auto
   message-length maximum 512
@@ -205,5 +256,5 @@ call-home
   subscribe-to-alert-group inventory periodic monthly
   subscribe-to-alert-group configuration periodic monthly
   subscribe-to-alert-group telemetry periodic daily
-Cryptochecksum:b5358a4f209fc32829d6aa81de212151
+Cryptochecksum:c26e8378f8f270d528037dad873ee198
 : end
