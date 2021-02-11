@@ -1,0 +1,940 @@
+lab:
+  description: Imported from topology_initial.virl
+  notes: |-
+    ## Import Progress
+    - processing node /SW1 (iosvl2)
+    - processing node /SW2 (iosvl2)
+    - processing node /SW3 (iosvl2)
+    - processing node /FW1 (asav)
+    - processing node /FW2 (asav)
+    - processing node /HQ1 (iosv)
+    - processing node /HQ2 (iosv)
+    - processing node /ISP (iosv)
+    - processing node /BR2 (iosv)
+    - processing node /BR3 (iosv)
+    - processing node /L2VPN (unmanaged_switch)
+    - processing node /RADIUS (alpine)
+    - processing node /PC1 (alpine)
+    - processing node /Provision-01 (external_connector)
+    - processing node /Provision-02 (external_connector)
+    - link GigabitEthernet1/2.SW2 -> GigabitEthernet1/2.SW3
+    - link GigabitEthernet0/1.SW1 -> GigabitEthernet0/1.SW2
+    - link GigabitEthernet0/2.SW1 -> GigabitEthernet0/2.SW2
+    - link GigabitEthernet0/3.SW1 -> GigabitEthernet0/3.SW2
+    - link GigabitEthernet0/2.HQ1 -> GigabitEthernet0/1.ISP
+    - link GigabitEthernet0/2.HQ2 -> GigabitEthernet0/2.ISP
+    - link GigabitEthernet0/1.BR3 -> GigabitEthernet0/4.ISP
+    - link GigabitEthernet0/2.BR3 -> port3.L2VPN
+    - link GigabitEthernet1/1.SW1 -> GigabitEthernet1/1.SW3
+    - link GigabitEthernet0/1.HQ2 -> GigabitEthernet0/2.SW3
+    - link GigabitEthernet0/2.FW1 -> port1.L2VPN
+    - link GigabitEthernet0/3.SW3 -> GigabitEthernet0/1.FW1
+    - link GigabitEthernet0/1.HQ1 -> GigabitEthernet0/1.SW3
+    - link GigabitEthernet0/2.BR2 -> GigabitEthernet0/3.ISP
+    - link port2.L2VPN -> GigabitEthernet0/2.FW2
+    - link GigabitEthernet0/1.BR2 -> GigabitEthernet0/1.FW2
+    - link eth1.RADIUS -> GigabitEthernet1/0.SW1
+    - link eth1.PC1 -> GigabitEthernet1/0.SW2
+    - link port.Provision-01 -> eth2.RADIUS
+    - link port.Provision-02 -> eth2.PC1
+
+    ## Import Warnings
+    - Node /RADIUS: lxc node mapped to alpine, manual adaption required!
+    - Node /PC1: lxc node mapped to alpine, manual adaption required!
+  timestamp: 1594843073.8753283
+  title: skill39-wsc2017-mod-c.yaml
+  version: 0.0.3
+nodes:
+  - id: n0
+    label: SW1
+    node_definition: iosvl2
+    x: 267
+    y: 153
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       no switchport
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.106 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+      - id: i3
+        slot: 3
+        label: GigabitEthernet0/3
+        type: physical
+      - id: i4
+        slot: 4
+        label: GigabitEthernet1/0
+        type: physical
+      - id: i5
+        slot: 5
+        label: GigabitEthernet1/1
+        type: physical
+      - id: i6
+        slot: 6
+        label: GigabitEthernet1/2
+        type: physical
+  - id: n1
+    label: SW2
+    node_definition: iosvl2
+    x: 261
+    y: 432
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       no switchport
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.107 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+      - id: i3
+        slot: 3
+        label: GigabitEthernet0/3
+        type: physical
+      - id: i4
+        slot: 4
+        label: GigabitEthernet1/0
+        type: physical
+      - id: i5
+        slot: 5
+        label: GigabitEthernet1/1
+        type: physical
+      - id: i6
+        slot: 6
+        label: GigabitEthernet1/2
+        type: physical
+  - id: n2
+    label: SW3
+    node_definition: iosvl2
+    x: 560
+    y: 297
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       no switchport
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.108 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+      - id: i3
+        slot: 3
+        label: GigabitEthernet0/3
+        type: physical
+      - id: i4
+        slot: 4
+        label: GigabitEthernet1/0
+        type: physical
+      - id: i5
+        slot: 5
+        label: GigabitEthernet1/1
+        type: physical
+      - id: i6
+        slot: 6
+        label: GigabitEthernet1/2
+        type: physical
+  - id: n3
+    label: FW1
+    node_definition: asav
+    x: 550
+    y: 561
+    configuration: |-
+      !
+      hostname initial_hostname
+      enable password password
+      domain-name domain.name
+      interface Management0/0
+       ip address 10.0.191.109 255.255.255.0
+       nameif Mgmt-intf
+       security-level 100
+      icmp permit any Mgmt-intf
+      aaa authentication ssh console LOCAL
+      aaa authorization exec LOCAL auto-enable
+      ssh stricthostkeycheck
+      ssh 0.0.0.0 0.0.0.0 Mgmt-intf
+      ssh key-exchange group dh-group14-sha1
+      username do_not_delete_this_user password JHjdYNHbnvF5aMG8 privilege 15
+      route Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      crypto key generate rsa gen modulus 1024
+    cpus: 2
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: Management0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i3
+        slot: 3
+        label: GigabitEthernet0/2
+        type: physical
+  - id: n4
+    label: FW2
+    node_definition: asav
+    x: 1300
+    y: 300
+    configuration: |-
+      !
+      hostname initial_hostname
+      enable password password
+      domain-name domain.name
+      interface Management0/0
+       ip address 10.0.191.110 255.255.255.0
+       nameif Mgmt-intf
+       security-level 100
+      icmp permit any Mgmt-intf
+      aaa authentication ssh console LOCAL
+      aaa authorization exec LOCAL auto-enable
+      ssh stricthostkeycheck
+      ssh 0.0.0.0 0.0.0.0 Mgmt-intf
+      ssh key-exchange group dh-group14-sha1
+      username do_not_delete_this_user password JHjdYNHbnvF5aMG8 privilege 15
+      route Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      crypto key generate rsa gen modulus 1024
+    cpus: 2
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: Management0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i3
+        slot: 3
+        label: GigabitEthernet0/2
+        type: physical
+  - id: n5
+    label: HQ1
+    node_definition: iosv
+    x: 750
+    y: 150
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.121 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+  - id: n6
+    label: HQ2
+    node_definition: iosv
+    x: 750
+    y: 450
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.122 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+  - id: n7
+    label: ISP
+    node_definition: iosv
+    x: 887
+    y: 281
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.103 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+      - id: i3
+        slot: 3
+        label: GigabitEthernet0/3
+        type: physical
+      - id: i4
+        slot: 4
+        label: GigabitEthernet0/4
+        type: physical
+  - id: n8
+    label: BR2
+    node_definition: iosv
+    x: 1086
+    y: 165
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.104 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+  - id: n9
+    label: BR3
+    node_definition: iosv
+    x: 1100
+    y: 450
+    configuration: |-
+      !
+      hostname initial_hostname
+      ip domain-name domain.name
+      username do_not_delete_this_user priv 15 secret JHjdYNHbnvF5aMG8
+      vrf definition Mgmt-intf
+       !
+       address-family ipv4
+       exit-address-family
+      !
+      ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 10.0.191.254
+      interface GigabitEthernet0/0
+       vrf forwarding Mgmt-intf
+       ip address 10.0.191.105 255.255.255.0
+       media-type rj45
+       negotiation auto
+      !
+      ip ssh port 2222 rotary 1
+      line vty 10 15
+       rotary 1
+       login local
+       privilege level 15
+       logging synchronous
+       transport input ssh
+      !
+      crypto key gen rsa gen mod 1024
+      !
+      end
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: GigabitEthernet0/0
+        type: physical
+      - id: i1
+        slot: 1
+        label: GigabitEthernet0/1
+        type: physical
+      - id: i2
+        slot: 2
+        label: GigabitEthernet0/2
+        type: physical
+  - id: n10
+    label: L2VPN
+    node_definition: unmanaged_switch
+    x: 1100
+    y: 550
+    configuration: null
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 1
+        label: port1
+        type: physical
+      - id: i1
+        slot: 2
+        label: port2
+        type: physical
+      - id: i2
+        slot: 3
+        label: port3
+        type: physical
+  - id: n13
+    label: RADIUS
+    node_definition: ubuntu
+    x: 150
+    y: 150
+    configuration: |-
+      #cloud-config
+      bootcmd:
+      - ln -s -t /etc/rc.d /etc/rc.local
+      hostname: RADIUS
+      manage_etc_hosts: true
+      runcmd:
+      - systemctl start rc-local
+      - sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+      - echo "UseDNS no" >> /etc/ssh/sshd_config
+      - service ssh restart
+      - service sshd restart
+      users:
+      - default
+      - gecos: User for automated testing
+        lock-passwd: false
+        name: do_not_delete_this_user
+        plain-text-passwd: JHjdYNHbnvF5aMG8
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        ssh_authorized_keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDShBTwUJQMBTpWcqqYON1iwbSlhsZ3mvpGVXOOQsbHmJwIRIMgLIuSCT0SMAhJunrBrBx9xK3xkxQSDlcMQePhr5ApXrxJMz29NQj3Uc89zwVQbNcARIeTWlcOwSIqJSbyRr2BSnJY6Z1vfsZ55mOR9zl78boqRCC3iTT3fi7BMYtAsS1f+JwOb6qlRdhfQOVkutRO+6Du8b2jPL0xkgMjtd5AoY3g24Tk92XJWo3/OjOH0ICoHu0H+eP7M3fXGrLgCS5jlztzJFqSMNwuJ0wLgWPY/QJgHkdHLO5Uj38o/2roZ6trfLBw9qwyTfxzIgvfzDawy/di90YCmRBYXd9Z menus12@ubuntu
+      chpasswd:
+        list: |
+          root:Skill39
+        expire: False
+      write_files:
+      - path: /etc/rc.local
+        owner: root:root
+        permissions: '0755'
+        content: |-
+          #!/bin/sh
+          ip netns add Mgmt-intf
+          ip link set dev enp0s2 netns Mgmt-intf
+          ip netns exec Mgmt-intf ip addr add 10.0.191.111/24 dev enp0s2
+          ip netns exec Mgmt-intf ip link set enp0s2 up
+          ip netns exec Mgmt-intf ip route add default via 10.0.191.254
+          echo nameserver 8.8.8.8 > /etc/resolv.conf
+          ip netns exec Mgmt-intf apt-get update
+          ip netns exec Mgmt-intf apt-get install python python-apt resolvconf -y
+          echo nameserver 8.8.8.8 > /etc/resolvconf/resolv.conf.d/head
+          service resolvconf restart
+          ip netns exec Mgmt-intf /usr/sbin/sshd -o PidFile=/run/sshd-Mgmt-intf.pid
+          ip netns add topology-intf
+          ip link set dev enp0s3 netns topology-intf
+          exit 0
+    image_definition: ubuntu-18-04
+    ram: 1024
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: enp0s2
+        type: physical
+      - id: i1
+        slot: 1
+        label: enp0s3
+        type: physical
+  - id: n11
+    label: PC1
+    node_definition: ubuntu
+    x: 150
+    y: 450
+    configuration: |-
+      #cloud-config
+      bootcmd:
+      - ln -s -t /etc/rc.d /etc/rc.local
+      hostname: PC1
+      manage_etc_hosts: true
+      runcmd:
+      - systemctl start rc-local
+      - sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+      - echo "UseDNS no" >> /etc/ssh/sshd_config
+      - service ssh restart
+      - service sshd restart
+      users:
+      - default
+      - gecos: User for automated testing
+        lock-passwd: false
+        name: do_not_delete_this_user
+        plain-text-passwd: JHjdYNHbnvF5aMG8
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        ssh_authorized_keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDShBTwUJQMBTpWcqqYON1iwbSlhsZ3mvpGVXOOQsbHmJwIRIMgLIuSCT0SMAhJunrBrBx9xK3xkxQSDlcMQePhr5ApXrxJMz29NQj3Uc89zwVQbNcARIeTWlcOwSIqJSbyRr2BSnJY6Z1vfsZ55mOR9zl78boqRCC3iTT3fi7BMYtAsS1f+JwOb6qlRdhfQOVkutRO+6Du8b2jPL0xkgMjtd5AoY3g24Tk92XJWo3/OjOH0ICoHu0H+eP7M3fXGrLgCS5jlztzJFqSMNwuJ0wLgWPY/QJgHkdHLO5Uj38o/2roZ6trfLBw9qwyTfxzIgvfzDawy/di90YCmRBYXd9Z menus12@ubuntu
+      chpasswd:
+        list: |
+          root:Skill39
+        expire: False
+      write_files:
+      - path: /etc/rc.local
+        owner: root:root
+        permissions: '0755'
+        content: |-
+          #!/bin/sh
+          ip netns add Mgmt-intf
+          ip link set dev enp0s2 netns Mgmt-intf
+          ip netns exec Mgmt-intf ip addr add 10.0.191.112/24 dev enp0s2
+          ip netns exec Mgmt-intf ip link set enp0s2 up
+          ip netns exec Mgmt-intf ip route add default via 10.0.191.254
+          echo nameserver 8.8.8.8 > /etc/resolv.conf
+          ip netns exec Mgmt-intf apt-get update
+          ip netns exec Mgmt-intf apt-get install python python-apt resolvconf -y
+          echo nameserver 8.8.8.8 > /etc/resolvconf/resolv.conf.d/head
+          service resolvconf restart
+          ip netns exec Mgmt-intf /usr/sbin/sshd -o PidFile=/run/sshd-Mgmt-intf.pid
+          ip netns add topology-intf
+          ip link set dev enp0s3 netns topology-intf
+          exit 0
+    image_definition: ubuntu-18-04
+    ram: 1024
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: enp0s2
+        type: physical
+      - id: i1
+        slot: 1
+        label: enp0s3
+        type: physical
+  - id: n12
+    label: Mgmt-net
+    node_definition: unmanaged_switch
+    x: -100
+    y: 300
+    configuration: ''
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: port0
+        type: physical
+      - id: i1
+        slot: 1
+        label: port1
+        type: physical
+      - id: i2
+        slot: 2
+        label: port2
+        type: physical
+      - id: i3
+        slot: 3
+        label: port3
+        type: physical
+      - id: i4
+        slot: 4
+        label: port4
+        type: physical
+      - id: i5
+        slot: 5
+        label: port5
+        type: physical
+      - id: i6
+        slot: 6
+        label: port6
+        type: physical
+      - id: i7
+        slot: 7
+        label: port7
+        type: physical
+      - id: i8
+        slot: 8
+        label: port8
+        type: physical
+      - id: i9
+        slot: 9
+        label: port9
+        type: physical
+      - id: i10
+        slot: 10
+        label: port10
+        type: physical
+      - id: i11
+        slot: 11
+        label: port11
+        type: physical
+      - id: i12
+        slot: 12
+        label: port12
+        type: physical
+  - id: n14
+    label: ext-conn-0
+    node_definition: external_connector
+    x: -350
+    y: 300
+    configuration: bridge0
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: port
+        type: physical
+links:
+  - id: l0
+    i1: i6
+    n1: n1
+    i2: i6
+    n2: n2
+  - id: l1
+    i1: i1
+    n1: n0
+    i2: i1
+    n2: n1
+  - id: l2
+    i1: i2
+    n1: n0
+    i2: i2
+    n2: n1
+  - id: l3
+    i1: i3
+    n1: n0
+    i2: i3
+    n2: n1
+  - id: l4
+    i1: i2
+    n1: n5
+    i2: i1
+    n2: n7
+  - id: l5
+    i1: i2
+    n1: n6
+    i2: i2
+    n2: n7
+  - id: l6
+    i1: i1
+    n1: n9
+    i2: i4
+    n2: n7
+  - id: l7
+    i1: i2
+    n1: n9
+    i2: i2
+    n2: n10
+  - id: l8
+    i1: i5
+    n1: n0
+    i2: i5
+    n2: n2
+  - id: l9
+    i1: i1
+    n1: n6
+    i2: i2
+    n2: n2
+  - id: l10
+    i1: i3
+    n1: n3
+    i2: i0
+    n2: n10
+  - id: l11
+    i1: i3
+    n1: n2
+    i2: i2
+    n2: n3
+  - id: l12
+    i1: i1
+    n1: n5
+    i2: i1
+    n2: n2
+  - id: l13
+    i1: i2
+    n1: n8
+    i2: i3
+    n2: n7
+  - id: l14
+    i1: i1
+    n1: n10
+    i2: i3
+    n2: n4
+  - id: l15
+    i1: i1
+    n1: n8
+    i2: i2
+    n2: n4
+  - id: l16
+    i1: i1
+    n1: n13
+    i2: i4
+    n2: n0
+  - id: l17
+    i1: i1
+    n1: n11
+    i2: i4
+    n2: n1
+  - id: l18
+    i1: i0
+    n1: n12
+    i2: i0
+    n2: n5
+  - id: l19
+    i1: i1
+    n1: n12
+    i2: i0
+    n2: n6
+  - id: l20
+    i1: i2
+    n1: n12
+    i2: i0
+    n2: n7
+  - id: l21
+    i1: i3
+    n1: n12
+    i2: i0
+    n2: n8
+  - id: l22
+    i1: i4
+    n1: n12
+    i2: i0
+    n2: n9
+  - id: l23
+    i1: i5
+    n1: n12
+    i2: i0
+    n2: n0
+  - id: l24
+    i1: i6
+    n1: n12
+    i2: i0
+    n2: n1
+  - id: l25
+    i1: i7
+    n1: n12
+    i2: i0
+    n2: n2
+  - id: l26
+    i1: i8
+    n1: n12
+    i2: i0
+    n2: n3
+  - id: l27
+    i1: i9
+    n1: n12
+    i2: i0
+    n2: n4
+  - id: l28
+    i1: i10
+    n1: n12
+    i2: i0
+    n2: n13
+  - id: l29
+    i1: i11
+    n1: n12
+    i2: i0
+    n2: n11
+  - id: l30
+    i1: i0
+    n1: n14
+    i2: i12
+    n2: n12
